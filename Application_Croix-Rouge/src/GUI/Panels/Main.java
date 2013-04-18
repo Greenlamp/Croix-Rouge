@@ -13,6 +13,8 @@ import Containers.Residence;
 import Containers.Telephone;
 import Containers.Urgence;
 import Containers.Volontaire;
+import EquipeVolontaire.M_ConsulterEquipesVolontaire;
+import EquipeVolontaire.M_NewEditEquipeVolontaire;
 import GUI.Panels.GestionUtilisateurs.M_NewEditUtilisateurs;
 import Network.NetworkClient;
 import NouveauVolontaire.M_NouveauVolontaireP1;
@@ -22,9 +24,9 @@ import NouveauVolontaire.M_NouveauVolontaireP4;
 import NouveauVolontaire.M_NouveauVolontaireP5;
 import NouveauVolontaire.M_NouveauVolontaireP6;
 import java.awt.Image;
-import java.io.File;
 import java.util.LinkedList;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -51,11 +53,15 @@ public class Main extends javax.swing.JFrame {
     public static String GESTION_GROUPES = "GESTION_GROUPES";
     public static String GESTION_UTILISATEURS = "GESTION_UTILISATEURS";
     public static String EDITNEWUSER = "EDITNEWUSER";
+    public static String GESTION_EQUIPES = "GESTION_EQUIPES";
+    public static String EDITNEWEQUIPE = "EDITNEWEQUIPE";
 
     private boolean connected = false;
     private String groupe = null;
     private LinkedList<String> droits = null;
+
     private String loginUser = null;
+    String equipeSelected = null;
 
     private String actualState = Main.UNLOGGED;
 
@@ -91,6 +97,7 @@ public class Main extends javax.swing.JFrame {
         Mmenu = new javax.swing.JMenu();
         Mconsulter = new javax.swing.JMenuItem();
         MnouveauVolontaire = new javax.swing.JMenuItem();
+        MgererEquipe = new javax.swing.JMenuItem();
         Madministration = new javax.swing.JMenu();
         MgestionDroits = new javax.swing.JMenuItem();
         MgestionGroupes = new javax.swing.JMenuItem();
@@ -134,6 +141,14 @@ public class Main extends javax.swing.JFrame {
             }
         });
         Mmenu.add(MnouveauVolontaire);
+
+        MgererEquipe.setText("Gérer equipes de volontaires");
+        MgererEquipe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MgererEquipeActionPerformed(evt);
+            }
+        });
+        Mmenu.add(MgererEquipe);
 
         jMenuBar1.add(Mmenu);
 
@@ -231,6 +246,14 @@ public class Main extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    private void MgererEquipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MgererEquipeActionPerformed
+        if(this.actualState.equals(Main.UNLOGGED)){
+            return;
+        }
+        this.actualState = Main.GESTION_EQUIPES;
+        refreshPanel();
+    }//GEN-LAST:event_MgererEquipeActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -270,6 +293,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu Madministration;
     private javax.swing.JMenuItem Mconsulter;
     private javax.swing.JMenu Mfichier;
+    private javax.swing.JMenuItem MgererEquipe;
     private javax.swing.JMenuItem MgestionDroits;
     private javax.swing.JMenuItem MgestionGroupes;
     private javax.swing.JMenuItem MgestionUtilisateurs;
@@ -400,6 +424,22 @@ public class Main extends javax.swing.JFrame {
             M_NewEditUtilisateurs fenetre = new M_NewEditUtilisateurs(this, this.socket, "Modifier un utilisateur", loginUser);
             Gscene.add(fenetre);
             Gscene.revalidate();
+        }else if(this.actualState.equals(Main.GESTION_EQUIPES)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_ConsulterEquipesVolontaire mConsulterEquipesVolontaire = new M_ConsulterEquipesVolontaire(this, socket);
+            Gscene.add(mConsulterEquipesVolontaire);
+            Gscene.revalidate();
+        }else if(this.actualState.equals(Main.EDITNEWEQUIPE)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditEquipeVolontaire mNewEditEquipeVolontaire = new M_NewEditEquipeVolontaire(this, socket);
+            Gscene.add(mNewEditEquipeVolontaire);
+            Gscene.revalidate();
         }
     }
 
@@ -417,6 +457,7 @@ public class Main extends javax.swing.JFrame {
             MgestionGroupes.setVisible(false);
             MgestionUtilisateurs.setVisible(false);
             MnouveauVolontaire.setVisible(false);
+            MgererEquipe.setVisible(false);
         }else if(type.equals("interdit")){
             if(droits.contains("SEE_ADMIN")){
                 Madministration.setVisible(true);
@@ -432,6 +473,9 @@ public class Main extends javax.swing.JFrame {
             }
             if(droits.contains("CREATE_VOLUNTEER")){
                 MnouveauVolontaire.setVisible(true);
+            }
+            if(droits.contains("SEE_MANAGER_TEAM")){
+                MgererEquipe.setVisible(true);
             }
         }
     }
@@ -462,5 +506,18 @@ public class Main extends javax.swing.JFrame {
 
     public void setVolontaireP5(Formations formations) {
         volontaire.setFormations(formations);
+    }
+
+    public void afficherMessage(String message) {
+        JOptionPane.showMessageDialog(this, message);
+        //System.out.println("Message : " + message);
+    }
+
+    public void setNomEquipeSelected(String equipeSelected) {
+        this.equipeSelected = equipeSelected;
+    }
+
+    public String getEquipeSelected() {
+        return this.equipeSelected;
     }
 }

@@ -4,7 +4,6 @@
  */
 package GUI.Panels;
 
-import GUI.Panels.GestionUtilisateurs.M_NewEditUtilisateurs;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
 import PacketCom.PacketCom;

@@ -9,6 +9,9 @@ import Containers.Formations;
 import Containers.Volontaire;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import PacketCom.PacketCom;
+import States.States;
+import Wizard.Wizard_Nouveau;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -215,8 +219,18 @@ public class M_NouveauVolontaireP5 extends javax.swing.JPanel {
         jLabel24.setText("6");
 
         jButton2.setText("Terminer");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Annuler");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Suivant");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -1053,502 +1067,12 @@ public class M_NouveauVolontaireP5 extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        Formations formations = new Formations();
-
-        if(Gb1.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb1.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB1.getSelectedItem().toString();
-            String mois = GmoisObtenuB1.getSelectedItem().toString();
-            String annee = GanneeObtenuB1.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GbrevetNumB1.getText()));
-
-            //Date Peremption
-            jour = GjourValableB1.getSelectedItem().toString();
-            mois = GmoisValableB1.getSelectedItem().toString();
-            annee = GanneeValableB1.getSelectedItem().toString();
-            dateString = jour + "/" + mois + "/" + annee;
-            Date datePeremption = null;
-            try {
-                datePeremption = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDatePeremption(datePeremption);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb2.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb2.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB2.getSelectedItem().toString();
-            String mois = GmoisObtenuB2.getSelectedItem().toString();
-            String annee = GanneeObtenuB2.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Date Peremption
-            jour = GjourExamenB2.getSelectedItem().toString();
-            mois = GmoisExamenB2.getSelectedItem().toString();
-            annee = GanneeExamenB2.getSelectedItem().toString();
-            dateString = jour + "/" + mois + "/" + annee;
-            Date dateExamen = null;
-            try {
-                dateExamen = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateExamen(dateExamen);
-            formation.setLieu(GlieuExamenB2.getText());
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb3.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb3.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB3.getSelectedItem().toString();
-            String mois = GmoisObtenuB3.getSelectedItem().toString();
-            String annee = GanneeObtenuB3.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GbadgeNumB3.getText()));
-            formation.setNumeroService112(GnumServiceB3.getText());
-
-            formation.setPhotocopie(photocopieB3);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb4.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb4.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB4.getSelectedItem().toString();
-            String mois = GmoisObtenuB4.getSelectedItem().toString();
-            String annee = GanneeObtenuB4.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GbrevetNumB4.getText()));
-
-            formation.setPhotocopie(photocopieB4);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb5.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb5.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB5.getSelectedItem().toString();
-            String mois = GmoisObtenuB5.getSelectedItem().toString();
-            String annee = GanneeObtenuB5.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GnumSantePubliqueB5.getText()));
-
-            formation.setPhotocopie(photocopieB5);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb6.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb6.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB6.getSelectedItem().toString();
-            String mois = GmoisObtenuB6.getSelectedItem().toString();
-            String annee = GanneeObtenuB6.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GnumBadgeB6.getText()));
-
-            formation.setPhotocopie(photocopieB6);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb7.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb7.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB7.getSelectedItem().toString();
-            String mois = GmoisObtenuB7.getSelectedItem().toString();
-            String annee = GanneeObtenuB7.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GnumInamiB7.getText()));
-
-            formation.setPhotocopie(photocopieB7);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb8.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gautre.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB8.getSelectedItem().toString();
-            String mois = GmoisObtenuB8.getSelectedItem().toString();
-            String annee = GanneeObtenuB8.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GnumCertificationB8.getText()));
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        parent.setVolontaireP5(formations);
+        enregistrerData();
         parent.changeState(Main.NOUVEAU_VOLONTAIREP6);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        Formations formations = new Formations();
-
-        if(Gb1.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb1.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB1.getSelectedItem().toString();
-            String mois = GmoisObtenuB1.getSelectedItem().toString();
-            String annee = GanneeObtenuB1.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GbrevetNumB1.getText()));
-
-            //Date Peremption
-            jour = GjourValableB1.getSelectedItem().toString();
-            mois = GmoisValableB1.getSelectedItem().toString();
-            annee = GanneeValableB1.getSelectedItem().toString();
-            dateString = jour + "/" + mois + "/" + annee;
-            Date datePeremption = null;
-            try {
-                datePeremption = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDatePeremption(datePeremption);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb2.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb2.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB2.getSelectedItem().toString();
-            String mois = GmoisObtenuB2.getSelectedItem().toString();
-            String annee = GanneeObtenuB2.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Date Peremption
-            jour = GjourExamenB2.getSelectedItem().toString();
-            mois = GmoisExamenB2.getSelectedItem().toString();
-            annee = GanneeExamenB2.getSelectedItem().toString();
-            dateString = jour + "/" + mois + "/" + annee;
-            Date dateExamen = null;
-            try {
-                dateExamen = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateExamen(dateExamen);
-            formation.setLieu(GlieuExamenB2.getText());
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb3.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb3.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB3.getSelectedItem().toString();
-            String mois = GmoisObtenuB3.getSelectedItem().toString();
-            String annee = GanneeObtenuB3.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GbadgeNumB3.getText()));
-            formation.setNumeroService112(GnumServiceB3.getText());
-
-            formation.setPhotocopie(photocopieB3);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb4.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb4.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB4.getSelectedItem().toString();
-            String mois = GmoisObtenuB4.getSelectedItem().toString();
-            String annee = GanneeObtenuB4.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GbrevetNumB4.getText()));
-
-            formation.setPhotocopie(photocopieB4);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb5.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb5.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB5.getSelectedItem().toString();
-            String mois = GmoisObtenuB5.getSelectedItem().toString();
-            String annee = GanneeObtenuB5.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GnumSantePubliqueB5.getText()));
-
-            formation.setPhotocopie(photocopieB5);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb6.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb6.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB6.getSelectedItem().toString();
-            String mois = GmoisObtenuB6.getSelectedItem().toString();
-            String annee = GanneeObtenuB6.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GnumBadgeB6.getText()));
-
-            formation.setPhotocopie(photocopieB6);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb7.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gb7.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB7.getSelectedItem().toString();
-            String mois = GmoisObtenuB7.getSelectedItem().toString();
-            String annee = GanneeObtenuB7.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GnumInamiB7.getText()));
-
-            formation.setPhotocopie(photocopieB7);
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        if(Gb8.isSelected()){
-            //Nouvelle formation
-            Formation formation = new Formation();
-
-            //Nom de la formation
-            formation.setNom(Gautre.getText());
-
-            //Date obtenu
-            String jour = GjourObtenuB8.getSelectedItem().toString();
-            String mois = GmoisObtenuB8.getSelectedItem().toString();
-            String annee = GanneeObtenuB8.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            formation.setDateObtention(dateObtention);
-
-            //Numéro de brevet
-            formation.setNumero(Integer.parseInt(GnumCertificationB8.getText()));
-
-            //Ajouter a la liste des formations
-            formations.addFormation(formation);
-        }
-        parent.setVolontaireP5(formations);
+        enregistrerData();
         parent.changeState(Main.NOUVEAU_VOLONTAIREP4);
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -1591,6 +1115,34 @@ public class M_NouveauVolontaireP5 extends javax.swing.JPanel {
             photocopieB5 = fileChooser.getSelectedFile();
         }
     }//GEN-LAST:event_BparcourirB5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        enregistrerData();
+        boolean cont = false;
+        volontaire = parent.getVolontaire();
+        PacketCom packet = new PacketCom(States.NOUVEAU_VOLONTAIRE, (Object)volontaire);
+        socket.send(packet);
+        try {
+            PacketCom packetReponse = socket.receive();
+            String type = packetReponse.getType();
+            if(type.equals(States.NOUVEAU_VOLONTAIRE_OUI)){
+                parent.afficherMessage("Ajout nouveau volontaire réussi.");
+                cont = true;
+            }else if(type.equals(States.NOUVEAU_VOLONTAIRE_NON)){
+                String message = (String) packetReponse.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(cont){
+            parent.changeState(Main.LOGGED);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BparcourirB3;
@@ -1807,6 +1359,255 @@ public class M_NouveauVolontaireP5 extends javax.swing.JPanel {
                 annee.setSelectedIndex(i);
             }
         }
+    }
+
+    private void enregistrerData() {
+        Formations formations = new Formations();
+
+        if(Gb1.isSelected()){
+            //Nouvelle formation
+            Formation formation = new Formation();
+
+            //Nom de la formation
+            formation.setNom(Gb1.getText());
+
+            //Date obtenu
+            String jour = GjourObtenuB1.getSelectedItem().toString();
+            String mois = GmoisObtenuB1.getSelectedItem().toString();
+            String annee = GanneeObtenuB1.getSelectedItem().toString();
+            String dateString = jour + "/" + mois + "/" + annee;
+            Date dateObtention = null;
+            try {
+                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            formation.setDateObtention(dateObtention);
+
+            //Numéro de brevet
+            formation.setNumero(Integer.parseInt(GbrevetNumB1.getText()));
+
+            //Date Peremption
+            jour = GjourValableB1.getSelectedItem().toString();
+            mois = GmoisValableB1.getSelectedItem().toString();
+            annee = GanneeValableB1.getSelectedItem().toString();
+            dateString = jour + "/" + mois + "/" + annee;
+            Date datePeremption = null;
+            try {
+                datePeremption = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            formation.setDatePeremption(datePeremption);
+
+            //Ajouter a la liste des formations
+            formations.addFormation(formation);
+        }
+        if(Gb2.isSelected()){
+            //Nouvelle formation
+            Formation formation = new Formation();
+
+            //Nom de la formation
+            formation.setNom(Gb2.getText());
+
+            //Date obtenu
+            String jour = GjourObtenuB2.getSelectedItem().toString();
+            String mois = GmoisObtenuB2.getSelectedItem().toString();
+            String annee = GanneeObtenuB2.getSelectedItem().toString();
+            String dateString = jour + "/" + mois + "/" + annee;
+            Date dateObtention = null;
+            try {
+                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            formation.setDateObtention(dateObtention);
+
+            //Date Peremption
+            jour = GjourExamenB2.getSelectedItem().toString();
+            mois = GmoisExamenB2.getSelectedItem().toString();
+            annee = GanneeExamenB2.getSelectedItem().toString();
+            dateString = jour + "/" + mois + "/" + annee;
+            Date dateExamen = null;
+            try {
+                dateExamen = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            formation.setDateExamen(dateExamen);
+            formation.setLieu(GlieuExamenB2.getText());
+
+            //Ajouter a la liste des formations
+            formations.addFormation(formation);
+        }
+        if(Gb3.isSelected()){
+            //Nouvelle formation
+            Formation formation = new Formation();
+
+            //Nom de la formation
+            formation.setNom(Gb3.getText());
+
+            //Date obtenu
+            String jour = GjourObtenuB3.getSelectedItem().toString();
+            String mois = GmoisObtenuB3.getSelectedItem().toString();
+            String annee = GanneeObtenuB3.getSelectedItem().toString();
+            String dateString = jour + "/" + mois + "/" + annee;
+            Date dateObtention = null;
+            try {
+                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            formation.setDateObtention(dateObtention);
+
+            //Numéro de brevet
+            formation.setNumero(Integer.parseInt(GbadgeNumB3.getText()));
+            formation.setNumeroService112(GnumServiceB3.getText());
+
+            formation.setPhotocopie(photocopieB3);
+
+            //Ajouter a la liste des formations
+            formations.addFormation(formation);
+        }
+        if(Gb4.isSelected()){
+            //Nouvelle formation
+            Formation formation = new Formation();
+
+            //Nom de la formation
+            formation.setNom(Gb4.getText());
+
+            //Date obtenu
+            String jour = GjourObtenuB4.getSelectedItem().toString();
+            String mois = GmoisObtenuB4.getSelectedItem().toString();
+            String annee = GanneeObtenuB4.getSelectedItem().toString();
+            String dateString = jour + "/" + mois + "/" + annee;
+            Date dateObtention = null;
+            try {
+                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            formation.setDateObtention(dateObtention);
+
+            //Numéro de brevet
+            formation.setNumero(Integer.parseInt(GbrevetNumB4.getText()));
+
+            formation.setPhotocopie(photocopieB4);
+
+            //Ajouter a la liste des formations
+            formations.addFormation(formation);
+        }
+        if(Gb5.isSelected()){
+            //Nouvelle formation
+            Formation formation = new Formation();
+
+            //Nom de la formation
+            formation.setNom(Gb5.getText());
+
+            //Date obtenu
+            String jour = GjourObtenuB5.getSelectedItem().toString();
+            String mois = GmoisObtenuB5.getSelectedItem().toString();
+            String annee = GanneeObtenuB5.getSelectedItem().toString();
+            String dateString = jour + "/" + mois + "/" + annee;
+            Date dateObtention = null;
+            try {
+                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            formation.setDateObtention(dateObtention);
+
+            //Numéro de brevet
+            formation.setNumero(Integer.parseInt(GnumSantePubliqueB5.getText()));
+
+            formation.setPhotocopie(photocopieB5);
+
+            //Ajouter a la liste des formations
+            formations.addFormation(formation);
+        }
+        if(Gb6.isSelected()){
+            //Nouvelle formation
+            Formation formation = new Formation();
+
+            //Nom de la formation
+            formation.setNom(Gb6.getText());
+
+            //Date obtenu
+            String jour = GjourObtenuB6.getSelectedItem().toString();
+            String mois = GmoisObtenuB6.getSelectedItem().toString();
+            String annee = GanneeObtenuB6.getSelectedItem().toString();
+            String dateString = jour + "/" + mois + "/" + annee;
+            Date dateObtention = null;
+            try {
+                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            formation.setDateObtention(dateObtention);
+
+            //Numéro de brevet
+            formation.setNumero(Integer.parseInt(GnumBadgeB6.getText()));
+
+            formation.setPhotocopie(photocopieB6);
+
+            //Ajouter a la liste des formations
+            formations.addFormation(formation);
+        }
+        if(Gb7.isSelected()){
+            //Nouvelle formation
+            Formation formation = new Formation();
+
+            //Nom de la formation
+            formation.setNom(Gb7.getText());
+
+            //Date obtenu
+            String jour = GjourObtenuB7.getSelectedItem().toString();
+            String mois = GmoisObtenuB7.getSelectedItem().toString();
+            String annee = GanneeObtenuB7.getSelectedItem().toString();
+            String dateString = jour + "/" + mois + "/" + annee;
+            Date dateObtention = null;
+            try {
+                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            formation.setDateObtention(dateObtention);
+
+            //Numéro de brevet
+            formation.setNumero(Integer.parseInt(GnumInamiB7.getText()));
+
+            formation.setPhotocopie(photocopieB7);
+
+            //Ajouter a la liste des formations
+            formations.addFormation(formation);
+        }
+        if(Gb8.isSelected()){
+            //Nouvelle formation
+            Formation formation = new Formation();
+
+            //Nom de la formation
+            formation.setNom(Gautre.getText());
+
+            //Date obtenu
+            String jour = GjourObtenuB8.getSelectedItem().toString();
+            String mois = GmoisObtenuB8.getSelectedItem().toString();
+            String annee = GanneeObtenuB8.getSelectedItem().toString();
+            String dateString = jour + "/" + mois + "/" + annee;
+            Date dateObtention = null;
+            try {
+                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            formation.setDateObtention(dateObtention);
+
+            //Numéro de brevet
+            formation.setNumero(Integer.parseInt(GnumCertificationB8.getText()));
+
+            //Ajouter a la liste des formations
+            formations.addFormation(formation);
+        }
+        parent.setVolontaireP5(formations);
     }
 
 }

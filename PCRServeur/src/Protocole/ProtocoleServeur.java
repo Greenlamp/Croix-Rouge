@@ -5,10 +5,14 @@
 
 package Protocole;
 
+import Containers.Adresse;
+import Containers.Identite;
+import Containers.Volontaire;
 import DB.DbRequests;
 import PacketCom.PacketCom;
 import PacketCom.Protocolable;
 import States.States;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
@@ -56,6 +60,8 @@ public class ProtocoleServeur implements Protocolable{
             return actionGetMyDroits(type, contenu);
         }else if(type.equals(States.GET_DETAILS_USER)){
             return actionGetDetailsUser(type, contenu);
+        }else if(type.equals(States.GET_EQUIPES_ALL)){
+            return actionGetEquipes(type, contenu);
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }
@@ -85,28 +91,8 @@ public class ProtocoleServeur implements Protocolable{
             PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit de créer de nouveau volontaires");
             return packetRetour;
         }
-        String[] data = (String[]) contenu;
-        String nom = data[0];
-        String prenom = data[1];
-        String nomEpoux = data[2];
-        String dateNaissance = data[3];
-        String sexe = data[4];
-        String email = data[5];
-        String rue = data[6];
-        String numero = data[7];
-        String ville = data[8];
-        String codePostal = data[9];
-        String boite = data[10];
-        String nationalite = data[11];
-
-        try {
-            dbRequests.insertVolontaire(nom, prenom, nomEpoux, dateNaissance, sexe, email, rue, numero, ville, codePostal, boite, nationalite);
-        } catch (Exception ex) {
-            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-            return new PacketCom(States.NOUVEAU_VOLONTAIRE_NON, "ERROR");
-        }
-        PacketCom packetRetour = new PacketCom(States.NOUVEAU_VOLONTAIRE_OUI, null);
-        return packetRetour;
+        Volontaire volontaire = (Volontaire)contenu;
+        return insererVolontaire(volontaire);
     }
 
     private PacketCom actionGetVolontaires(String type, Object contenu, String portee) {
@@ -245,5 +231,71 @@ public class ProtocoleServeur implements Protocolable{
         }else{
             return new PacketCom(States.GET_DETAILS_USER_NON, "ERROR");
         }
+    }
+
+    private PacketCom insererVolontaire(Volontaire volontaire) {
+        String matricule = volontaire.getIdentite().getNom() + "-" + volontaire.getIdentite().getPrenom();
+
+        boolean check = false;
+        try {
+            check = dbRequests.checkMatricule(matricule);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(!check){
+            int idPersonneUrgence = -1;
+            int idDecouverte = -1;
+            int idLangueMaternelle = -1;
+            int idRenseignement = -1;
+            int idPaysLegal = -1;
+            int idVilleLegal = -1;
+            int idAdresseLegale = -1;
+            int idPaysResidence = -1;
+            int idVilleResidence = -1;
+            int idAdresseResidence = -1;
+            int idTelephone = -1;
+            try {
+                if(volontaire.getUrgence() != null) idPersonneUrgence = dbRequests.insertPersonneUrgence(volontaire.getUrgence().getNom(), volontaire.getUrgence().getPrenom(), volontaire.getUrgence().getTelephone());
+                if(volontaire.getDecouverte() != null) idDecouverte = dbRequests.insertDecouvertes(volontaire.getDecouverte().getListeDescription());
+                if(volontaire.getComplementaire() != null) idLangueMaternelle = dbRequests.insertLangueMaternelle(volontaire.getComplementaire().getLangueMaternelle());
+                if(volontaire.getComplementaire() != null) idRenseignement = dbRequests.insertRenseignement(volontaire.getComplementaire().getActivitePro(), volontaire.getComplementaire().getActivite(), volontaire.getComplementaire().getQualification(), (volontaire.getComplementaire().isPermis() ? "Oui" : "Non"), volontaire.getComplementaire().getCategorie(), volontaire.getComplementaire().getDateObtention(), (volontaire.getComplementaire().isSelectionMedicale() ? "Oui" : "Non"), volontaire.getComplementaire().getDateValidité(), idLangueMaternelle);
+                if(volontaire.getComplementaire() != null) dbRequests.insertLanguesConnue(idRenseignement, volontaire.getComplementaire().getListeLangue());
+                if(volontaire.getFormations() != null) dbRequests.insertFormationsSuivie(matricule, volontaire.getFormations().getListeFormation());
+                if(volontaire.getAdresse() != null) idPaysLegal = dbRequests.insertPaysLegal(volontaire.getAdresse().getPays());
+                if(volontaire.getAdresse() != null) idVilleLegal = dbRequests.insertVilleLegal(volontaire.getAdresse().getVille());
+                if(volontaire.getAdresse() != null) idAdresseLegale = dbRequests.insertAdresseLegale(volontaire.getAdresse().getRue(), volontaire.getAdresse().getNuméro(), volontaire.getAdresse().getCodePostal(), volontaire.getAdresse().getBoite(), idPaysLegal, idVilleLegal, matricule);
+                if(volontaire.getResidence() != null) idPaysResidence = dbRequests.insertPaysResidence(volontaire.getResidence().getPays());
+                if(volontaire.getResidence() != null) idVilleResidence = dbRequests.insertVilleResidence(volontaire.getResidence().getVille());
+                if(volontaire.getResidence() != null) idAdresseResidence = dbRequests.insertAdresseResidence(volontaire.getResidence().getRue(), volontaire.getResidence().getNuméro(), volontaire.getResidence().getCodePostal(), volontaire.getResidence().getBoite(), volontaire.getResidence(), idPaysResidence, idVilleResidence, matricule);
+                if(volontaire.getTelephone() != null) idTelephone = dbRequests.insertTelephone(volontaire.getTelephone().getGsm(), volontaire.getTelephone().getAutreGsm(), volontaire.getTelephone().getTelephoneFix(), volontaire.getTelephone().getTelephoneProfesionnelle(), volontaire.getTelephone().getFax());
+                dbRequests.insertVolontaire(matricule, volontaire.getIdentite().getNom(), volontaire.getIdentite().getPrenom(), volontaire.getIdentite().getNomJeuneFille(), volontaire.getIdentite().getDateNaissance(), volontaire.getIdentite().getSexe(), (volontaire.getAdresse() == null ? null : volontaire.getAdresse().getEmail()), "", idPersonneUrgence, idDecouverte, -1, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, -1);
+            } catch (Exception ex) {
+                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                return new PacketCom(States.NOUVEAU_VOLONTAIRE_NON, "Une erreur s'est produite.");
+            }
+            return new PacketCom(States.NOUVEAU_VOLONTAIRE_OUI, null);
+        }else{
+            return new PacketCom(States.NOUVEAU_VOLONTAIRE_NON, "Volontaire déja existant");
+        }
+    }
+
+    private PacketCom actionGetEquipes(String type, Object contenu) {
+        if(!droitsOffi.contains("SEE_MANAGER_TEAM")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
+            return packetRetour;
+        }
+        PacketCom packetReponse = null;
+        LinkedList<String[]> listeEquipes = null;
+        try {
+            listeEquipes = dbRequests.getEquipes();
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(listeEquipes != null){
+            packetReponse = new PacketCom(States.GET_EQUIPES_ALL_OUI, (Object)listeEquipes);
+        }else{
+            //TODO: traiter si la liste est vide.
+        }
+        return packetReponse;
     }
 }

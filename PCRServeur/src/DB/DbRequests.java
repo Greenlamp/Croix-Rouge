@@ -5,11 +5,15 @@
 
 package DB;
 
+import Containers.Adresse;
+import Containers.Formation;
+import Containers.Residence;
 import Database.Jdbc_MySQL;
 import java.beans.Beans;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -33,12 +37,46 @@ public class DbRequests {
         }
     }
 
-    public void insertVolontaire(String nom, String prenom, String nomEpoux, String dateNaissance, String sexe, String email, String rue, String numero, String ville, String codePostal, String boite, String nationalite) throws Exception {
-        java.sql.Date dateNaissanceSql = new java.sql.Date(new SimpleDateFormat("dd/MM/yyyy").parse(dateNaissance).getTime());
-        char sexeC = (sexe.equalsIgnoreCase("homme") ? 'M' : 'F');
-        String request = "INSERT INTO Volontaires(matricule, nom, nomEpouse, prenom, dateNaissance, sexe, email) VALUES('"+nom+"-"+prenom+"', '"+nom+"', '"+nomEpoux+"', '"+prenom+"', '"+dateNaissanceSql+"', '"+sexeC+"', '"+email+"')";
+    public void insertVolontaire(String matricule, String nom, String prenom, String nomEpoux, Date dateNaissance, char sexe, String email, String remarque, int idPersonneUrgence, int idDecouverte, int idPrestation, int idRenseignement, int idAdresseLegal, int idAdresseResidence, int idTelephone, int idActivite) throws Exception {
+        java.sql.Date dateNaissanceSql = new java.sql.Date(dateNaissance.getTime());
+        String request = "INSERT INTO Volontaires"
+                + "("
+                + "matricule,"
+                + " nom,"
+                + " nomEpouse,"
+                + " prenom,"
+                + " dateNaissance,"
+                + " sexe,"
+                + " email,"
+                + " remarques,"
+                + " idPersonneUrgence,"
+                + " idDecouverte,"
+                + " idPrestation,"
+                + " idRenseignement,"
+                + " idAdresseLegale,"
+                + " idAdresseResidence,"
+                + " idTelephone,"
+                + " idActivite"
+                + ")"
+                + " VALUES("
+                + " '"+matricule+"',"
+                + " "+(nom.isEmpty() ? null : "'"+nom+"'")+","
+                + " "+(nomEpoux.isEmpty() ? null : "'"+nomEpoux+"'")+","
+                + " "+(prenom.isEmpty() ? null : "'"+prenom+"'")+","
+                + " '"+dateNaissanceSql+"',"
+                + " '"+sexe+"',"
+                + " "+(email.isEmpty() ? null : "'"+email+"'")+","
+                + " "+(remarque.isEmpty() ? null : "'"+remarque+"'")+","
+                + " "+(idPersonneUrgence == -1 ? null : "'"+idPersonneUrgence+"'")+","
+                + " "+(idDecouverte == -1 ? null : "'"+idDecouverte+"'")+","
+                + " "+(idPrestation == -1 ? null : "'"+idPrestation+"'")+","
+                + " "+(idRenseignement == -1 ? null : "'"+idRenseignement+"'")+","
+                + " "+(idAdresseLegal == -1 ? null : "'"+idAdresseLegal+"'")+","
+                + " "+(idAdresseResidence == -1 ? null : "'"+idAdresseResidence+"'")+","
+                + " "+(idTelephone == -1 ? null : "'"+idTelephone+"'")+","
+                + " "+(idActivite == -1 ? null : "'"+idActivite+"'")
+                + ")";
         mySql.update(request);
-        mySql.closeStatement();
     }
 
     public void checkLogin(String login) throws Exception {
@@ -229,5 +267,343 @@ public class DbRequests {
 
     }
 
+    public int insertPersonneUrgence(String nom, String prenom, String telephone) throws Exception {
+        String request = "INSERT INTO PersonneUrgence(nom, prenom, telephone) VALUES('"+nom+"', '"+prenom+"', '"+telephone+"')";
+        mySql.update(request);
+        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM PersonneUrgence";
+        int idPersonneUrgence = -1;
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        while(tuples.next()){
+            idPersonneUrgence = tuples.getInt("id");
+        }
+        mySql.closeStatement();
+        return idPersonneUrgence;
+    }
 
+    public int insertDecouvertes(LinkedList<String> listeDescription) throws Exception {
+        if(listeDescription.isEmpty()){
+            return -1;
+        }
+        String description = listeDescription.getFirst();
+        description = escapeChar(description);
+        String request = "SELECT idDecouverte FROM Decouverte WHERE description = '"+description+"'";
+        boolean found = false;
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idDecouverte = -1;
+        while(tuples.next()){
+            found = true;
+            idDecouverte = tuples.getInt("idDecouverte");
+        }
+        mySql.closeStatement();
+
+        if(!found){
+            request = "INSERT INTO Decouverte(description) VALUES('"+description+"')";
+            mySql.update(request);
+            request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Decouverte";
+            tuples = (ResultSet)mySql.select(request);
+            while(tuples.next()){
+                idDecouverte = tuples.getInt("id");
+            }
+            mySql.closeStatement();
+        }
+        return idDecouverte;
+    }
+
+    public int insertLangueMaternelle(String langueMaternelle) throws Exception {
+        String request = "SELECT idLangue FROM Langue WHERE nom = '"+langueMaternelle+"'";
+        boolean found = false;
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idLangue = -1;
+        while(tuples.next()){
+            found = true;
+            idLangue = tuples.getInt("idLangue");
+        }
+        mySql.closeStatement();
+
+        if(!found){
+            request = "INSERT INTO Langue(nom) VALUES('"+langueMaternelle+"')";
+            mySql.update(request);
+            request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Langue";
+            tuples = (ResultSet)mySql.select(request);
+            while(tuples.next()){
+                idLangue = tuples.getInt("id");
+            }
+            mySql.closeStatement();
+        }
+        return idLangue;
+    }
+
+    public int insertRenseignement(String activitePro, String activite, String qualification, String permis, String categorie, Date dateObtention, String selectionMedicale, String dateValidité, int idLangueMaternelle) throws Exception {
+        java.sql.Date dateObtentionSQL = new java.sql.Date(dateObtention.getTime());
+        String request = "INSERT INTO Renseignements(activitePro, SituationActuelle, Diplome, PermisConduire, Categorie, DateObtention, selectionMedicale, dateValidite, numCompteBancaire, idLangueMaternelle) VALUES('"+activitePro+"', '"+activite+"', '"+qualification+"', '"+permis+"', '"+categorie+"', '"+dateObtentionSQL+"', '"+selectionMedicale+"', '"+dateValidité+"', '', '"+idLangueMaternelle+"')";
+        mySql.update(request);
+        int idRenseignement = -1;
+        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Renseignements";
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        while(tuples.next()){
+            idRenseignement = tuples.getInt("id");
+        }
+        mySql.closeStatement();
+        return idRenseignement;
+    }
+
+    public void insertLanguesConnue(int idRenseignement, LinkedList<String> listeLangue) throws Exception {
+        LinkedList<Integer> listeId = new LinkedList<>();
+        for(String langue : listeLangue){
+            String request = "SELECT idLangue FROM Langue WHERE nom = '"+langue+"'";
+            boolean found = false;
+            ResultSet tuples = (ResultSet)mySql.select(request);
+            int idLangue = -1;
+            while(tuples.next()){
+                found = true;
+                idLangue = tuples.getInt("idLangue");
+                listeId.add(idLangue);
+            }
+            mySql.closeStatement();
+            if(!found && !langue.isEmpty()){
+                request = "INSERT INTO Langue(nom) VALUES('"+langue+"')";
+                mySql.update(request);
+                request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Langue";
+                tuples = (ResultSet)mySql.select(request);
+                while(tuples.next()){
+                    idLangue = tuples.getInt("id");
+                    listeId.add(idLangue);
+                }
+                mySql.closeStatement();
+            }
+        }
+        for(int idLangue : listeId){
+            String request = "INSERT INTO LanguesConnue(idRenseignements, idLangue) VALUES('"+idRenseignement+"', '"+idLangue+"')";
+            mySql.update(request);
+        }
+    }
+
+    public void insertFormationsSuivie(String matricule, LinkedList<Formation> listeFormation) throws Exception {
+        LinkedList<Integer> listeId = new LinkedList<>();
+        for(Formation formation : listeFormation){
+            String request = "SELECT idFormation FROM Formation WHERE nomFormation = '"+formation.getNom()+"'";
+            boolean found = false;
+            ResultSet tuples = (ResultSet)mySql.select(request);
+            int idFormation = -1;
+            while(tuples.next()){
+                found = true;
+                idFormation = tuples.getInt("idFormation");
+                listeId.add(idFormation);
+            }
+            mySql.closeStatement();
+            if(!found){
+                java.sql.Date dateObtentionSQL = new java.sql.Date(formation.getDateObtention().getTime());
+                java.sql.Date dateExpirationSQL = new java.sql.Date((formation.getDatePeremption() != null ? formation.getDatePeremption().getTime() : formation.getDateExamen().getTime()));
+                request = "INSERT INTO Formation(nomFormation, dateObtention, dateExpiration, numero, lieu, copie, numeroService112) "
+                        + "VALUES('"+formation.getNom()+"', '"+dateObtentionSQL+"', '"+dateExpirationSQL+"', '"+formation.getNumero()+"', '"+formation.getLieu()+"', '"+formation.getPhotocopie()+"', '"+formation.getNumeroService112()+"')";
+                mySql.update(request);
+                request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Formation";
+                tuples = (ResultSet)mySql.select(request);
+                while(tuples.next()){
+                    idFormation = tuples.getInt("id");
+                    listeId.add(idFormation);
+                }
+                mySql.closeStatement();
+            }
+        }
+        for(int idFormation : listeId){
+            String request = "INSERT INTO FormationsSuivie(matricule, idFormation) VALUES('"+matricule+"', '"+idFormation+"')";
+            mySql.update(request);
+        }
+    }
+
+    public int insertPaysLegal(String pays) throws Exception {
+        String request = "SELECT idPays FROM Pays WHERE nomPays = '"+pays+"'";
+        boolean found = false;
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idPays = -1;
+        while(tuples.next()){
+            found = true;
+            idPays = tuples.getInt("idPays");
+        }
+        mySql.closeStatement();
+        if(!found && !pays.isEmpty()){
+            request = "INSERT INTO Pays(nomPays) VALUES('"+pays+"')";
+            mySql.update(request);
+            request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Pays";
+            tuples = (ResultSet)mySql.select(request);
+            while(tuples.next()){
+                idPays = tuples.getInt("id");
+            }
+            mySql.closeStatement();
+        }
+        return idPays;
+    }
+
+    public int insertPaysResidence(String pays) throws Exception {
+        String request = "SELECT idPays FROM Pays WHERE nomPays = '"+pays+"'";
+        boolean found = false;
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idPays = -1;
+        while(tuples.next()){
+            found = true;
+            idPays = tuples.getInt("idPays");
+        }
+        mySql.closeStatement();
+        if(!found && !pays.isEmpty()){
+            request = "INSERT INTO Pays(nomPays) VALUES('"+pays+"')";
+            mySql.update(request);
+            request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Pays";
+            tuples = (ResultSet)mySql.select(request);
+            while(tuples.next()){
+                idPays = tuples.getInt("id");
+            }
+            mySql.closeStatement();
+        }
+        return idPays;
+    }
+
+    public int insertVilleLegal(String ville) throws Exception {
+        String request = "SELECT idVille FROM Ville WHERE nomVille = '"+ville+"'";
+        boolean found = false;
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idVille = -1;
+        while(tuples.next()){
+            found = true;
+            idVille = tuples.getInt("idVille");
+        }
+        mySql.closeStatement();
+        if(!found && !ville.isEmpty()){
+            request = "INSERT INTO Ville(nomVille) VALUES('"+ville+"')";
+            mySql.update(request);
+            request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Ville";
+            tuples = (ResultSet)mySql.select(request);
+            while(tuples.next()){
+                idVille = tuples.getInt("id");
+            }
+            mySql.closeStatement();
+        }
+        return idVille;
+    }
+
+    public int insertVilleResidence(String ville) throws Exception {
+        String request = "SELECT idVille FROM Ville WHERE nomVille = '"+ville+"'";
+        boolean found = false;
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idVille = -1;
+        while(tuples.next()){
+            found = true;
+            idVille = tuples.getInt("idVille");
+        }
+        mySql.closeStatement();
+        if(!found && !ville.isEmpty()){
+            request = "INSERT INTO Ville(nomVille) VALUES('"+ville+"')";
+            mySql.update(request);
+            request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Ville";
+            tuples = (ResultSet)mySql.select(request);
+            while(tuples.next()){
+                idVille = tuples.getInt("id");
+            }
+            mySql.closeStatement();
+        }
+        return idVille;
+    }
+
+    public int insertAdresseLegale(String rue, int numéro, int codePostal, int boite, int idPaysLegal, int idVilleLegal, String matricule) throws Exception {
+        if(rue.isEmpty()){
+            return -1;
+        }
+        String request = "INSERT INTO Adresse(rueAvenueBd, numero, codePostal, boite, idPays, idVille, matriculeVolontaire) VALUES('"+rue+"', '"+numéro+"', '"+codePostal+"', '"+(boite == -1 ? null : boite)+"', '"+idPaysLegal+"', '"+idVilleLegal+"', '"+matricule+"')";
+        mySql.update(request);
+        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Adresse";
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idAdresse = -1;
+        while(tuples.next()){
+            idAdresse = tuples.getInt("id");
+        }
+        mySql.closeStatement();
+        return idAdresse;
+    }
+
+    public int insertAdresseResidence(String rue, int numéro, int codePostal, int boite, Residence residence, int idPaysResidence, int idVilleResidence, String matricule) throws Exception {
+        if(rue.isEmpty()){
+            return -1;
+        }
+        String request = "INSERT INTO Adresse(rue-avenue-bd, numero, codePostal, boite, idPays, idVille, matriculeVolontaire) VALUES('"+rue+"', '"+numéro+"', '"+codePostal+"', '"+boite+"', '"+idPaysResidence+"', '"+idVilleResidence+"', '"+matricule+"')";
+        mySql.update(request);
+        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Adresse";
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idAdresse = -1;
+        while(tuples.next()){
+            idAdresse = tuples.getInt("id");
+        }
+        mySql.closeStatement();
+        return idAdresse;
+    }
+
+    public int insertTelephone(String gsm, String autreGsm, String telephoneFix, String telephoneProfesionnelle, String fax) throws Exception {
+        /*String request = "INSERT INTO Telephone(gsm, autreGsm, telephoneFix, telephonePro, fax) "
+                + "VALUES("
+                + "'"+(gsm.isEmpty() ? null : gsm)+"',"
+                + " '"+(autreGsm.isEmpty() ? null : autreGsm)+"',"
+                + " '"+(telephoneFix.isEmpty() ? null : telephoneFix)+"',"
+                + " '"+(telephoneProfesionnelle.isEmpty() ? null : telephoneProfesionnelle)+"',"
+                + " '"+(fax.isEmpty() ? null : fax)+"'"
+                + ")";*/
+        String request = "INSERT INTO Telephone(gsm, autreGsm, telephoneFix, telephonePro, fax) VALUES("+(gsm.isEmpty() ? null : "'"+gsm+"'")+", "+(autreGsm.isEmpty() ? null : "'"+autreGsm+"'")+","+(telephoneFix.isEmpty() ? null : "'"+telephoneFix+"'")+" ,"+(telephoneProfesionnelle.isEmpty() ? null : "'"+telephoneProfesionnelle+"'")+" ,"+(fax.isEmpty() ? null : "'"+fax+"'")+")";
+        mySql.update(request);
+        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Telephone";
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idTelephone = -1;
+        while(tuples.next()){
+            idTelephone = tuples.getInt("id");
+        }
+        mySql.closeStatement();
+        return idTelephone;
+    }
+
+    private String escapeChar(String description) {
+        String retour = description.replaceAll("'", "+");
+        retour = retour.replace("+", "\\'");
+        return retour;
+    }
+
+    public boolean checkMatricule(String matricule) throws Exception {
+        boolean found = false;
+        String request =  "SELECT matricule "
+                        + "FROM volontaires "
+                        + "WHERE matricule = '"+matricule+"';";
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        while(tuples.next()){
+            found = true;
+        }
+        mySql.closeStatement();
+        return found;
+    }
+
+    public LinkedList<String[]> getEquipes() throws Exception {
+        LinkedList<String[]> listeEquipes = null;
+        String request =  "SELECT nom, dateCreation, count(matricule) as 'count'"
+                        + "FROM Equipe E, Lier L "
+                        + "WHERE E.idEquipe = L.idEquipe";
+
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        while(tuples.next()){
+            if(listeEquipes == null){
+                listeEquipes = new LinkedList<>();
+            }
+            String nom = null;
+            java.sql.Date dateCreation = null;
+            int count = -1;
+
+            nom = tuples.getString("nom");
+            if(nom == null){
+                return listeEquipes;
+            }
+            dateCreation = tuples.getDate("dateCreation");
+            count = tuples.getInt("count");
+
+            java.util.Date dateUtil = new java.util.Date(dateCreation.getTime());
+
+            String[] data = {nom, new SimpleDateFormat("dd/MM/yyyy").format(dateUtil), String.valueOf(count)};
+            listeEquipes.add(data);
+        }
+        mySql.closeStatement();
+        return listeEquipes;
+    }
 }

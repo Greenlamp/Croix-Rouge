@@ -8,6 +8,11 @@ import Containers.Decouverte;
 import Containers.Volontaire;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import PacketCom.PacketCom;
+import States.States;
+import Wizard.Wizard_Nouveau;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -98,6 +103,7 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
         jLabel26.setText("à la Croix-Rouge ?");
 
         G1.setBackground(new java.awt.Color(153, 153, 153));
+        G1.setSelected(true);
         G1.setText("Un volontaire m'en a parlé");
 
         G2.setBackground(new java.awt.Color(153, 153, 153));
@@ -193,6 +199,11 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
         jLabel24.setText("6");
 
         jButton2.setText("Terminer");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Annuler");
 
@@ -283,72 +294,38 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        Decouverte decouverte = new Decouverte();
-        if(G1.isSelected()){
-            decouverte.addDescription(G1.getText());
-        }
-        if(G2.isSelected()){
-            decouverte.addDescription(G2.getText());
-        }
-        if(G3.isSelected()){
-            decouverte.addDescription(G3.getText());
-        }
-        if(G4.isSelected()){
-            decouverte.addDescription(G4.getText());
-        }
-        if(G5.isSelected()){
-            decouverte.addDescription(G5.getText());
-        }
-        if(G6.isSelected()){
-            decouverte.addDescription(G6.getText());
-        }
-        if(G7.isSelected()){
-            decouverte.addDescription(G7.getText());
-        }
-        if(G8.isSelected()){
-            decouverte.addDescription(G8.getText());
-        }
-        if(G9.isSelected()){
-            decouverte.addDescription(Gprecision.getText());
-        }
-
-        parent.setVolontaireP3(decouverte);
+        enregistrerData();
         parent.changeState(Main.NOUVEAU_VOLONTAIREP2);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        Decouverte decouverte = new Decouverte();
-        if(G1.isSelected()){
-            decouverte.addDescription(G1.getText());
-        }
-        if(G2.isSelected()){
-            decouverte.addDescription(G2.getText());
-        }
-        if(G3.isSelected()){
-            decouverte.addDescription(G3.getText());
-        }
-        if(G4.isSelected()){
-            decouverte.addDescription(G4.getText());
-        }
-        if(G5.isSelected()){
-            decouverte.addDescription(G5.getText());
-        }
-        if(G6.isSelected()){
-            decouverte.addDescription(G6.getText());
-        }
-        if(G7.isSelected()){
-            decouverte.addDescription(G7.getText());
-        }
-        if(G8.isSelected()){
-            decouverte.addDescription(G8.getText());
-        }
-        if(G9.isSelected()){
-            decouverte.addDescription(Gprecision.getText());
-        }
-
-        parent.setVolontaireP3(decouverte);
+        enregistrerData();
         parent.changeState(Main.NOUVEAU_VOLONTAIREP4);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        enregistrerData();
+        boolean cont = false;
+        volontaire = parent.getVolontaire();
+        PacketCom packet = new PacketCom(States.NOUVEAU_VOLONTAIRE, (Object)volontaire);
+        socket.send(packet);
+        try {
+            PacketCom packetReponse = socket.receive();
+            String type = packetReponse.getType();
+            if(type.equals(States.NOUVEAU_VOLONTAIRE_OUI)){
+                parent.afficherMessage("Ajout nouveau volontaire réussi.");
+                cont = true;
+            }else if(type.equals(States.NOUVEAU_VOLONTAIRE_NON)){
+                String message = (String) packetReponse.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(cont){
+            parent.changeState(Main.LOGGED);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox G1;
@@ -417,6 +394,39 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
         }catch(Exception ex){
 
         }
+    }
+
+    private void enregistrerData() {
+        Decouverte decouverte = new Decouverte();
+        if(G1.isSelected()){
+            decouverte.addDescription(G1.getText());
+        }
+        if(G2.isSelected()){
+            decouverte.addDescription(G2.getText());
+        }
+        if(G3.isSelected()){
+            decouverte.addDescription(G3.getText());
+        }
+        if(G4.isSelected()){
+            decouverte.addDescription(G4.getText());
+        }
+        if(G5.isSelected()){
+            decouverte.addDescription(G5.getText());
+        }
+        if(G6.isSelected()){
+            decouverte.addDescription(G6.getText());
+        }
+        if(G7.isSelected()){
+            decouverte.addDescription(G7.getText());
+        }
+        if(G8.isSelected()){
+            decouverte.addDescription(G8.getText());
+        }
+        if(G9.isSelected()){
+            decouverte.addDescription(Gprecision.getText());
+        }
+
+        parent.setVolontaireP3(decouverte);
     }
 
 }

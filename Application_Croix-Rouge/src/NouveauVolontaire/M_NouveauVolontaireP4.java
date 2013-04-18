@@ -8,6 +8,9 @@ import Containers.Complementaire;
 import Containers.Volontaire;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import PacketCom.PacketCom;
+import States.States;
+import Wizard.Wizard_Nouveau;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -123,12 +126,15 @@ public class M_NouveauVolontaireP4 extends javax.swing.JPanel {
 
         jLabel2.setText("Activité professionnelle que vous exercez ou avez exercé à titre principal");
 
+        GactivitePro.setText("étudiant");
+
         jLabel3.setText("Actuellement vous êtes");
 
         G1.setBackground(new java.awt.Color(153, 153, 153));
         G1.setText("au travail");
 
         G2.setBackground(new java.awt.Color(153, 153, 153));
+        G2.setSelected(true);
         G2.setText("aux études");
 
         G3.setBackground(new java.awt.Color(153, 153, 153));
@@ -145,7 +151,11 @@ public class M_NouveauVolontaireP4 extends javax.swing.JPanel {
 
         jLabel4.setText("Langue maternelle");
 
+        GlangueMaternelle.setText("Français");
+
         jLabel5.setText("Autre(s) langue(s) couramment parlée(s)");
+
+        GautreLangue1.setText("Anglais");
 
         jLabel6.setText("Qualification ou diplôme");
 
@@ -320,6 +330,11 @@ public class M_NouveauVolontaireP4 extends javax.swing.JPanel {
         jLabel24.setText("6");
 
         jButton2.setText("Terminer");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Annuler");
 
@@ -411,106 +426,38 @@ public class M_NouveauVolontaireP4 extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        Complementaire complementaire = new Complementaire();
-            complementaire.setActivitePro(GactivitePro.getText());
-            if(G1.isSelected()){
-                complementaire.addActivite(G1.getText());
-            }
-            if(G2.isSelected()){
-                complementaire.addActivite(G2.getText());
-            }
-            if(G3.isSelected()){
-                complementaire.addActivite(G3.getText());
-            }
-            if(G4.isSelected()){
-                complementaire.addActivite(G4.getText());
-            }
-            if(G5.isSelected()){
-                complementaire.addActivite(G5.getText());
-            }
-            if(G6.isSelected()){
-                complementaire.addActivite(Gprecision.getText());
-            }
-            complementaire.setLangueMaternelle(GlangueMaternelle.getText());
-            complementaire.addLangue(GautreLangue1.getText());
-            complementaire.addLangue(GautreLangue2.getText());
-            complementaire.addLangue(GautreLangue3.getText());
-            complementaire.setQualification(Gdiplome.getText());
-            if(Gpermis.isSelected()){
-                complementaire.setPermis(true);
-            }
-            complementaire.setCategorie(Gcategorie.getText());
-
-            String jour = Gjour.getSelectedItem().toString();
-            String mois = Gmois.getSelectedItem().toString();
-            String annee = Gannee.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            complementaire.setDateObtention(dateObtention);
-            if(GselectionMedicale.isSelected()){
-                complementaire.setSelectionMedicale(true);
-            }
-            complementaire.setDateValidité(GdateValidite.getText());
-
-        parent.setVolontaireP4(complementaire);
+        enregistrerData();
         parent.changeState(Main.NOUVEAU_VOLONTAIREP5);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        Complementaire complementaire = new Complementaire();
-            complementaire.setActivitePro(GactivitePro.getText());
-            if(G1.isSelected()){
-                complementaire.addActivite(G1.getText());
-            }
-            if(G2.isSelected()){
-                complementaire.addActivite(G2.getText());
-            }
-            if(G3.isSelected()){
-                complementaire.addActivite(G3.getText());
-            }
-            if(G4.isSelected()){
-                complementaire.addActivite(G4.getText());
-            }
-            if(G5.isSelected()){
-                complementaire.addActivite(G5.getText());
-            }
-            if(G6.isSelected()){
-                complementaire.addActivite(Gprecision.getText());
-            }
-            complementaire.setLangueMaternelle(GlangueMaternelle.getText());
-            complementaire.addLangue(GautreLangue1.getText());
-            complementaire.addLangue(GautreLangue2.getText());
-            complementaire.addLangue(GautreLangue3.getText());
-            complementaire.setQualification(Gdiplome.getText());
-            if(Gpermis.isSelected()){
-                complementaire.setPermis(true);
-            }
-            complementaire.setCategorie(Gcategorie.getText());
-
-            String jour = Gjour.getSelectedItem().toString();
-            String mois = Gmois.getSelectedItem().toString();
-            String annee = Gannee.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateObtention = null;
-            try {
-                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            complementaire.setDateObtention(dateObtention);
-            if(GselectionMedicale.isSelected()){
-                complementaire.setSelectionMedicale(true);
-            }
-            complementaire.setDateValidité(GdateValidite.getText());
-
-        parent.setVolontaireP4(complementaire);
+        enregistrerData();
         parent.changeState(Main.NOUVEAU_VOLONTAIREP3);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        enregistrerData();
+        boolean cont = false;
+        volontaire = parent.getVolontaire();
+        PacketCom packet = new PacketCom(States.NOUVEAU_VOLONTAIRE, (Object)volontaire);
+        socket.send(packet);
+        try {
+            PacketCom packetReponse = socket.receive();
+            String type = packetReponse.getType();
+            if(type.equals(States.NOUVEAU_VOLONTAIRE_OUI)){
+                parent.afficherMessage("Ajout nouveau volontaire réussi.");
+                cont = true;
+            }else if(type.equals(States.NOUVEAU_VOLONTAIRE_NON)){
+                String message = (String) packetReponse.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(cont){
+            parent.changeState(Main.LOGGED);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox G1;
@@ -563,31 +510,19 @@ public class M_NouveauVolontaireP4 extends javax.swing.JPanel {
 
     private void fillChampComplementaire() {
         GactivitePro.setText(volontaire.getComplementaire().getActivitePro());
-        if(volontaire.getComplementaire().getListeActivite().contains(G1.getText())){
+        if(volontaire.getComplementaire().getActivite().equals(G1.getText())){
             G1.setSelected(true);
-            volontaire.getComplementaire().getListeActivite().remove(G1.getText());
-        }
-        if(volontaire.getComplementaire().getListeActivite().contains(G2.getText())){
+        }else if(volontaire.getComplementaire().getActivite().equals(G2.getText())){
             G2.setSelected(true);
-            volontaire.getComplementaire().getListeActivite().remove(G2.getText());
-        }
-        if(volontaire.getComplementaire().getListeActivite().contains(G3.getText())){
+        }else if(volontaire.getComplementaire().getActivite().equals(G3.getText())){
             G3.setSelected(true);
-            volontaire.getComplementaire().getListeActivite().remove(G3.getText());
-        }
-        if(volontaire.getComplementaire().getListeActivite().contains(G4.getText())){
+        }else if(volontaire.getComplementaire().getActivite().equals(G4.getText())){
             G4.setSelected(true);
-            volontaire.getComplementaire().getListeActivite().remove(G4.getText());
-        }
-        if(volontaire.getComplementaire().getListeActivite().contains(G5.getText())){
+        }else if(volontaire.getComplementaire().getActivite().equals(G5.getText())){
             G5.setSelected(true);
-            volontaire.getComplementaire().getListeActivite().remove(G5.getText());
-        }
-        try{
-            Gprecision.setText(volontaire.getComplementaire().getListeActivite().getFirst());
+        }else{
             G6.setSelected(true);
-        }catch(Exception ex){
-
+            Gprecision.setText(volontaire.getComplementaire().getActivite());
         }
         GlangueMaternelle.setText(volontaire.getComplementaire().getLangueMaternelle());
         if(volontaire.getComplementaire().getListeLangue().size() >= 1){
@@ -629,6 +564,56 @@ public class M_NouveauVolontaireP4 extends javax.swing.JPanel {
         for(int i=1997; i>=1920; i--){
             Gannee.addItem(i);
         }
+    }
+
+    private void enregistrerData() {
+        Complementaire complementaire = new Complementaire();
+            complementaire.setActivitePro(GactivitePro.getText());
+            if(G1.isSelected()){
+                complementaire.setActivite(G1.getText());
+            }
+            if(G2.isSelected()){
+                complementaire.setActivite(G2.getText());
+            }
+            if(G3.isSelected()){
+                complementaire.setActivite(G3.getText());
+            }
+            if(G4.isSelected()){
+                complementaire.setActivite(G4.getText());
+            }
+            if(G5.isSelected()){
+                complementaire.setActivite(G5.getText());
+            }
+            if(G6.isSelected()){
+                complementaire.setActivite(Gprecision.getText());
+            }
+            complementaire.setLangueMaternelle(GlangueMaternelle.getText());
+            complementaire.addLangue(GautreLangue1.getText());
+            complementaire.addLangue(GautreLangue2.getText());
+            complementaire.addLangue(GautreLangue3.getText());
+            complementaire.setQualification(Gdiplome.getText());
+            if(Gpermis.isSelected()){
+                complementaire.setPermis(true);
+            }
+            complementaire.setCategorie(Gcategorie.getText());
+
+            String jour = Gjour.getSelectedItem().toString();
+            String mois = Gmois.getSelectedItem().toString();
+            String annee = Gannee.getSelectedItem().toString();
+            String dateString = jour + "/" + mois + "/" + annee;
+            Date dateObtention = null;
+            try {
+                dateObtention = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            complementaire.setDateObtention(dateObtention);
+            if(GselectionMedicale.isSelected()){
+                complementaire.setSelectionMedicale(true);
+            }
+            complementaire.setDateValidité(GdateValidite.getText());
+
+        parent.setVolontaireP4(complementaire);
     }
 
 }

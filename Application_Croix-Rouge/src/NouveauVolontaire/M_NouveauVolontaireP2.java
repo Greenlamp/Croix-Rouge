@@ -9,6 +9,11 @@ import Containers.Urgence;
 import Containers.Volontaire;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import PacketCom.PacketCom;
+import States.States;
+import Wizard.Wizard_Nouveau;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -181,6 +186,11 @@ public class M_NouveauVolontaireP2 extends javax.swing.JPanel {
         jLabel24.setText("6");
 
         jButton2.setText("Terminer");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Annuler");
 
@@ -328,38 +338,38 @@ public class M_NouveauVolontaireP2 extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        Telephone telephone = new Telephone();
-            telephone.setGsm(Ggsm.getText());
-            telephone.setAutreGsm(GautreGsm.getText());
-            telephone.setTelephoneFix(GtelephoneFix.getText());
-            telephone.setTelephoneProfesionnelle(GtelephoneProfessionnelle.getText());
-            telephone.setFax(Gfax.getText());
-
-        Urgence urgence = new Urgence();
-            urgence.setNom(GnomUrgence.getText());
-            urgence.setPrenom(GprenomUrgence.getText());
-            urgence.setTelephone(GtelephoneUrgence.getText());
-
-        parent.setVolontaireP2(telephone, urgence);
+        enregistrerData();
         parent.changeState(Main.NOUVEAU_VOLONTAIREP3);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        Telephone telephone = new Telephone();
-            telephone.setGsm(Ggsm.getText());
-            telephone.setAutreGsm(GautreGsm.getText());
-            telephone.setTelephoneFix(GtelephoneFix.getText());
-            telephone.setTelephoneProfesionnelle(GtelephoneProfessionnelle.getText());
-            telephone.setFax(Gfax.getText());
-
-        Urgence urgence = new Urgence();
-            urgence.setNom(GnomUrgence.getText());
-            urgence.setPrenom(GprenomUrgence.getText());
-            urgence.setTelephone(GtelephoneUrgence.getText());
-
-        parent.setVolontaireP2(telephone, urgence);
+        enregistrerData();
         parent.changeState(Main.NOUVEAU_VOLONTAIREP1);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        enregistrerData();
+        boolean cont = false;
+        volontaire = parent.getVolontaire();
+        PacketCom packet = new PacketCom(States.NOUVEAU_VOLONTAIRE, (Object)volontaire);
+        socket.send(packet);
+        try {
+            PacketCom packetReponse = socket.receive();
+            String type = packetReponse.getType();
+            if(type.equals(States.NOUVEAU_VOLONTAIRE_OUI)){
+                parent.afficherMessage("Ajout nouveau volontaire réussi.");
+                cont = true;
+            }else if(type.equals(States.NOUVEAU_VOLONTAIRE_NON)){
+                String message = (String) packetReponse.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(cont){
+            parent.changeState(Main.LOGGED);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField GautreGsm;
@@ -408,6 +418,22 @@ public class M_NouveauVolontaireP2 extends javax.swing.JPanel {
         GnomUrgence.setText(volontaire.getUrgence().getNom());
         GprenomUrgence.setText(volontaire.getUrgence().getPrenom());
         GtelephoneUrgence.setText(volontaire.getUrgence().getTelephone());
+    }
+
+    private void enregistrerData() {
+        Telephone telephone = new Telephone();
+            telephone.setGsm(Ggsm.getText());
+            telephone.setAutreGsm(GautreGsm.getText());
+            telephone.setTelephoneFix(GtelephoneFix.getText());
+            telephone.setTelephoneProfesionnelle(GtelephoneProfessionnelle.getText());
+            telephone.setFax(Gfax.getText());
+
+        Urgence urgence = new Urgence();
+            urgence.setNom(GnomUrgence.getText());
+            urgence.setPrenom(GprenomUrgence.getText());
+            urgence.setTelephone(GtelephoneUrgence.getText());
+
+        parent.setVolontaireP2(telephone, urgence);
     }
 
 }

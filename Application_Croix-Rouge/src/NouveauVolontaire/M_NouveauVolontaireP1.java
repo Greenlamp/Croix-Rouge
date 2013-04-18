@@ -10,6 +10,9 @@ import Containers.Residence;
 import Containers.Volontaire;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import PacketCom.PacketCom;
+import States.States;
+import Wizard.Wizard_Nouveau;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -437,6 +440,11 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
         jLabel24.setText("6");
 
         jButton2.setText("Terminer");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Annuler");
 
@@ -518,63 +526,33 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        Identite identite = new Identite();
-            identite.setNom(Gnom.getText());
-            identite.setPrenom(Gprenom.getText());
-            identite.setSexe((Ghomme.isSelected() ? 'h' : 'f'));
-            identite.setNomJeuneFille(GnomFille.getText());
-
-            String jour = Gjour.getSelectedItem().toString();
-            String mois = Gmois.getSelectedItem().toString();
-            String annee = Gannee.getSelectedItem().toString();
-            String dateString = jour + "/" + mois + "/" + annee;
-            Date dateNaissance = null;
-            try {
-                dateNaissance = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
-            } catch (ParseException ex) {
-                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            identite.setDateNaissance(dateNaissance);
-
-        Adresse adresse = new Adresse();
-            adresse.setEmail(Gemail.getText());
-
-            adresse.setRue(Grue.getText());
-            adresse.setNuméro(Integer.parseInt(Gnumero.getText()));
-            try{
-                adresse.setBoite(Integer.parseInt(Gboite.getText()));
-            }catch(Exception ex){
-
-            }
-            adresse.setCodePostal(Integer.parseInt(GcodePostal.getText()));
-            adresse.setVille(Gville.getText());
-            adresse.setPays(Gpays.getSelectedItem().toString());
-
-        Residence residence = new Residence();
-            residence.setRue(GrueResidence.getText());
-            try{
-                residence.setNuméro(Integer.parseInt(GnumeroResidence.getText()));
-            }catch(Exception ex){
-
-            }
-            try{
-                residence.setBoite(Integer.parseInt(GboiteResidence.getText()));
-            }catch(Exception ex){
-
-            }
-            try{
-                residence.setCodePostal(Integer.parseInt(GcodePostalResidence.getText()));
-            }catch(Exception ex){
-
-            }
-            residence.setVille(GvilleResidence.getText());
-            residence.setPays((GpaysResidence.getSelectedItem().toString().equals(" ") ? "" : GpaysResidence.getSelectedItem().toString()));
-
-
-        parent.setVolontaireP1(identite, adresse, residence);
+        enregistrerData();
         parent.changeState(Main.NOUVEAU_VOLONTAIREP2);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        enregistrerData();
+        boolean cont = false;
+        volontaire = parent.getVolontaire();
+        PacketCom packet = new PacketCom(States.NOUVEAU_VOLONTAIRE, (Object)volontaire);
+        socket.send(packet);
+        try {
+            PacketCom packetReponse = socket.receive();
+            String type = packetReponse.getType();
+            if(type.equals(States.NOUVEAU_VOLONTAIRE_OUI)){
+                parent.afficherMessage("Ajout nouveau volontaire réussi.");
+                cont = true;
+            }else if(type.equals(States.NOUVEAU_VOLONTAIRE_NON)){
+                String message = (String) packetReponse.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(cont){
+            parent.changeState(Main.LOGGED);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox Gannee;
@@ -649,9 +627,9 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
         Gnom.setText(volontaire.getIdentite().getNom());
         Gprenom.setText(volontaire.getIdentite().getPrenom());
         if(volontaire.getIdentite().getSexe() == 'M'){
-            Ghomme.setEnabled(true);
+            Ghomme.setSelected(true);
         }else{
-            Gfemme.setEnabled(true);
+            Gfemme.setSelected(true);
         }
         GnomFille.setText(volontaire.getIdentite().getNomJeuneFille());
         String dateNaissance = new SimpleDateFormat("dd/MM/yyyy").format(volontaire.getIdentite().getDateNaissance());
@@ -701,5 +679,63 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
                 found = true;
             }
         }
+    }
+
+    private void enregistrerData() {
+        Identite identite = new Identite();
+            identite.setNom(Gnom.getText());
+            identite.setPrenom(Gprenom.getText());
+            identite.setSexe((Ghomme.isSelected() ? 'h' : 'f'));
+            identite.setNomJeuneFille(GnomFille.getText());
+
+            String jour = Gjour.getSelectedItem().toString();
+            String mois = Gmois.getSelectedItem().toString();
+            String annee = Gannee.getSelectedItem().toString();
+            String dateString = jour + "/" + mois + "/" + annee;
+            Date dateNaissance = null;
+            try {
+                dateNaissance = new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(M_NouveauVolontaireP1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            identite.setDateNaissance(dateNaissance);
+
+        Adresse adresse = new Adresse();
+            adresse.setEmail(Gemail.getText());
+
+            adresse.setRue(Grue.getText());
+            adresse.setNuméro(Integer.parseInt(Gnumero.getText()));
+            try{
+                adresse.setBoite(Integer.parseInt(Gboite.getText()));
+            }catch(Exception ex){
+
+            }
+            adresse.setCodePostal(Integer.parseInt(GcodePostal.getText()));
+            adresse.setVille(Gville.getText());
+            adresse.setPays(Gpays.getSelectedItem().toString());
+
+        Residence residence = new Residence();
+            residence.setRue(GrueResidence.getText());
+            try{
+                residence.setNuméro(Integer.parseInt(GnumeroResidence.getText()));
+            }catch(Exception ex){
+
+            }
+            try{
+                residence.setBoite(Integer.parseInt(GboiteResidence.getText()));
+            }catch(Exception ex){
+
+            }
+            try{
+                residence.setCodePostal(Integer.parseInt(GcodePostalResidence.getText()));
+            }catch(Exception ex){
+
+            }
+            residence.setVille(GvilleResidence.getText());
+            residence.setPays((GpaysResidence.getSelectedItem().toString().equals(" ") ? "" : GpaysResidence.getSelectedItem().toString()));
+
+
+        parent.setVolontaireP1(identite, adresse, residence);
     }
 }
