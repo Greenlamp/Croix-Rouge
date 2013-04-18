@@ -24,6 +24,7 @@ import NouveauVolontaire.M_NouveauVolontaireP3;
 import NouveauVolontaire.M_NouveauVolontaireP4;
 import NouveauVolontaire.M_NouveauVolontaireP5;
 import NouveauVolontaire.M_NouveauVolontaireP6;
+import Recherche.TupleRecherche;
 import java.awt.Image;
 import java.util.LinkedList;
 import javax.swing.ImageIcon;
@@ -64,7 +65,7 @@ public class Main extends javax.swing.JFrame {
 
     private String loginUser = null;
     String equipeSelected = null;
-    LinkedList<String[]> listeVolontaire = null;
+    LinkedList<TupleRecherche> listeVolontaire = null;
 
     private String actualState = Main.UNLOGGED;
 
@@ -532,11 +533,11 @@ public class Main extends javax.swing.JFrame {
         return this.equipeSelected;
     }
 
-    public LinkedList<String[]> getListeVolontaire() {
+    public LinkedList<TupleRecherche> getListeVolontaire() {
         return this.listeVolontaire;
     }
 
-    public void setListeVolontaire(LinkedList<String[]> listeVolontaire) {
+    public void setListeVolontaire(LinkedList<TupleRecherche> listeVolontaire) {
         this.listeVolontaire = listeVolontaire;
     }
 }

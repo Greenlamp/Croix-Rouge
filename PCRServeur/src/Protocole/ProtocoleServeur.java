@@ -15,6 +15,7 @@ import Recherche.Critere;
 import Recherche.Criteres.ByNom;
 import Recherche.Criteres.CritereCustom;
 import Recherche.Criteres.TraitementRecherche;
+import Recherche.Equipe;
 import Recherche.TupleRecherche;
 import States.States;
 import java.util.Date;
@@ -69,6 +70,8 @@ public class ProtocoleServeur implements Protocolable{
             return actionGetEquipes(type, contenu);
         }else if(type.equals(States.RECHERCHE)){
             return actionRecherche(type, contenu);
+        }else if(type.equals(States.NOUVELLE_EQUIPE)){
+            return actionNouvelleEquipe(type, contenu);
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }
@@ -329,5 +332,27 @@ public class ProtocoleServeur implements Protocolable{
         traitementRecherche.Filtrer(listeCritereCustoms);
 
         return new PacketCom(States.RECHERCHE_OUI, (Object)traitementRecherche.getResultats());
+    }
+
+    private PacketCom actionNouvelleEquipe(String type, Object contenu) {
+        Equipe equipe = (Equipe) contenu;
+        int idEquipe;
+        try {
+            idEquipe = dbRequests.insertEquipe(equipe.getNom());
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            return new PacketCom(States.NOUVELLE_EQUIPE_NON, (Object)"Nom d'équipe déja utilisé");
+        }
+        for(TupleRecherche tuple : equipe.getVolontaires()){
+            String matricule;
+            try {
+                matricule = dbRequests.getMatricule(tuple.getNom(), tuple.getPrenom());
+                dbRequests.insertMembreEquipe(idEquipe, matricule);
+            } catch (Exception ex) {
+                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                return new PacketCom(States.NOUVELLE_EQUIPE_NON, (Object)ex.getMessage());
+            }
+        }
+        return new PacketCom(States.NOUVELLE_EQUIPE_OUI, null);
     }
 }

@@ -30,7 +30,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
      */
     Main parent = null;
     NetworkClient socket = null;
-    LinkedList<String[]> listeVolontaire = null;
+    LinkedList<TupleRecherche> listeVolontaire = null;
     LinkedList<Critere> listeCriteres = null;
     int cpt = 0;
     public M_SearchCrit(Main parent, NetworkClient socket) {
@@ -64,6 +64,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         Gresultat = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         GdotNom = new javax.swing.JRadioButton();
@@ -174,6 +175,13 @@ public class M_SearchCrit extends javax.swing.JPanel {
         ));
         jScrollPane3.setViewportView(Gresultat);
 
+        jButton1.setText("Sélectionner");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -181,10 +189,11 @@ public class M_SearchCrit extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -193,7 +202,9 @@ public class M_SearchCrit extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -328,7 +339,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
             return;
         }
         String[] split = selected.split("-");
-        int numero = Integer.parseInt(split[0]);
+        int numero = Integer.parseInt(split[1]);
         int cpt = 0;
         for(Critere elm : listeCriteres){
             if(elm.getNumero() == numero){
@@ -365,6 +376,18 @@ public class M_SearchCrit extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_BrechercherActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int[] selectedRows = Gresultat.getSelectedRows();
+        LinkedList<TupleRecherche> listeResultatSelectionne = new LinkedList<>();
+        for(int indice : selectedRows){
+            String nom = Gresultat.getValueAt(indice, 0).toString();
+            String prenom = Gresultat.getValueAt(indice, 1).toString();
+            listeResultatSelectionne.add(new TupleRecherche(nom, prenom));
+        }
+        parent.setListeVolontaire(listeResultatSelectionne);
+        parent.changeState(Main.EDITNEWEQUIPE);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Bajouter;
     private javax.swing.JButton Brechercher;
@@ -381,6 +404,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
     private javax.swing.JTextField Gprenom;
     private javax.swing.JTable Gresultat;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

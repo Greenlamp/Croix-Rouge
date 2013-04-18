@@ -57,6 +57,10 @@ public class ProtocoleClient implements Protocolable{
             return packet;
         }else if (type.equals(States.RECHERCHE_NON)) {
             return packet;
+        }else if (type.equals(States.NOUVELLE_EQUIPE_OUI)) {
+            return packet;
+        }else if (type.equals(States.NOUVELLE_EQUIPE_NON)) {
+            return packet;
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }

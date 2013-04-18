@@ -7,8 +7,15 @@ package EquipeVolontaire;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
+import PacketCom.PacketCom;
+import Recherche.Equipe;
+import Recherche.TupleRecherche;
+import States.States;
+import Wizard.Wizard_Nouveau;
 import java.util.LinkedList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,7 +29,7 @@ public class M_NewEditEquipeVolontaire extends javax.swing.JPanel {
     Main parent = null;
     NetworkClient socket = null;
     String equipeSelected = null;
-    LinkedList<String[]> listeVolontaire = null;
+    LinkedList<TupleRecherche> listeVolontaire = null;
     public M_NewEditEquipeVolontaire(Main parent, NetworkClient socket) {
         initComponents();
         this.socket = socket;
@@ -64,6 +71,9 @@ public class M_NewEditEquipeVolontaire extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         Bajouter = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        GnomEquipe = new javax.swing.JTextField();
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -157,7 +167,7 @@ public class M_NewEditEquipeVolontaire extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -187,6 +197,33 @@ public class M_NewEditEquipeVolontaire extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel4.setBackground(new java.awt.Color(153, 153, 153));
+
+        jLabel1.setText("Nom de l'équipe");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 527, Short.MAX_VALUE))
+                    .addComponent(GnomEquipe))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(GnomEquipe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -194,13 +231,16 @@ public class M_NewEditEquipeVolontaire extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -210,6 +250,8 @@ public class M_NewEditEquipeVolontaire extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -223,7 +265,28 @@ public class M_NewEditEquipeVolontaire extends javax.swing.JPanel {
     }//GEN-LAST:event_BajouterActionPerformed
 
     private void BvaliderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BvaliderActionPerformed
-        // TODO add your handling code here:
+        String nomEquipe = GnomEquipe.getText();
+        Equipe equipe = new Equipe(nomEquipe, listeVolontaire);
+        PacketCom packet = new PacketCom(States.NOUVELLE_EQUIPE, (Object)equipe);
+        socket.send(packet);
+        boolean cont = false;
+        try {
+            PacketCom packetReponse = socket.receive();
+            String type = packetReponse.getType();
+            if(type.equals(States.NOUVELLE_EQUIPE_OUI)){
+                parent.afficherMessage("Ajout nouvelle équipe réussi.");
+                cont = true;
+            }else if(type.equals(States.NOUVELLE_EQUIPE_NON)){
+                String message = (String) packetReponse.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(cont){
+            parent.setListeVolontaire(null);
+            parent.changeState(Main.GESTION_EQUIPES);
+        }
     }//GEN-LAST:event_BvaliderActionPerformed
 
     private void BannulerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BannulerActionPerformed
@@ -234,26 +297,28 @@ public class M_NewEditEquipeVolontaire extends javax.swing.JPanel {
     private javax.swing.JButton Bajouter;
     private javax.swing.JButton Bannuler;
     private javax.swing.JButton Bvalider;
+    private javax.swing.JTextField GnomEquipe;
     private javax.swing.JTable Gtableau;
     private javax.swing.JLabel Ltitre;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-    private LinkedList<String[]> chargerVolontaires(String equipeSelected) {
+    private LinkedList<TupleRecherche> chargerVolontaires(String equipeSelected) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     private void chargerListeVolontaire() {
-        for(String[] volontaire : listeVolontaire){
+        for(TupleRecherche volontaire : listeVolontaire){
             Vector vector = new Vector();
-            for(String elm : volontaire){
-                vector.addElement(elm);
-            }
+            vector.addElement(volontaire.getNom());
+            vector.addElement(volontaire.getPrenom());
             SwingUtils.addToTable(Gtableau, vector);
         }
     }

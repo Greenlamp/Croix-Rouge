@@ -31,6 +31,8 @@ public interface States {
 
     public static String RECHERCHE = "RECHERCHE";
 
+    public static String NOUVELLE_EQUIPE = "NOUVELLE_EQUIPE";
+
     //Client
     public static String LOGIN_OUI = "LOGIN_OUI";
     public static String LOGIN_NON = "LOGIN_NON";
@@ -57,4 +59,7 @@ public interface States {
 
     public static String RECHERCHE_OUI = "RECHERCHE_OUI";
     public static String RECHERCHE_NON = "RECHERCHE_NON";
+
+    public static String NOUVELLE_EQUIPE_OUI = "NOUVELLE_EQUIPE_OUI";
+    public static String NOUVELLE_EQUIPE_NON = "NOUVELLE_EQUIPE_NON";
 }
