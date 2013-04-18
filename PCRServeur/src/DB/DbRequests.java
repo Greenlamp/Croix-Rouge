@@ -9,9 +9,12 @@ import Containers.Adresse;
 import Containers.Formation;
 import Containers.Residence;
 import Database.Jdbc_MySQL;
+import Recherche.Criteres.DBA;
+import Recherche.TupleRecherche;
 import java.beans.Beans;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -21,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class DbRequests {
+public class DbRequests implements DBA{
     Jdbc_MySQL mySql = null;
 
     public DbRequests(){
@@ -605,5 +608,24 @@ public class DbRequests {
         }
         mySql.closeStatement();
         return listeEquipes;
+    }
+
+    @Override
+    public LinkedList<TupleRecherche> searchByNom(String nom) {
+        LinkedList<TupleRecherche> resultat = new LinkedList<>();
+        String request = "SELECT nom, prenom FROM volontaires WHERE nom = '"+nom+"'";
+        try {
+            mySql.closeStatementClean();
+            ResultSet tuples = (ResultSet)mySql.select(request);
+            while(tuples.next()){
+                String nomResultat = tuples.getString("nom");
+                String prenomResultat = tuples.getString("prenom");
+                resultat.add(new TupleRecherche(nomResultat, prenomResultat));
+            }
+            mySql.closeStatement();
+        } catch (Exception ex) {
+            Logger.getLogger(DbRequests.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resultat;
     }
 }

@@ -11,6 +11,11 @@ import Containers.Volontaire;
 import DB.DbRequests;
 import PacketCom.PacketCom;
 import PacketCom.Protocolable;
+import Recherche.Critere;
+import Recherche.Criteres.ByNom;
+import Recherche.Criteres.CritereCustom;
+import Recherche.Criteres.TraitementRecherche;
+import Recherche.TupleRecherche;
 import States.States;
 import java.util.Date;
 import java.util.LinkedList;
@@ -62,6 +67,8 @@ public class ProtocoleServeur implements Protocolable{
             return actionGetDetailsUser(type, contenu);
         }else if(type.equals(States.GET_EQUIPES_ALL)){
             return actionGetEquipes(type, contenu);
+        }else if(type.equals(States.RECHERCHE)){
+            return actionRecherche(type, contenu);
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }
@@ -297,5 +304,30 @@ public class ProtocoleServeur implements Protocolable{
             //TODO: traiter si la liste est vide.
         }
         return packetReponse;
+    }
+
+    private PacketCom actionRecherche(String type, Object contenu) {
+        if(!droitsOffi.contains("SEE_MANAGER_TEAM")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
+            return packetRetour;
+        }
+
+        LinkedList<CritereCustom> listeCritereCustoms = new LinkedList<>();
+        LinkedList<Critere> listeCriteres = (LinkedList<Critere>) contenu;
+
+        for(Critere critere : listeCriteres){
+            if(critere.getType().equals("nom")){
+                ByNom byNom = new ByNom(critere.getDonnee(), dbRequests);
+                byNom.doSearch();
+                listeCritereCustoms.add(byNom);
+            }else if(critere.getType().equals("prenom")){
+                //To implement
+            }
+        }
+
+        TraitementRecherche traitementRecherche = new TraitementRecherche();
+        traitementRecherche.Filtrer(listeCritereCustoms);
+
+        return new PacketCom(States.RECHERCHE_OUI, (Object)traitementRecherche.getResultats());
     }
 }

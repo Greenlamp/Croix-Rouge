@@ -5,7 +5,10 @@
 package EquipeVolontaire;
 
 import GUI.Panels.Main;
+import Helpers.SwingUtils;
 import Network.NetworkClient;
+import java.util.LinkedList;
+import java.util.Vector;
 
 /**
  *
@@ -19,16 +22,25 @@ public class M_NewEditEquipeVolontaire extends javax.swing.JPanel {
     Main parent = null;
     NetworkClient socket = null;
     String equipeSelected = null;
+    LinkedList<String[]> listeVolontaire = null;
     public M_NewEditEquipeVolontaire(Main parent, NetworkClient socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;
         equipeSelected = parent.getEquipeSelected();
+        listeVolontaire = parent.getListeVolontaire();
         if(equipeSelected != null){
-            chargerVolontaires(equipeSelected);
+            listeVolontaire = chargerVolontaires(equipeSelected);
             Ltitre.setText("Modifier une équipe");
+            parent.setNomEquipeSelected(null);
         }else{
             Ltitre.setText("Créer une nouvelle équipe");
+            if(listeVolontaire == null){
+                listeVolontaire = new LinkedList<>();
+                parent.setListeVolontaire(listeVolontaire);
+            }else{
+                chargerListeVolontaire();
+            }
         }
     }
 
@@ -207,7 +219,7 @@ public class M_NewEditEquipeVolontaire extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BajouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BajouterActionPerformed
-        // TODO add your handling code here:
+        parent.changeState(Main.SEARCH_CRIT);
     }//GEN-LAST:event_BajouterActionPerformed
 
     private void BvaliderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BvaliderActionPerformed
@@ -232,9 +244,20 @@ public class M_NewEditEquipeVolontaire extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-    private void chargerVolontaires(String equipeSelected) {
+    private LinkedList<String[]> chargerVolontaires(String equipeSelected) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
+
+    private void chargerListeVolontaire() {
+        for(String[] volontaire : listeVolontaire){
+            Vector vector = new Vector();
+            for(String elm : volontaire){
+                vector.addElement(elm);
+            }
+            SwingUtils.addToTable(Gtableau, vector);
+        }
+    }
+
 
 
 }

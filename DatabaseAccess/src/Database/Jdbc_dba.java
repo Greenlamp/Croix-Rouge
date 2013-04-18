@@ -54,6 +54,13 @@ public class Jdbc_dba {
         }
     }
 
+    public void closeStatementClean() throws Exception, SQLException{
+        if(this.isBusy()){
+            this.getStatement().close();
+            this.setStatement(null);
+        }
+    }
+
     public void endExtract() throws Exception, SQLException{
         closeStatement();
     }

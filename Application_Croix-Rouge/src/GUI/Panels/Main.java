@@ -15,6 +15,7 @@ import Containers.Urgence;
 import Containers.Volontaire;
 import EquipeVolontaire.M_ConsulterEquipesVolontaire;
 import EquipeVolontaire.M_NewEditEquipeVolontaire;
+import EquipeVolontaire.M_SearchCrit;
 import GUI.Panels.GestionUtilisateurs.M_NewEditUtilisateurs;
 import Network.NetworkClient;
 import NouveauVolontaire.M_NouveauVolontaireP1;
@@ -55,6 +56,7 @@ public class Main extends javax.swing.JFrame {
     public static String EDITNEWUSER = "EDITNEWUSER";
     public static String GESTION_EQUIPES = "GESTION_EQUIPES";
     public static String EDITNEWEQUIPE = "EDITNEWEQUIPE";
+    public static String SEARCH_CRIT = "SEARCH_CRIT";
 
     private boolean connected = false;
     private String groupe = null;
@@ -62,6 +64,7 @@ public class Main extends javax.swing.JFrame {
 
     private String loginUser = null;
     String equipeSelected = null;
+    LinkedList<String[]> listeVolontaire = null;
 
     private String actualState = Main.UNLOGGED;
 
@@ -440,6 +443,14 @@ public class Main extends javax.swing.JFrame {
             M_NewEditEquipeVolontaire mNewEditEquipeVolontaire = new M_NewEditEquipeVolontaire(this, socket);
             Gscene.add(mNewEditEquipeVolontaire);
             Gscene.revalidate();
+        }else if(this.actualState.equals(Main.SEARCH_CRIT)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_SearchCrit mSearchCrit = new M_SearchCrit(this, socket);
+            Gscene.add(mSearchCrit);
+            Gscene.revalidate();
         }
     }
 
@@ -519,5 +530,13 @@ public class Main extends javax.swing.JFrame {
 
     public String getEquipeSelected() {
         return this.equipeSelected;
+    }
+
+    public LinkedList<String[]> getListeVolontaire() {
+        return this.listeVolontaire;
+    }
+
+    public void setListeVolontaire(LinkedList<String[]> listeVolontaire) {
+        this.listeVolontaire = listeVolontaire;
     }
 }

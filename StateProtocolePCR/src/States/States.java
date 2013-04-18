@@ -29,6 +29,8 @@ public interface States {
 
     public static String GET_EQUIPES_ALL = "GET_EQUIPES_ALL";
 
+    public static String RECHERCHE = "RECHERCHE";
+
     //Client
     public static String LOGIN_OUI = "LOGIN_OUI";
     public static String LOGIN_NON = "LOGIN_NON";
@@ -52,4 +54,7 @@ public interface States {
 
     public static String GET_EQUIPES_ALL_OUI = "GET_EQUIPES_ALL_OUI";
     public static String GET_EQUIPES_ALL_NON = "GET_EQUIPES_ALL_NON";
+
+    public static String RECHERCHE_OUI = "RECHERCHE_OUI";
+    public static String RECHERCHE_NON = "RECHERCHE_NON";
 }
