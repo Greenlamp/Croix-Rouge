@@ -145,11 +145,7 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
 
         jLabel2.setText("Nom");
 
-        Gnom.setText("Knuts");
-
         jLabel3.setText("Prénom");
-
-        Gprenom.setText("Gabriel");
 
         jLabel4.setText("Sexe");
 
@@ -157,12 +153,22 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
         buttonGroup1.add(Ghomme);
         Ghomme.setSelected(true);
         Ghomme.setText("H");
+        Ghomme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GfemmeActionPerformed(evt);
+            }
+        });
 
         Gfemme.setBackground(new java.awt.Color(153, 153, 153));
         buttonGroup1.add(Gfemme);
         Gfemme.setText("F");
+        Gfemme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GfemmeActionPerformed(evt);
+            }
+        });
 
-        jLabel5.setText("Nom de jeune fille");
+        jLabel5.setText("Nom d'épouse");
 
         GnomFille.setEnabled(false);
 
@@ -178,25 +184,15 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
 
         jLabel9.setText("Adresse E-Mail");
 
-        Gemail.setText("Gabriel.knuts@gmail.com");
-
         jLabel10.setText("Rue");
 
-        Grue.setText("Grande");
-
         jLabel11.setText("Numéro");
-
-        Gnumero.setText("132");
 
         jLabel12.setText("Boite");
 
         jLabel13.setText("Code Postal");
 
-        GcodePostal.setText("4460");
-
         jLabel14.setText("Ville");
-
-        Gville.setText("Grâce-Hollogne");
 
         jLabel15.setText("Pays");
 
@@ -553,6 +549,14 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
             parent.changeState(Main.LOGGED);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void GfemmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GfemmeActionPerformed
+        if(Gfemme.isSelected()){
+            GnomFille.setEnabled(true);
+        }else{
+            GnomFille.setEnabled(false);
+        }
+    }//GEN-LAST:event_GfemmeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox Gannee;

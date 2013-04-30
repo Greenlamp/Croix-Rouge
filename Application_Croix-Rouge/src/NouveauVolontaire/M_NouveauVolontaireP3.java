@@ -103,7 +103,6 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
         jLabel26.setText("à la Croix-Rouge ?");
 
         G1.setBackground(new java.awt.Color(153, 153, 153));
-        G1.setSelected(true);
         G1.setText("Un volontaire m'en a parlé");
 
         G2.setBackground(new java.awt.Color(153, 153, 153));

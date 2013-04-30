@@ -138,6 +138,7 @@ public class NetworkServer {
                 Object received = in.readObject();
                 return this.protocole.messageFromClient(received);
             }catch(Exception ex){
+                //Logger.getLogger(NetworkServer.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println("Client déconnecté");
                 throw new Exception("Client fermé");
             }

@@ -8,7 +8,9 @@ import Containers.Adresse;
 import Containers.Complementaire;
 import Containers.Decouverte;
 import Containers.Formations;
+import Containers.Grille;
 import Containers.Identite;
+import Containers.Key;
 import Containers.Residence;
 import Containers.Telephone;
 import Containers.Urgence;
@@ -17,6 +19,8 @@ import EquipeVolontaire.M_ConsulterEquipesVolontaire;
 import EquipeVolontaire.M_NewEditEquipeVolontaire;
 import EquipeVolontaire.M_SearchCrit;
 import GUI.Panels.GestionUtilisateurs.M_NewEditUtilisateurs;
+import GrillesHoraires.M_ConsulterGrillesHoraires;
+import GrillesHoraires.M_NewEditGrilleHoraire;
 import Network.NetworkClient;
 import NouveauVolontaire.M_NouveauVolontaireP1;
 import NouveauVolontaire.M_NouveauVolontaireP2;
@@ -24,11 +28,18 @@ import NouveauVolontaire.M_NouveauVolontaireP3;
 import NouveauVolontaire.M_NouveauVolontaireP4;
 import NouveauVolontaire.M_NouveauVolontaireP5;
 import NouveauVolontaire.M_NouveauVolontaireP6;
+import PacketCom.PacketCom;
 import Recherche.TupleRecherche;
+import States.States;
 import java.awt.Image;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import sun.util.calendar.Gregorian;
 
 /**
  *
@@ -58,6 +69,8 @@ public class Main extends javax.swing.JFrame {
     public static String GESTION_EQUIPES = "GESTION_EQUIPES";
     public static String EDITNEWEQUIPE = "EDITNEWEQUIPE";
     public static String SEARCH_CRIT = "SEARCH_CRIT";
+    public static String GESTION_GRILLES_HORAIRES = "GESTION_GRILLES_HORAIRES";
+    public static String EDITNEWGRILLLE = "EDITNEWGRILLLE";
 
     private boolean connected = false;
     private String groupe = null;
@@ -72,6 +85,12 @@ public class Main extends javax.swing.JFrame {
     NetworkClient socket = null;
 
     Volontaire volontaire = new Volontaire();
+
+    private Grille grille = null;
+    private Grille grilleOld = null;
+    private int celluleRow;
+    private int celluleColumn;
+    private String typeGrille;
 
 
     public Main() {
@@ -102,6 +121,7 @@ public class Main extends javax.swing.JFrame {
         Mconsulter = new javax.swing.JMenuItem();
         MnouveauVolontaire = new javax.swing.JMenuItem();
         MgererEquipe = new javax.swing.JMenuItem();
+        MgererGrillesHoraires = new javax.swing.JMenuItem();
         Madministration = new javax.swing.JMenu();
         MgestionDroits = new javax.swing.JMenuItem();
         MgestionGroupes = new javax.swing.JMenuItem();
@@ -109,6 +129,11 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Application de Gestion de la Croix-Rouge");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         Gscene.setLayout(new java.awt.BorderLayout());
 
@@ -153,6 +178,14 @@ public class Main extends javax.swing.JFrame {
             }
         });
         Mmenu.add(MgererEquipe);
+
+        MgererGrillesHoraires.setText("Gérer grilles horaires");
+        MgererGrillesHoraires.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MgererGrillesHorairesActionPerformed(evt);
+            }
+        });
+        Mmenu.add(MgererGrillesHoraires);
 
         jMenuBar1.add(Mmenu);
 
@@ -258,6 +291,18 @@ public class Main extends javax.swing.JFrame {
         refreshPanel();
     }//GEN-LAST:event_MgererEquipeActionPerformed
 
+    private void MgererGrillesHorairesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MgererGrillesHorairesActionPerformed
+        if(this.actualState.equals(Main.UNLOGGED)){
+            return;
+        }
+        this.actualState = Main.GESTION_GRILLES_HORAIRES;
+        refreshPanel();
+    }//GEN-LAST:event_MgererGrillesHorairesActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        unlockGrille();
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -298,6 +343,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem Mconsulter;
     private javax.swing.JMenu Mfichier;
     private javax.swing.JMenuItem MgererEquipe;
+    private javax.swing.JMenuItem MgererGrillesHoraires;
     private javax.swing.JMenuItem MgestionDroits;
     private javax.swing.JMenuItem MgestionGroupes;
     private javax.swing.JMenuItem MgestionUtilisateurs;
@@ -331,6 +377,7 @@ public class Main extends javax.swing.JFrame {
     }
 
     private void refreshPanel() {
+        cleanState();
         if(this.actualState.equals(Main.UNLOGGED)){
             M_Connexion mConnexion = new M_Connexion(this, this.socket);
             Gscene.add(mConnexion);
@@ -428,6 +475,14 @@ public class Main extends javax.swing.JFrame {
             M_NewEditUtilisateurs fenetre = new M_NewEditUtilisateurs(this, this.socket, "Modifier un utilisateur", loginUser);
             Gscene.add(fenetre);
             Gscene.revalidate();
+        }else if(this.actualState.equals(Main.EDITNEWGRILLLE)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditGrilleHoraire m_NewEditGrilleHoraire = new M_NewEditGrilleHoraire(this, this.socket, "Nouvelle grille d'horaire");
+            Gscene.add(m_NewEditGrilleHoraire);
+            Gscene.revalidate();
         }else if(this.actualState.equals(Main.GESTION_EQUIPES)){
             Gscene.removeAll();
             Gscene.repaint();
@@ -452,6 +507,14 @@ public class Main extends javax.swing.JFrame {
             M_SearchCrit mSearchCrit = new M_SearchCrit(this, socket);
             Gscene.add(mSearchCrit);
             Gscene.revalidate();
+        }else if(this.actualState.equals(Main.GESTION_GRILLES_HORAIRES)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_ConsulterGrillesHoraires m_ConsulterGrillesHoraires = new M_ConsulterGrillesHoraires(this, socket);
+            Gscene.add(m_ConsulterGrillesHoraires);
+            Gscene.revalidate();
         }
     }
 
@@ -470,6 +533,7 @@ public class Main extends javax.swing.JFrame {
             MgestionUtilisateurs.setVisible(false);
             MnouveauVolontaire.setVisible(false);
             MgererEquipe.setVisible(false);
+            MgererGrillesHoraires.setVisible(false);
         }else if(type.equals("interdit")){
             if(droits.contains("SEE_ADMIN")){
                 Madministration.setVisible(true);
@@ -489,6 +553,7 @@ public class Main extends javax.swing.JFrame {
             if(droits.contains("SEE_MANAGER_TEAM")){
                 MgererEquipe.setVisible(true);
             }
+            MgererGrillesHoraires.setVisible(true);
         }
     }
 
@@ -539,5 +604,75 @@ public class Main extends javax.swing.JFrame {
 
     public void setListeVolontaire(LinkedList<TupleRecherche> listeVolontaire) {
         this.listeVolontaire = listeVolontaire;
+    }
+
+    public Grille getGrille() {
+        return grille;
+    }
+
+    public void setGrille(Grille grille) {
+        this.grille = grille;
+    }
+
+    public void cleanState(){
+        if(!(actualState.equals(Main.EDITNEWGRILLLE) || actualState.equals(Main.SEARCH_CRIT))){
+            unlockGrille();
+            setGrille(null);
+            setGrilleOld(null);
+        }
+        if(!actualState.equals(Main.NOUVEAU_VOLONTAIREP1) && !actualState.equals(Main.NOUVEAU_VOLONTAIREP2) && !actualState.equals(NOUVEAU_VOLONTAIREP3) && !actualState.equals(NOUVEAU_VOLONTAIREP4) && !actualState.equals(NOUVEAU_VOLONTAIREP5) && !actualState.equals(NOUVEAU_VOLONTAIREP6) && !actualState.equals(NOUVEAU_VOLONTAIREP7) && !actualState.equals(NOUVEAU_VOLONTAIREP8)){
+            setVolontaireP1(null, null, null);
+            setVolontaireP2(null, null);
+            setVolontaireP3(null);
+            setVolontaireP4(null);
+            setVolontaireP5(null);
+        }
+    }
+
+    public int getCelluleRow() {
+        return celluleRow;
+    }
+
+    public void setCelluleRow(int celluleRow) {
+        this.celluleRow = celluleRow;
+    }
+
+    public int getCelluleColumn() {
+        return celluleColumn;
+    }
+
+    public void setCelluleColumn(int celluleColumn) {
+        this.celluleColumn = celluleColumn;
+    }
+
+    public void setTypeGrille(String type) {
+        this.typeGrille = type;
+    }
+
+    public String getTypeGrille(){
+        return this.typeGrille;
+    }
+
+    public Grille getGrilleOld() {
+        return grilleOld;
+    }
+
+    public void setGrilleOld(Grille grilleOld) {
+        this.grilleOld = grilleOld;
+    }
+
+    private void unlockGrille() {
+        if(grille != null){
+            PacketCom packet = new PacketCom(States.UNLOCK_GRILLE, (Object)grille);
+            socket.send(packet);
+            try {
+                PacketCom packetReponse = socket.receive();
+                if(packetReponse.getType().equals(States.UNLOCK_GRILLE_NON)){
+                    afficherMessage("erreur de déverouillage de grille");
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(M_ConsulterGrillesHoraires.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }

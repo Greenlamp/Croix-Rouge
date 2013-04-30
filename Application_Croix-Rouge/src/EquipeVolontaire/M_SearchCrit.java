@@ -4,6 +4,8 @@
  */
 package EquipeVolontaire;
 
+import Containers.Grille;
+import Containers.Key;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
@@ -13,8 +15,6 @@ import Recherche.TupleRecherche;
 import States.States;
 import Wizard.Wizard_Nouveau;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,8 +37,8 @@ public class M_SearchCrit extends javax.swing.JPanel {
         initComponents();
         this.socket = socket;
         this.parent = parent;
-        listeVolontaire = parent.getListeVolontaire();
         listeCriteres = new LinkedList<>();
+        getListeFormation();
     }
 
     /**
@@ -74,9 +74,8 @@ public class M_SearchCrit extends javax.swing.JPanel {
         GdotDateNaissance = new javax.swing.JRadioButton();
         GdateNaissance = new javax.swing.JTextField();
         GdotFormation = new javax.swing.JRadioButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        GlisteFormations = new javax.swing.JList();
         Bajouter = new javax.swing.JButton();
+        Gformation = new javax.swing.JComboBox();
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -217,8 +216,6 @@ public class M_SearchCrit extends javax.swing.JPanel {
         buttonGroup1.add(GdotNom);
         GdotNom.setText("Selon le nom");
 
-        Gnom.setText("Knuts");
-
         GdotPrenom.setBackground(new java.awt.Color(153, 153, 153));
         buttonGroup1.add(GdotPrenom);
         GdotPrenom.setText("Selon le prénom");
@@ -230,8 +227,6 @@ public class M_SearchCrit extends javax.swing.JPanel {
         GdotFormation.setBackground(new java.awt.Color(153, 153, 153));
         buttonGroup1.add(GdotFormation);
         GdotFormation.setText("Selon la formation");
-
-        jScrollPane1.setViewportView(GlisteFormations);
 
         Bajouter.setText("Ajouter le critère à la liste");
         Bajouter.addActionListener(new java.awt.event.ActionListener() {
@@ -250,7 +245,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
                     .addComponent(Gnom)
                     .addComponent(Gprenom)
                     .addComponent(GdateNaissance)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                    .addComponent(Bajouter, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(GdotFormation)
@@ -259,7 +254,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
                             .addComponent(jLabel2)
                             .addComponent(GdotPrenom))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(Bajouter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Gformation, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -281,8 +276,8 @@ public class M_SearchCrit extends javax.swing.JPanel {
                 .addComponent(GdateNaissance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(GdotFormation)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Gformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Bajouter)
                 .addContainerGap())
@@ -378,14 +373,25 @@ public class M_SearchCrit extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int[] selectedRows = Gresultat.getSelectedRows();
-        LinkedList<TupleRecherche> listeResultatSelectionne = new LinkedList<>();
+        if(selectedRows.length == 1){
+            String nom = null;
+            int row = parent.getCelluleRow();
+            int column = parent.getCelluleColumn();
+            Grille grille = parent.getGrille();
+            for(int indice : selectedRows){
+                nom = Gresultat.getValueAt(indice, 0).toString() + " " + Gresultat.getValueAt(indice, 1).toString();
+            }
+            grille.setNom(row, column, nom);
+            parent.setGrille(grille);
+        }
+        /*LinkedList<TupleRecherche> listeResultatSelectionne = new LinkedList<>();
         for(int indice : selectedRows){
             String nom = Gresultat.getValueAt(indice, 0).toString();
             String prenom = Gresultat.getValueAt(indice, 1).toString();
             listeResultatSelectionne.add(new TupleRecherche(nom, prenom));
         }
-        parent.setListeVolontaire(listeResultatSelectionne);
-        parent.changeState(Main.EDITNEWEQUIPE);
+        parent.setListeVolontaire(listeResultatSelectionne);*/
+        parent.changeState(Main.EDITNEWGRILLLE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -398,8 +404,8 @@ public class M_SearchCrit extends javax.swing.JPanel {
     private javax.swing.JRadioButton GdotFormation;
     private javax.swing.JRadioButton GdotNom;
     private javax.swing.JRadioButton GdotPrenom;
+    private javax.swing.JComboBox Gformation;
     private javax.swing.JList GlisteCriteres;
-    private javax.swing.JList GlisteFormations;
     private javax.swing.JTextField Gnom;
     private javax.swing.JTextField Gprenom;
     private javax.swing.JTable Gresultat;
@@ -413,7 +419,6 @@ public class M_SearchCrit extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     // End of variables declaration//GEN-END:variables
@@ -443,7 +448,11 @@ public class M_SearchCrit extends javax.swing.JPanel {
     }
 
     private void AjouterCritereFormation() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        String formation = Gformation.getSelectedItem().toString();
+        cpt++;
+        String mot = "-" + cpt + "- Formation -> " + formation;
+        SwingUtils.addToList(GlisteCriteres, mot);
+        listeCriteres.add(new Critere(cpt, "formation", formation));
     }
 
     private void TraitementResultat(LinkedList<TupleRecherche> listeResultat) {
@@ -453,6 +462,25 @@ public class M_SearchCrit extends javax.swing.JPanel {
             vector.add(tuple.getNom());
             vector.add(tuple.getPrenom());
             SwingUtils.addToTable(Gresultat, vector);
+        }
+    }
+
+    private void getListeFormation() {
+        PacketCom packet = new PacketCom(States.GET_LISTE_FORMATIONS, null);
+        socket.send(packet);
+        try {
+            PacketCom packetReponse = socket.receive();
+            String type = packetReponse.getType();
+            if(type.equals(States.GET_LISTE_FORMATIONS_OUI)){
+                for(String elm : (LinkedList<String>)packetReponse.getObjet()){
+                    SwingUtils.addToComboBox(Gformation, elm);
+                }
+            }else if(type.equals(States.NOUVEAU_VOLONTAIRE_NON)){
+                String message = (String) packetReponse.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

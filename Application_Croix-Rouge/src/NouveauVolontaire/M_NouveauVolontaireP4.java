@@ -126,15 +126,12 @@ public class M_NouveauVolontaireP4 extends javax.swing.JPanel {
 
         jLabel2.setText("Activité professionnelle que vous exercez ou avez exercé à titre principal");
 
-        GactivitePro.setText("étudiant");
-
         jLabel3.setText("Actuellement vous êtes");
 
         G1.setBackground(new java.awt.Color(153, 153, 153));
         G1.setText("au travail");
 
         G2.setBackground(new java.awt.Color(153, 153, 153));
-        G2.setSelected(true);
         G2.setText("aux études");
 
         G3.setBackground(new java.awt.Color(153, 153, 153));
@@ -151,11 +148,7 @@ public class M_NouveauVolontaireP4 extends javax.swing.JPanel {
 
         jLabel4.setText("Langue maternelle");
 
-        GlangueMaternelle.setText("Français");
-
         jLabel5.setText("Autre(s) langue(s) couramment parlée(s)");
-
-        GautreLangue1.setText("Anglais");
 
         jLabel6.setText("Qualification ou diplôme");
 

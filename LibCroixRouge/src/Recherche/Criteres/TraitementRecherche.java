@@ -19,9 +19,20 @@ public class TraitementRecherche implements Serializable{
 
     public void Filtrer(LinkedList<CritereCustom> listeCritereCustoms){
         //AND
-        resultats = listeCritereCustoms.getFirst().getResultats();
-        for(CritereCustom elm : listeCritereCustoms){
-            resultats.retainAll(elm.getResultats());
+        resultats = new LinkedList<>();
+        resultats.addAll(listeCritereCustoms.getFirst().getResultats());
+        for(CritereCustom critere : listeCritereCustoms){
+            for(TupleRecherche tupleResultat : resultats){
+                boolean found = false;
+                for(TupleRecherche tuple : critere.getResultats()){
+                    if(tupleResultat.getNom().equals(tuple.getNom()) && tupleResultat.getPrenom().equals(tuple.getPrenom())){
+                        found = true;
+                    }
+                }
+                if(!found){
+                    resultats.remove(tupleResultat);
+                }
+            }
         }
     }
 

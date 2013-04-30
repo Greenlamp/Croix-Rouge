@@ -6,7 +6,10 @@
 package DB;
 
 import Containers.Adresse;
+import Containers.CelluleGrille;
 import Containers.Formation;
+import Containers.Grille;
+import Containers.Key;
 import Containers.Residence;
 import Database.Jdbc_MySQL;
 import Recherche.Criteres.DBA;
@@ -15,7 +18,9 @@ import java.beans.Beans;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
@@ -420,6 +425,7 @@ public class DbRequests implements DBA{
                 java.sql.Date dateExpirationSQL = new java.sql.Date((formation.getDatePeremption() != null ? formation.getDatePeremption().getTime() : formation.getDateExamen().getTime()));
                 request = "INSERT INTO Formation(nomFormation, dateObtention, dateExpiration, numero, lieu, copie, numeroService112) "
                         + "VALUES('"+formation.getNom()+"', '"+dateObtentionSQL+"', '"+dateExpirationSQL+"', '"+formation.getNumero()+"', '"+formation.getLieu()+"', '"+formation.getPhotocopie()+"', '"+formation.getNumeroService112()+"')";
+                mySql.closeStatementClean();
                 mySql.update(request);
                 request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Formation";
                 mySql.closeStatementClean();
@@ -434,7 +440,11 @@ public class DbRequests implements DBA{
         for(int idFormation : listeId){
             String request = "INSERT INTO FormationsSuivie(matricule, idFormation) VALUES('"+matricule+"', '"+idFormation+"')";
             mySql.closeStatementClean();
-            mySql.update(request);
+            try{
+                mySql.update(request);
+            }catch(Exception ex){
+
+            }
         }
     }
 
@@ -616,7 +626,7 @@ public class DbRequests implements DBA{
     }
 
     public LinkedList<String[]> getEquipes() throws Exception {
-        LinkedList<String[]> listeEquipes = null;
+        LinkedList<String[]> listeEquipes = new LinkedList<>();
         String request =  "SELECT nom, dateCreation, count(matricule) as 'count'"
                         + "FROM Equipe E, Lier L "
                         + "WHERE E.idEquipe = L.idEquipe "
@@ -648,25 +658,6 @@ public class DbRequests implements DBA{
         return listeEquipes;
     }
 
-    @Override
-    public LinkedList<TupleRecherche> searchByNom(String nom) {
-        LinkedList<TupleRecherche> resultat = new LinkedList<>();
-        String request = "SELECT nom, prenom FROM volontaires WHERE nom = '"+nom+"'";
-        try {
-            mySql.closeStatementClean();
-            ResultSet tuples = (ResultSet)mySql.select(request);
-            while(tuples.next()){
-                String nomResultat = tuples.getString("nom");
-                String prenomResultat = tuples.getString("prenom");
-                resultat.add(new TupleRecherche(nomResultat, prenomResultat));
-            }
-            mySql.closeStatement();
-        } catch (Exception ex) {
-            Logger.getLogger(DbRequests.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return resultat;
-    }
-
     public int insertEquipe(String nom) throws Exception {
         String request = "INSERT INTO Equipe(nom, dateCreation) VALUES('"+nom+"', now())";
         mySql.closeStatementClean();
@@ -696,6 +687,350 @@ public class DbRequests implements DBA{
 
     public void insertMembreEquipe(int idEquipe, String matricule) throws Exception {
         String request = "INSERT INTO Lier(idEquipe, matricule) VALUES('"+idEquipe+"', '"+matricule+"')";
+        mySql.closeStatementClean();
+        mySql.update(request);
+    }
+
+    public LinkedList<String> getFormations() throws Exception {
+        LinkedList<String> listeFormations = new LinkedList<>();
+        String request =  "SELECT nomFormation FROM formation";
+
+        mySql.closeStatementClean();
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        while(tuples.next()){
+            if(listeFormations == null){
+                listeFormations = new LinkedList<>();
+            }
+            String nomFormation = null;
+
+            nomFormation = tuples.getString("nomFormation");
+            if(nomFormation == null){
+                return listeFormations;
+            }
+            listeFormations.add(nomFormation);
+        }
+        mySql.closeStatement();
+        return listeFormations;
+    }
+
+    @Override
+    public LinkedList<TupleRecherche> searchByCritere(String request) {
+        LinkedList<TupleRecherche> resultat = new LinkedList<>();
+        try {
+            mySql.closeStatementClean();
+            ResultSet tuples = (ResultSet)mySql.select(request);
+            while(tuples.next()){
+                String nomResultat = tuples.getString("nom");
+                String prenomResultat = tuples.getString("prenom");
+                resultat.add(new TupleRecherche(nomResultat, prenomResultat));
+            }
+            mySql.closeStatement();
+        } catch (Exception ex) {
+            Logger.getLogger(DbRequests.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resultat;
+    }
+
+    public LinkedList<String[]> getGrillesHoraires() throws Exception{
+        LinkedList<String[]> listeGrilles = new LinkedList<>();
+        String request = "SELECT numéroSemaine, dateDebut, dateFin, dateCréation, dateModification, ambulance, lieu, année FROM grillehoraire";
+
+        mySql.closeStatementClean();
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        while(tuples.next()){
+            if(listeGrilles == null){
+                listeGrilles = new LinkedList<>();
+            }
+            String ambulance = null;
+
+            int numeroSemaine = tuples.getInt("numéroSemaine");
+            int année = tuples.getInt("année");
+            java.sql.Date dateDebut = tuples.getDate("dateDebut");
+            java.sql.Date dateFin = tuples.getDate("dateFin");
+            java.sql.Date dateCréation = tuples.getDate("dateCréation");
+            java.sql.Date dateModification = tuples.getDate("dateModification");
+            java.util.Date dateTest = new java.util.Date(dateModification.getTime());
+            String test = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(dateTest);
+            ambulance= tuples.getString("ambulance");
+            String lieu = tuples.getString("lieu");
+
+            if(ambulance == null){
+                return listeGrilles;
+            }
+            String[] data = {String.valueOf(numeroSemaine),
+                String.valueOf(année),
+                new SimpleDateFormat("dd/MM/yyyy").format(dateDebut),
+                new SimpleDateFormat("dd/MM/yyyy").format(dateFin),
+                new SimpleDateFormat("dd/MM/yyyy HH:mm").format(dateCréation),
+                new SimpleDateFormat("dd/MM/yyyy HH:mm").format(dateModification),
+                ambulance,
+                lieu
+            };
+            listeGrilles.add(data);
+        }
+        mySql.closeStatement();
+        return listeGrilles;
+    }
+
+    public int insertGrilleHoraire(int semaine, String dateDebut, String dateFin, String nomAmbulance, String lieu, int annee) throws Exception{
+        String request = "SELECT idGrilleHoraire FROM GrilleHoraire WHERE numéroSemaine = '"+semaine+"' AND ambulance = '"+nomAmbulance+"' AND année = '"+annee+"'";
+        boolean found = false;
+        mySql.closeStatementClean();
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idGrilleHoraire = -1;
+        while(tuples.next()){
+            found = true;
+            idGrilleHoraire = tuples.getInt("idGrilleHoraire");
+        }
+        mySql.closeStatement();
+        if(!found && nomAmbulance != null && lieu != null && annee != -1 && semaine != -1){
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date dateUtil = sdf.parse(dateDebut);
+            java.sql.Date dateDebutSQL = null;
+            java.sql.Date dateFinSQL = null;
+
+            dateDebutSQL = new java.sql.Date(dateUtil.getTime());
+            dateUtil = sdf.parse(dateFin);
+            dateFinSQL = new java.sql.Date(dateUtil.getTime());
+
+            request = "INSERT INTO GrilleHoraire(dateCréation, dateModification, numéroSemaine, dateDebut, dateFin, ambulance, lieu, locked, année) VALUES"
+                    + "(now(), now(), '"+semaine+"', '"+dateDebutSQL+"', '"+dateFinSQL+"', '"+nomAmbulance+"', '"+lieu+"', 0, '"+annee+"')";
+            mySql.closeStatementClean();
+            mySql.update(request);
+            request = "SELECT DISTINCT LAST_INSERT_ID(), idGrilleHoraire FROM GrilleHoraire";
+            mySql.closeStatementClean();
+            tuples = (ResultSet)mySql.select(request);
+            idGrilleHoraire = -1;
+            while(tuples.next()){
+                idGrilleHoraire = tuples.getInt("idGrilleHoraire");
+            }
+            mySql.closeStatement();
+        }else{
+            throw new Exception("Grille déja existante");
+        }
+        return idGrilleHoraire;
+
+    }
+
+    public int insertCellule(String jour, String date, String heure, String role, int row, int column, int idGrilleHoraire) throws Exception{
+        String request = "SELECT idCaseHoraire FROM CaseHoraire WHERE idGrilleHoraire = '"+idGrilleHoraire+"' AND jour = '"+jour+"' AND heurePrestation = '"+heure+"' AND role = '"+role+"'";
+        boolean found = false;
+        mySql.closeStatementClean();
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idCaseHoraire = -1;
+        while(tuples.next()){
+            found = true;
+            idCaseHoraire = tuples.getInt("idCaseHoraire");
+        }
+        mySql.closeStatement();
+        if(!found && idGrilleHoraire != -1 && heure != null && date != null){
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date dateUtil = sdf.parse(date);
+            java.sql.Date dateSQL = null;
+            dateSQL = new java.sql.Date(dateUtil.getTime());
+
+            request = "INSERT INTO caseHoraire(idGrilleHoraire, date, heurePrestation, role, numRow, numColumn, jour) VALUES"
+                    + "('"+idGrilleHoraire+"', '"+dateSQL+"', '"+heure+"', '"+role+"', '"+row+"', '"+column+"', '"+jour+"')";
+            mySql.closeStatementClean();
+            mySql.update(request);
+            request = "SELECT DISTINCT LAST_INSERT_ID(), idCaseHoraire FROM caseHoraire";
+            mySql.closeStatementClean();
+            tuples = (ResultSet)mySql.select(request);
+            idCaseHoraire = -1;
+            while(tuples.next()){
+                idCaseHoraire = tuples.getInt("idCaseHoraire");
+            }
+            mySql.closeStatement();
+        }
+        return idCaseHoraire;
+    }
+
+    public int EditCellule(String jour, String date, String heure, String role, int row, int column, int idGrilleHoraire, String nouvelleHeure) throws Exception{
+        if(idGrilleHoraire == -1 || heure == null || date == null){
+            return -1;
+        }
+        String request = "SELECT idCaseHoraire FROM CaseHoraire WHERE idGrilleHoraire = '"+idGrilleHoraire+"' AND jour = '"+jour+"' AND heurePrestation = '"+heure+"' AND role = '"+role+"'";
+        boolean found = false;
+        mySql.closeStatementClean();
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idCaseHoraire = -1;
+        while(tuples.next()){
+            found = true;
+            idCaseHoraire = tuples.getInt("idCaseHoraire");
+        }
+        mySql.closeStatement();
+
+        if(found){
+            request = "UPDATE caseHoraire SET heurePrestation = '"+nouvelleHeure+"' WHERE idCaseHoraire = '"+idCaseHoraire+"'";
+            mySql.closeStatementClean();
+            mySql.update(request);
+        }
+
+        return idCaseHoraire;
+    }
+
+    public void insertAssignationCaseHoraire(int idCaseHoraire, String matricule) throws Exception{
+        if(idCaseHoraire != -1 && matricule != null){
+            String request = "INSERT INTO AssignationCaseHoraire(matricule, idCaseHoraire) VALUES"
+                    + "('"+matricule+"', '"+idCaseHoraire+"')";
+            mySql.closeStatementClean();
+            mySql.update(request);
+        }
+    }
+
+    public void EditAssignationCaseHoraire(int idCaseHoraire, String matricule) throws Exception{
+        if(idCaseHoraire != -1 && matricule != null && !matricule.isEmpty()){
+            String request = "DELETE FROM AssignationCaseHoraire WHERE idCaseHoraire = '"+idCaseHoraire+"'";
+            mySql.closeStatementClean();
+            mySql.update(request);
+
+            request = "INSERT INTO AssignationCaseHoraire(matricule, idCaseHoraire) VALUES"
+                    + "('"+matricule+"', '"+idCaseHoraire+"')";
+            mySql.closeStatementClean();
+            mySql.update(request);
+        }else if (idCaseHoraire != -1 && (matricule == null || matricule.isEmpty())){
+            String request = "DELETE FROM AssignationCaseHoraire WHERE idCaseHoraire = '"+idCaseHoraire+"'";
+            mySql.closeStatementClean();
+            mySql.update(request);
+        }
+    }
+
+    public int getIdGrilleHoraire(int semaine, int année, String ambulance, String lieu) throws Exception{
+        int idGrilleHoraire = -1;
+        String request = "SELECT idGrilleHoraire FROM GrilleHoraire WHERE numéroSemaine = '"+semaine+"' AND année = '"+année+"' AND ambulance = '"+ambulance+"' AND lieu = '"+lieu+"'";
+        mySql.closeStatementClean();
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        while(tuples.next()){
+            idGrilleHoraire = tuples.getInt("idGrilleHoraire");
+        }
+        mySql.closeStatement();
+        return idGrilleHoraire;
+
+    }
+
+    public Grille getGrille(int idGrilleHoraire) throws Exception{
+        Grille grille = new Grille();
+        String request = "SELECT numéroSemaine, dateDebut, dateFin, ambulance, lieu, année FROM GrilleHoraire WHERE idGrilleHoraire = '"+idGrilleHoraire+"'";
+        mySql.closeStatementClean();
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        while(tuples.next()){
+            int numeroSemaine = tuples.getInt("numéroSemaine");
+            java.sql.Date dateDebut = tuples.getDate("dateDebut");
+            java.sql.Date dateFin = tuples.getDate("dateFin");
+            String ambulance = tuples.getString("ambulance");
+            String lieu = tuples.getString("lieu");
+            int annee = tuples.getInt("année");
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            grille.setAnnee(annee);
+            grille.setSemaine(numeroSemaine);
+            grille.setDateDebut(sdf.format(dateDebut));
+            grille.setDateFin(sdf.format(dateFin));
+            grille.setLieu(lieu);
+            grille.setNomAmbulance(ambulance);
+        }
+        mySql.closeStatement();
+        return grille;
+    }
+
+    public LinkedList<Key> getCellules(int idGrilleHoraire) throws Exception{
+        LinkedList<Key> cellules = new LinkedList<>();
+        String request = "SELECT idCaseHoraire, date, heurePrestation, role, numRow, numColumn, jour FROM CaseHoraire WHERE idGrilleHoraire = '"+idGrilleHoraire+"'";
+        mySql.closeStatementClean();
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        while(tuples.next()){
+            java.sql.Date date = tuples.getDate("date");
+            String heurePrestation = tuples.getString("heurePrestation");
+            String role = tuples.getString("role");
+            int row = tuples.getInt("numRow");
+            int column = tuples.getInt("numColumn");
+            String jour = tuples.getString("jour");
+
+            CelluleGrille cellule = new CelluleGrille();
+            cellule.setJour(jour);
+            cellule.setHeure(heurePrestation);
+            cellule.setRole(role);
+            cellule.setDate(new SimpleDateFormat("dd/MM/yyyy").format(date));
+            cellule.setColumn(column);
+            cellule.setRow(row);
+            Key key = new Key(row, column, cellule);
+            cellules.add(key);
+        }
+        mySql.closeStatement();
+        return cellules;
+    }
+
+    public void getVolontaireGrille(Grille grille, int idGrilleHoraire) throws Exception{
+        String request = "SELECT c.idCaseHoraire, date, heurePrestation, role, numRow, numColumn, jour, nom, prenom FROM (CaseHoraire c INNER JOIN assignationCaseHoraire a ON(c.idCaseHoraire = a.idCaseHoraire)) INNER JOIN volontaires v ON(v.matricule = a.matricule) WHERE c.idGrilleHoraire = '"+idGrilleHoraire+"'";
+        mySql.closeStatementClean();
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        while(tuples.next()){
+            int row = tuples.getInt("numRow");
+            int column = tuples.getInt("numColumn");
+            String nom = tuples.getString("nom");
+            String prenom = tuples.getString("prenom");
+            String nomComplet = nom + " " + prenom;
+            for(Key keys : grille.getGrilles()){
+                if(keys.getX() == row && keys.getY() == column){
+                    keys.getValue().setNomPrenom(nomComplet);
+                    break;
+                }
+            }
+        }
+        mySql.closeStatement();
+    }
+
+    public int editGrilleHoraire(int semaine, int annee, String nomAmbulance, String lieu) throws Exception{
+        String request = "SELECT idGrilleHoraire FROM GrilleHoraire WHERE numéroSemaine = '"+semaine+"' AND ambulance = '"+nomAmbulance+"' AND année = '"+annee+"'";
+        boolean found = false;
+        mySql.closeStatementClean();
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int idGrilleHoraire = -1;
+        while(tuples.next()){
+            found = true;
+            idGrilleHoraire = tuples.getInt("idGrilleHoraire");
+        }
+        mySql.closeStatement();
+        if(found){
+            request = "UPDATE GrilleHoraire SET dateModification = now() WHERE idGrilleHoraire = '"+idGrilleHoraire+"'";
+            mySql.closeStatementClean();
+            mySql.update(request);
+        }
+        return idGrilleHoraire;
+    }
+
+    public boolean checkLockGrille(int semaine, int annee, String nomAmbulance, String lieu) throws Exception{
+        String request = "SELECT locked FROM GrilleHoraire WHERE numéroSemaine = '"+semaine+"' AND ambulance = '"+nomAmbulance+"' AND année = '"+annee+"'";
+        boolean found = false;
+        mySql.closeStatementClean();
+        ResultSet tuples = (ResultSet)mySql.select(request);
+        int locked = -1;
+        while(tuples.next()){
+            found = true;
+            locked = tuples.getInt("locked");
+        }
+        mySql.closeStatement();
+        if(locked == 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public void lockGrille(int semaine, int année, String ambulance, String lieu) throws Exception{
+        String request = "UPDATE GrilleHoraire SET locked = 1 WHERE numéroSemaine = '"+semaine+"' AND année = '"+année+"' AND ambulance = '"+ambulance+"' AND lieu = '"+lieu+"'";
+        mySql.closeStatementClean();
+        mySql.update(request);
+    }
+
+    public void unlockGrille(int semaine, int année, String ambulance, String lieu) throws Exception{
+        String request = "UPDATE GrilleHoraire SET locked = 0 WHERE numéroSemaine = '"+semaine+"' AND année = '"+année+"' AND ambulance = '"+ambulance+"' AND lieu = '"+lieu+"'";
+        mySql.closeStatementClean();
+        mySql.update(request);
+    }
+
+    public void unlockGrille(int idGrilleHoraire)  throws Exception{
+        String request = "UPDATE GrilleHoraire SET locked = 0 WHERE idGrilleHoraire = '"+idGrilleHoraire+"'";
         mySql.closeStatementClean();
         mySql.update(request);
     }

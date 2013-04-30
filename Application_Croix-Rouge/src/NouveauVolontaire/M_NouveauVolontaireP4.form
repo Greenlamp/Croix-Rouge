@@ -263,9 +263,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="GactivitePro">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&#xe9;tudiant"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
@@ -285,7 +282,6 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="99" green="99" red="99" type="rgb"/>
             </Property>
-            <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="aux &#xe9;tudes"/>
           </Properties>
         </Component>
@@ -329,9 +325,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="GlangueMaternelle">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Fran&#xe7;ais"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
@@ -339,9 +332,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="GautreLangue1">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Anglais"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="GautreLangue2">
         </Component>

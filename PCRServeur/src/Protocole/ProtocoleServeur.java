@@ -6,13 +6,18 @@
 package Protocole;
 
 import Containers.Adresse;
+import Containers.Grille;
 import Containers.Identite;
+import Containers.Key;
 import Containers.Volontaire;
 import DB.DbRequests;
 import PacketCom.PacketCom;
 import PacketCom.Protocolable;
 import Recherche.Critere;
+import Recherche.Criteres.ByDateNaissance;
+import Recherche.Criteres.ByFormation;
 import Recherche.Criteres.ByNom;
+import Recherche.Criteres.ByPrenom;
 import Recherche.Criteres.CritereCustom;
 import Recherche.Criteres.TraitementRecherche;
 import Recherche.Equipe;
@@ -21,6 +26,7 @@ import States.States;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,6 +78,20 @@ public class ProtocoleServeur implements Protocolable{
             return actionRecherche(type, contenu);
         }else if(type.equals(States.NOUVELLE_EQUIPE)){
             return actionNouvelleEquipe(type, contenu);
+        }else if(type.equals(States.GET_LISTE_FORMATIONS)){
+            return actionGetFormation(type, contenu);
+        }else if(type.equals(States.GET_GRILLES_HORAIRES)){
+            return actionGetGrillesHoraires(type, contenu);
+        }else if(type.equals(States.NEW_GRILLE_HORAIRE)){
+            return actionNewGrillesHoraires(type, contenu);
+        }else if(type.equals(States.EDIT_GRILLE_HORAIRE)){
+            return actionEditGrillesHoraires(type, contenu);
+        }else if(type.equals(States.GET_GRILLE)){
+            return actionGetGrille(type, contenu);
+        }else if(type.equals(States.CHECK_LOCK_GRILLE)){
+            return actionCheckLockGrille(type, contenu);
+        }else if(type.equals(States.UNLOCK_GRILLE)){
+            return actionUnlockGrille(type, contenu);
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }
@@ -324,7 +344,17 @@ public class ProtocoleServeur implements Protocolable{
                 byNom.doSearch();
                 listeCritereCustoms.add(byNom);
             }else if(critere.getType().equals("prenom")){
-                //To implement
+                ByPrenom byPrenom = new ByPrenom(critere.getDonnee(), dbRequests);
+                byPrenom.doSearch();
+                listeCritereCustoms.add(byPrenom);
+            }else if(critere.getType().equals("formation")){
+                ByFormation byFormation = new ByFormation(critere.getDonnee(), dbRequests);
+                byFormation.doSearch();
+                listeCritereCustoms.add(byFormation);
+            }else if(critere.getType().equals("dateNaissance")){
+                ByDateNaissance byDateNaissance = new ByDateNaissance(critere.getDonnee(), dbRequests);
+                byDateNaissance.doSearch();
+                listeCritereCustoms.add(byDateNaissance);
             }
         }
 
@@ -354,5 +384,232 @@ public class ProtocoleServeur implements Protocolable{
             }
         }
         return new PacketCom(States.NOUVELLE_EQUIPE_OUI, null);
+    }
+
+    private PacketCom actionGetFormation(String type, Object contenu) {
+        /*if(!droitsOffi.contains("SEE_MANAGE_GROUP")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
+            return packetRetour;
+        }*/
+        //TODO - Créer un droit pour récup les formations
+        PacketCom packetReponse = null;
+        LinkedList<String> listeFormations = null;
+        try {
+            listeFormations = dbRequests.getFormations();
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(listeFormations != null){
+            packetReponse = new PacketCom(States.GET_LISTE_FORMATIONS_OUI, (Object)listeFormations);
+        }else{
+            //TODO: traiter si la liste est vide.
+        }
+        return packetReponse;
+    }
+
+    private PacketCom actionGetGrillesHoraires(String type, Object contenu) {
+        //TODO - Créer un droit pour récup les grilles horaires
+        PacketCom packetReponse = null;
+        LinkedList<String[]> listeGrillesHoraires = null;
+        try {
+            listeGrillesHoraires = dbRequests.getGrillesHoraires();
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(listeGrillesHoraires != null){
+            packetReponse = new PacketCom(States.GET_GRILLES_HORAIRES_OUI, (Object)listeGrillesHoraires);
+        }else{
+            //TODO: traiter si la liste est vide.
+        }
+        return packetReponse;
+    }
+
+    private PacketCom actionGetGrille(String type, Object contenu) {
+        Object[] data = (Object[]) contenu;
+        int semaine = (int)data[0];
+        int année = (int)data[1];
+        String ambulance = (String)data[2];
+        String lieu = (String)data[3];
+        try {
+            dbRequests.lockGrille(semaine, année, ambulance, lieu);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        int idGrilleHoraire = -1;
+        try {
+            idGrilleHoraire = dbRequests.getIdGrilleHoraire(semaine, année, ambulance, lieu);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            return new PacketCom(States.GET_GRILLE_NON, "Grille inconnue");
+        }
+
+
+        Grille grille = null;
+        try {
+            grille = dbRequests.getGrille(idGrilleHoraire);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            return new PacketCom(States.GET_GRILLE_NON, "Impossible de récupérer la grille");
+        }
+
+
+        LinkedList<Key> cellules = null;
+        try {
+            cellules = dbRequests.getCellules(idGrilleHoraire);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            return new PacketCom(States.GET_GRILLE_NON, "cellules inconnue");
+        }
+
+        grille.setGrilles(cellules);
+        try {
+            dbRequests.getVolontaireGrille(grille, idGrilleHoraire);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            return new PacketCom(States.GET_GRILLE_NON, "Erreur lors de la récupération des volontaires pour la grille");
+        }
+
+        return new PacketCom(States.GET_GRILLE_OUI, (Object)grille);
+    }
+
+    private PacketCom actionNewGrillesHoraires(String type, Object contenu) {
+        Grille grille = (Grille)contenu;
+        int idGrilleHoraire;
+        try {
+            idGrilleHoraire = dbRequests.insertGrilleHoraire(grille.getSemaine(), grille.getDateDebut(), grille.getDateFin(), grille.getNomAmbulance(), grille.getLieu(), grille.getAnnee());
+        } catch (Exception ex) {
+            return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "La grille horaire pour la semaine " + grille.getSemaine() + " déja existante");
+        }
+
+        for(Key key : grille.getGrilles()){
+            boolean matriculed = false;
+            String nom = null;
+            String prenom = null;
+            String nomColle = key.getValue().getNomPrenom();
+            String matricule = null;
+            if(!nomColle.isEmpty()){
+                String[] split = nomColle.split(" ");
+                nom = split[0];
+                prenom = split[1];
+                try {
+                    matricule = dbRequests.getMatricule(nom, prenom);
+                } catch (Exception ex) {
+                    Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                    return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur au niveau de l'insertion de la recupération du matricule");
+                }
+                matriculed = true;
+            }
+            int idCaseHoraire;
+            try {
+                idCaseHoraire = dbRequests.insertCellule(key.getValue().getJour(), key.getValue().getDate(), key.getValue().getHeure(), key.getValue().getRole(), key.getValue().getRow(), key.getValue().getColumn(), idGrilleHoraire);
+                if(matriculed){
+                    dbRequests.insertAssignationCaseHoraire(idCaseHoraire, matricule);
+                }
+            } catch (Exception ex) {
+                return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur au niveau de l'insertion de la case horaire");
+            }
+        }
+        return new PacketCom(States.NEW_GRILLE_HORAIRE_OUI, null);
+    }
+
+    private PacketCom actionEditGrillesHoraires(String type, Object contenu) {
+        Object[] data = (Object[]) contenu;
+        Grille oldGrille = (Grille)data[0];
+        Grille newGrille = (Grille)data[1];
+        int idGrilleHoraire;
+        try {
+            idGrilleHoraire = dbRequests.editGrilleHoraire(oldGrille.getSemaine(), oldGrille.getAnnee(), oldGrille.getNomAmbulance(), oldGrille.getLieu());
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "La grille horaire pour la semaine " + oldGrille.getSemaine() + " est introuvable");
+        }
+
+        for(Key key : newGrille.getGrilles()){
+            String nom = null;
+            String prenom = null;
+            String nomColle = key.getValue().getNomPrenom();
+            String matricule = null;
+            if(nomColle != null && !nomColle.isEmpty()){
+                String[] split = nomColle.split(" ");
+                nom = split[0];
+                prenom = split[1];
+                try {
+                    matricule = dbRequests.getMatricule(nom, prenom);
+                } catch (Exception ex) {
+                    Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                    return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur au niveau de l'insertion de la recupération du matricule");
+                }
+            }
+            int idCaseHoraire = -1;
+            try {
+                String newHeure = null;
+                for(Key keyOld : oldGrille.getGrilles()){
+                    if(keyOld.getX() == key.getX() && keyOld.getY() == key.getY()){
+                        newHeure = key.getValue().getHeure();
+                        idCaseHoraire = dbRequests.EditCellule(keyOld.getValue().getJour(), keyOld.getValue().getDate(), keyOld.getValue().getHeure(), keyOld.getValue().getRole(), keyOld.getValue().getRow(), keyOld.getValue().getColumn(), idGrilleHoraire, key.getValue().getHeure());
+
+                        if(keyOld.getValue().getNomPrenom() == null && key.getValue().getNomPrenom() == null){
+
+                        }else{
+                            if((keyOld.getValue().getNomPrenom() == null && key.getValue().getNomPrenom() != null)){
+                                dbRequests.EditAssignationCaseHoraire(idCaseHoraire, matricule);
+                            }else if(keyOld.getValue().getNomPrenom() != null && key.getValue().getNomPrenom() == null){
+                                dbRequests.EditAssignationCaseHoraire(idCaseHoraire, matricule);
+                            }else if(!keyOld.getValue().getNomPrenom().equals(key.getValue().getNomPrenom())){
+                                dbRequests.EditAssignationCaseHoraire(idCaseHoraire, matricule);
+                            }
+                        }
+                        break;
+                    }
+                }
+
+            } catch (Exception ex) {
+                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur au niveau de l'insertion de la case horaire");
+            }
+        }
+        try {
+            dbRequests.unlockGrille(idGrilleHoraire);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new PacketCom(States.EDIT_GRILLE_HORAIRE_OUI, null);
+    }
+
+    private PacketCom actionCheckLockGrille(String type, Object contenu) {
+        Object[] data = (Object[]) contenu;
+        int semaine = (int)data[0];
+        int année = (int)data[1];
+        String ambulance = (String)data[2];
+        String lieu = (String)data[3];
+
+        boolean locked = true;
+        try {
+            locked = dbRequests.checkLockGrille(semaine, année, ambulance, lieu);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            return new PacketCom(States.GET_GRILLE_NON, "Grille inconnue");
+        }
+        if(!locked){
+            return new PacketCom(States.GRILLE_UNLOCKED, null);
+        }else{
+            return new PacketCom(States.GRILLE_LOCKED, null);
+        }
+    }
+
+    private PacketCom actionUnlockGrille(String type, Object contenu) {
+        Grille grille = (Grille)contenu;
+        int semaine = grille.getSemaine();
+        int année = grille.getAnnee();
+        String ambulance = grille.getNomAmbulance();
+        String lieu = grille.getLieu();
+        try {
+            dbRequests.unlockGrille(semaine, année, ambulance, lieu);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            return new PacketCom(States.UNLOCK_GRILLE_NON, null);
+        }
+        return new PacketCom(States.UNLOCK_GRILLE_OUI, null);
     }
 }

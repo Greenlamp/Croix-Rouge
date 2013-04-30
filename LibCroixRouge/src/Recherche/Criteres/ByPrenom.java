@@ -9,42 +9,37 @@ import Recherche.TupleRecherche;
 import java.util.LinkedList;
 
 
-public class ByNom implements CritereCustom{
-    private String nom;
+public class ByPrenom implements CritereCustom{
+    private String prenom;
     private LinkedList<TupleRecherche> resultats;
     private DBA dbRequest;
 
-    public ByNom(){
-        setNom(null);
+    public ByPrenom(){
+        setPrenom(null);
         setResultats(null);
         setDbRequest(null);
     }
 
-    public ByNom(String nom, DBA dbRequest){
-        setNom(nom);
+    public ByPrenom(String prenom, DBA dbRequest){
+        setPrenom(prenom);
         setResultats(null);
         setDbRequest(dbRequest);
     }
 
     public void doSearch(){
-        //resultats = dbRequest.searchByNom(getNom());
-        String request = "SELECT nom, prenom FROM volontaires WHERE nom = '"+nom+"'";
+        //setResultats(getDbRequest().searchByPrenom(getPrenom()));
+        String request = "SELECT nom, prenom FROM volontaires WHERE prenom = '"+prenom+"'";
         resultats = dbRequest.searchByCritere(request);
     }
 
-    public String getNom() {
-        return nom;
+    public String getPrenom() {
+        return prenom;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 
-    public void addResultat(TupleRecherche tuple){
-        getResultats().add(tuple);
-    }
-
-    @Override
     public LinkedList<TupleRecherche> getResultats() {
         return resultats;
     }

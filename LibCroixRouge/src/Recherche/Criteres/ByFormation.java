@@ -9,35 +9,26 @@ import Recherche.TupleRecherche;
 import java.util.LinkedList;
 
 
-public class ByNom implements CritereCustom{
-    private String nom;
+public class ByFormation implements CritereCustom{
+    private String nomFormation;
     private LinkedList<TupleRecherche> resultats;
     private DBA dbRequest;
 
-    public ByNom(){
-        setNom(null);
+    public ByFormation(){
+        setNomFormation(null);
         setResultats(null);
         setDbRequest(null);
     }
 
-    public ByNom(String nom, DBA dbRequest){
-        setNom(nom);
+    public ByFormation(String nomFormation, DBA dbRequest){
+        setNomFormation(nomFormation);
         setResultats(null);
         setDbRequest(dbRequest);
     }
 
     public void doSearch(){
-        //resultats = dbRequest.searchByNom(getNom());
-        String request = "SELECT nom, prenom FROM volontaires WHERE nom = '"+nom+"'";
+        String request = "SELECT nom, prenom FROM formationsSuivie f1, formation f2, volontaires v WHERE f1.idFormation = f2.idFormation AND v.matricule = f1.matricule AND f2.nomFormation = '"+nomFormation+"'";
         resultats = dbRequest.searchByCritere(request);
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     public void addResultat(TupleRecherche tuple){
@@ -59,5 +50,13 @@ public class ByNom implements CritereCustom{
 
     public void setDbRequest(DBA dbRequest) {
         this.dbRequest = dbRequest;
+    }
+
+    public String getNomFormation() {
+        return nomFormation;
+    }
+
+    public void setNomFormation(String nomFormation) {
+        this.nomFormation = nomFormation;
     }
 }

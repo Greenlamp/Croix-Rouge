@@ -109,8 +109,6 @@ public class M_NouveauVolontaireP2 extends javax.swing.JPanel {
 
         jLabel16.setText("Gsm");
 
-        Ggsm.setText("0498/42.84.56");
-
         jLabel17.setText("Autre Gsm");
 
         jLabel18.setText("Telephone Fix");
@@ -255,15 +253,9 @@ public class M_NouveauVolontaireP2 extends javax.swing.JPanel {
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
-        GtelephoneUrgence.setText("0498/42.84.56");
-
         jLabel25.setText("Téléphone");
 
-        GprenomUrgence.setText("Gabriel");
-
         jLabel26.setText("Prénom");
-
-        GnomUrgence.setText("Knuts");
 
         jLabel27.setText("Nom");
 

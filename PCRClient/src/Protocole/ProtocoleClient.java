@@ -61,6 +61,36 @@ public class ProtocoleClient implements Protocolable{
             return packet;
         }else if (type.equals(States.NOUVELLE_EQUIPE_NON)) {
             return packet;
+        }else if (type.equals(States.GET_LISTE_FORMATIONS_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_LISTE_FORMATIONS_NON)) {
+            return packet;
+        }else if (type.equals(States.GET_GRILLES_HORAIRES_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_GRILLES_HORAIRES_NON)) {
+            return packet;
+        }else if (type.equals(States.NEW_GRILLE_HORAIRE_OUI)) {
+            return packet;
+        }else if (type.equals(States.NEW_GRILLE_HORAIRE_NON)) {
+            return packet;
+        }else if (type.equals(States.GET_GRILLE_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_GRILLE_NON)) {
+            return packet;
+        }else if (type.equals(States.NEW_GRILLE_HORAIRE_NON)) {
+            return packet;
+        }else if (type.equals(States.EDIT_GRILLE_HORAIRE_OUI)) {
+            return packet;
+        }else if (type.equals(States.EDIT_GRILLE_HORAIRE_NON)) {
+            return packet;
+        }else if (type.equals(States.GRILLE_LOCKED)) {
+            return packet;
+        }else if (type.equals(States.GRILLE_UNLOCKED)) {
+            return packet;
+        }else if (type.equals(States.UNLOCK_GRILLE_OUI)) {
+            return packet;
+        }else if (type.equals(States.UNLOCK_GRILLE_NON)) {
+            return packet;
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }

@@ -295,7 +295,7 @@
                       <Component id="Gnom" alignment="0" max="32767" attributes="0"/>
                       <Component id="Gprenom" alignment="0" max="32767" attributes="0"/>
                       <Component id="GdateNaissance" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jScrollPane1" alignment="0" pref="330" max="32767" attributes="0"/>
+                      <Component id="Bajouter" alignment="0" pref="330" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="GdotFormation" min="-2" max="-2" attributes="0"/>
@@ -306,7 +306,7 @@
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="Bajouter" alignment="0" max="32767" attributes="0"/>
+                      <Component id="Gformation" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -331,8 +331,8 @@
                   <Component id="GdateNaissance" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="GdotFormation" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="Gformation" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="Bajouter" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -361,9 +361,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="Gnom">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Knuts"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="GdotPrenom">
           <Properties>
@@ -402,22 +399,6 @@
             <Property name="text" type="java.lang.String" value="Selon la formation"/>
           </Properties>
         </Component>
-        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-          <AuxValues>
-            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-          </AuxValues>
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-          <SubComponents>
-            <Component class="javax.swing.JList" name="GlisteFormations">
-              <Properties>
-                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="0"/>
-                </Property>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
         <Component class="javax.swing.JButton" name="Bajouter">
           <Properties>
             <Property name="text" type="java.lang.String" value="Ajouter le crit&#xe8;re &#xe0; la liste"/>
@@ -425,6 +406,13 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BajouterActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="Gformation">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

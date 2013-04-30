@@ -12,6 +12,6 @@ import java.util.LinkedList;
  * @author Greenlamp
  */
 public interface DBA {
-    public LinkedList<TupleRecherche> searchByNom(String nom);
+    public LinkedList<TupleRecherche> searchByCritere(String request);
 
 }
