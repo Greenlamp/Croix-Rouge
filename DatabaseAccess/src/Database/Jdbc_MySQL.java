@@ -9,6 +9,7 @@ import FileAccess.FileAccess;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 
 public class Jdbc_MySQL extends Jdbc_dba{
@@ -18,7 +19,7 @@ public class Jdbc_MySQL extends Jdbc_dba{
     private String password = null;
     private String dbName = null;
     private String separator = null;
-    
+
     public void init(String host, String port, String username, String password, String dbName) throws Exception{
         this.host = host;
         this.port = port;

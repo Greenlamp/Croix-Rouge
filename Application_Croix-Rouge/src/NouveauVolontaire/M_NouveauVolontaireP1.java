@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextField;
 
 /**
  *
@@ -443,6 +444,11 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
         });
 
         jButton3.setText("Annuler");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Suivant");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -522,31 +528,35 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        enregistrerData();
-        parent.changeState(Main.NOUVEAU_VOLONTAIREP2);
+        if(checkChamps()){
+            enregistrerData();
+            parent.changeState(Main.NOUVEAU_VOLONTAIREP2);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        enregistrerData();
-        boolean cont = false;
-        volontaire = parent.getVolontaire();
-        PacketCom packet = new PacketCom(States.NOUVEAU_VOLONTAIRE, (Object)volontaire);
-        socket.send(packet);
-        try {
-            PacketCom packetReponse = socket.receive();
-            String type = packetReponse.getType();
-            if(type.equals(States.NOUVEAU_VOLONTAIRE_OUI)){
-                parent.afficherMessage("Ajout nouveau volontaire réussi.");
-                cont = true;
-            }else if(type.equals(States.NOUVEAU_VOLONTAIRE_NON)){
-                String message = (String) packetReponse.getObjet();
-                parent.afficherMessage(message);
+        if(checkChamps()){
+            enregistrerData();
+            boolean cont = false;
+            volontaire = parent.getVolontaire();
+            PacketCom packet = new PacketCom(States.NOUVEAU_VOLONTAIRE, (Object)volontaire);
+            socket.send(packet);
+            try {
+                PacketCom packetReponse = socket.receive();
+                String type = packetReponse.getType();
+                if(type.equals(States.NOUVEAU_VOLONTAIRE_OUI)){
+                    parent.afficherMessage("Ajout nouveau volontaire réussi.");
+                    cont = true;
+                }else if(type.equals(States.NOUVEAU_VOLONTAIRE_NON)){
+                    String message = (String) packetReponse.getObjet();
+                    parent.afficherMessage(message);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if(cont){
-            parent.changeState(Main.LOGGED);
+            if(cont){
+                parent.changeState(Main.LOGGED);
+            }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -557,6 +567,10 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
             GnomFille.setEnabled(false);
         }
     }//GEN-LAST:event_GfemmeActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        parent.changeState(Main.LOGGED);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox Gannee;
@@ -741,5 +755,60 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
 
 
         parent.setVolontaireP1(identite, adresse, residence);
+    }
+
+    private boolean checkChamps() {
+        if(!checkLabelString(Gnom)){
+            parent.afficherMessage("Veuillez rentrer un nom valide");
+            return false;
+        }else if(!checkLabelString(Gprenom)){
+            parent.afficherMessage("Veuillez rentrer un prenom valide");
+            return false;
+        }else if(!checkLabelEmail(Gemail)){
+            parent.afficherMessage("Veuillez rentrer un email valide");
+            return false;
+        }else if(!checkLabelString(Grue)){
+            parent.afficherMessage("Veuillez rentrer une rue valide");
+            return false;
+        }else if(!checkLabelInt(Gnumero)){
+            parent.afficherMessage("Veuillez rentrer un numéro valide");
+            return false;
+        }else if(!checkLabelInt(GcodePostal)){
+            parent.afficherMessage("Veuillez rentrer un code postal valide");
+            return false;
+        }else if(!checkLabelString(Gville)){
+            parent.afficherMessage("Veuillez rentrer une ville valide");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkLabelString(JTextField champ) {
+        if(champ.getText() == null || champ.getText().isEmpty()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    private boolean checkLabelEmail(JTextField champ) {
+        if(champ.getText() == null || champ.getText().isEmpty()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    private boolean checkLabelInt(JTextField champ) {
+        if(champ.getText() == null || champ.getText().isEmpty()){
+            return false;
+        }else{
+            try{
+                Integer.parseInt(champ.getText());
+                return true;
+            }catch(Exception ex){
+                return false;
+            }
+        }
     }
 }

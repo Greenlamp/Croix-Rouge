@@ -283,14 +283,6 @@ public class Main extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
-    private void MgererEquipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MgererEquipeActionPerformed
-        if(this.actualState.equals(Main.UNLOGGED)){
-            return;
-        }
-        this.actualState = Main.GESTION_EQUIPES;
-        refreshPanel();
-    }//GEN-LAST:event_MgererEquipeActionPerformed
-
     private void MgererGrillesHorairesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MgererGrillesHorairesActionPerformed
         if(this.actualState.equals(Main.UNLOGGED)){
             return;
@@ -302,6 +294,14 @@ public class Main extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         unlockGrille();
     }//GEN-LAST:event_formWindowClosing
+
+    private void MgererEquipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MgererEquipeActionPerformed
+        /*if(this.actualState.equals(Main.UNLOGGED)){
+            return;
+        }
+        this.actualState = Main.GESTION_EQUIPES;
+        refreshPanel();*/
+    }//GEN-LAST:event_MgererEquipeActionPerformed
 
     /**
      * @param args the command line arguments

@@ -14,6 +14,7 @@ import States.States;
 import Wizard.Wizard_Nouveau;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextField;
 
 /**
  *
@@ -191,6 +192,11 @@ public class M_NouveauVolontaireP2 extends javax.swing.JPanel {
         });
 
         jButton3.setText("Annuler");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Suivant");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -330,13 +336,18 @@ public class M_NouveauVolontaireP2 extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        enregistrerData();
-        parent.changeState(Main.NOUVEAU_VOLONTAIREP3);
+        if(checkChamps()){
+            enregistrerData();
+            parent.changeState(Main.NOUVEAU_VOLONTAIREP3);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        enregistrerData();
-        parent.changeState(Main.NOUVEAU_VOLONTAIREP1);
+        if(checkChamps()){
+            enregistrerData();
+            parent.changeState(Main.NOUVEAU_VOLONTAIREP1);
+        }
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -362,6 +373,10 @@ public class M_NouveauVolontaireP2 extends javax.swing.JPanel {
             parent.changeState(Main.LOGGED);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        parent.changeState(Main.LOGGED);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField GautreGsm;
@@ -426,6 +441,31 @@ public class M_NouveauVolontaireP2 extends javax.swing.JPanel {
             urgence.setTelephone(GtelephoneUrgence.getText());
 
         parent.setVolontaireP2(telephone, urgence);
+    }
+
+    private boolean checkChamps() {
+        if(!checkLabelString(Ggsm)){
+            parent.afficherMessage("Veuillez rentrer un gsm valide");
+            return false;
+        }else if(!checkLabelString(GnomUrgence)){
+            parent.afficherMessage("Veuillez rentrer un nom de personne d'urgence valide");
+            return false;
+        }else if(!checkLabelString(GprenomUrgence)){
+            parent.afficherMessage("Veuillez rentrer un prenom de personne d'urgence valide");
+            return false;
+        }else if(!checkLabelString(GtelephoneUrgence)){
+            parent.afficherMessage("Veuillez rentrer un telephone de personne d'urgence valide");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkLabelString(JTextField champ) {
+        if(champ.getText() == null || champ.getText().isEmpty()){
+            return false;
+        }else{
+            return true;
+        }
     }
 
 }

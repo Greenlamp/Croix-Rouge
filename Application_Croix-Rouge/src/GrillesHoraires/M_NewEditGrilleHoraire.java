@@ -60,6 +60,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         grille = parent.getGrille();
         grilleOld = parent.getGrilleOld();
         if(grille != null){
+            cacher(true);
             if(grilleOld == null){
                 grilleOld = new Grille(grille);
                 parent.setGrilleOld(grilleOld);
@@ -638,7 +639,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
             Ggrille.setValueAt(role, row, 0);
             Ggrille.setValueAt(nomVolontaire, row, column);
             if(nomVolontaire != null && !nomVolontaire.isEmpty()){
-                
+
             }
         }
     }
