@@ -5,10 +5,10 @@
 
 package Protocole;
 
-import Containers.Adresse;
 import Containers.Grille;
-import Containers.Identite;
+import Containers.Groupe;
 import Containers.Key;
+import Containers.Utilisateur;
 import Containers.Volontaire;
 import DB.DbRequests;
 import PacketCom.PacketCom;
@@ -23,10 +23,8 @@ import Recherche.Criteres.TraitementRecherche;
 import Recherche.Equipe;
 import Recherche.TupleRecherche;
 import States.States;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,6 +58,8 @@ public class ProtocoleServeur implements Protocolable{
             return actionLogin(type, contenu);
         }else if(type.equals(States.NOUVEAU_VOLONTAIRE)){
             return actionNouveauVolontaire(type, contenu);
+        }else if(type.equals(States.DISCONNECT)){
+            return actionDisconnect(type, contenu);
         }else if(type.equals(States.GET_VOLONTAIRE_ALL)){
             return actionGetVolontaires(type, contenu, "all");
         }else if(type.equals(States.GET_DROITS_ALL)){
@@ -92,6 +92,28 @@ public class ProtocoleServeur implements Protocolable{
             return actionCheckLockGrille(type, contenu);
         }else if(type.equals(States.UNLOCK_GRILLE)){
             return actionUnlockGrille(type, contenu);
+        }else if(type.equals(States.GET_VOLONTAIRE)){
+            return actionGetVolontaire(type, contenu);
+        }else if(type.equals(States.EDIT_VOLONTAIRE)){
+            return actionEditVolontaire(type, contenu);
+        }else if(type.equals(States.GET_GROUPE)){
+            return actionGetGroupe(type, contenu);
+        }else if(type.equals(States.NEW_GROUPE)){
+            return actionNewGroupe(type, contenu);
+        }else if(type.equals(States.EDIT_GROUPE)){
+            return actionEditGroupe(type, contenu);
+        }else if(type.equals(States.DELETE_GROUPE)){
+            return actionDeleteGroupe(type, contenu);
+        }else if(type.equals(States.GET_UTILISATEUR)){
+            return actionGetUtilisateur(type, contenu);
+        }else if(type.equals(States.EDIT_UTILISATEUR)){
+            return actionEditUtilisateur(type, contenu);
+        }else if(type.equals(States.DELETE_UTILISATEUR)){
+            return actionDeleteUtilisateur(type, contenu);
+        }else if(type.equals(States.NEW_UTILISATEUR)){
+            return actionNouveauUtilisateur(type, contenu);
+        }else if(type.equals(States.DELETE_VOLONTAIRE)){
+            return actionDeleteVolontaire(type, contenu);
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }
@@ -101,18 +123,41 @@ public class ProtocoleServeur implements Protocolable{
         String[] infos = (String[]) contenu;
         String login = infos[0];
         String password = infos[1];
-
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"utilisateurs"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.ERROR, "Erreur de vérouillage");
+        }
         try {
             dbRequests.checkLogin(login);
         } catch (Exception ex) {
-            System.out.println("ex: " + ex.getMessage());
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
             return new PacketCom(States.LOGIN_NON_USER, null);
         }
         try {
             idUser = dbRequests.checLoginPassword(login, password);
         } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
             return new PacketCom(States.LOGIN_NON_PASS, null);
         }
+        try {
+            //dbRequests.checkAlreadyLogged(login);
+        } catch (Exception ex) {
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.LOGIN_NON, "cet utilisateur est déja connecté");
+        }
+        try {
+            dbRequests.userLogged(idUser);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.LOGIN_NON, "Impossible de se connecter");
+        }
+        dbRequests.getMysql().commit();
         return new PacketCom(States.LOGIN_OUI, null);
     }
 
@@ -125,6 +170,186 @@ public class ProtocoleServeur implements Protocolable{
         return insererVolontaire(volontaire);
     }
 
+    private PacketCom insererVolontaire(Volontaire volontaire){
+        try{
+            dbRequests.getMysql().lockTable(new String[]{"volontaires", "PersonneUrgence", "Decouverte", "langue", "Renseignements", "LanguesConnue", "Formation", "Pays", "Ville", "Telephone", "Adresse"});
+            boolean check = false;
+            check = dbRequests.checkMatricule(volontaire.getIdentite().getMatricule());
+            if(!check){
+                check = dbRequests.checkNomPrenom(volontaire.getIdentite().getNom(), volontaire.getIdentite().getPrenom());
+            }
+            if(!check){
+                int idPersonneUrgence = -1;
+                int idDecouverte = -1;
+                int idRenseignement = -1;
+                int idPaysLegal = -1;
+                int idVilleLegal = -1;
+                int idAdresseLegale = -1;
+                int idPaysResidence = -1;
+                int idVilleResidence = -1;
+                int idAdresseResidence = -1;
+                int idTelephone = -1;
+
+
+
+                /*
+                if(volontaire.getFormations() != null) dbRequests.insertFormationsSuivie(volontaire.getIdentite().getMatricule(), volontaire.getFormations().getListeFormation());
+                */
+
+                /*OLD*/
+                //if(volontaire.getDecouverte() != null) idDecouverte = dbRequests.insertDecouvertes(volontaire.getDecouverte().getDescription());
+                //if(volontaire.getComplementaire() != null) idLangueMaternelle = dbRequests.insertLangue(volontaire.getComplementaire().getLangueMaternelle());
+                //if(volontaire.getComplementaire() != null) dbRequests.insertLanguesConnue(idRenseignement, volontaire.getComplementaire().getListeLangue());
+                //if(volontaire.getComplementaire() != null) idRenseignement = dbRequests.insertRenseignement(volontaire.getComplementaire().getActivitePro(), volontaire.getComplementaire().getActivite(), volontaire.getComplementaire().getQualification(), (volontaire.getComplementaire().isPermis() ? "Oui" : "Non"), volontaire.getComplementaire().getCategorie(), volontaire.getComplementaire().getDateObtention(), (volontaire.getComplementaire().isSelectionMedicale() ? "Oui" : "Non"), volontaire.getComplementaire().getDateValidité(), idLangueMaternelle);
+                //if(volontaire.getAdresse() != null) idPaysLegal = dbRequests.insertPays(volontaire.getAdresse().getPays());
+                //if(volontaire.getAdresse() != null) idVilleLegal = dbRequests.insertVille(volontaire.getAdresse().getVille());
+                //if(volontaire.getAdresse() != null) idAdresseLegale = dbRequests.insertAdresse(volontaire.getAdresse().getRue(), volontaire.getAdresse().getNuméro(), volontaire.getAdresse().getCodePostal(), volontaire.getAdresse().getBoite(), idPaysLegal, idVilleLegal, volontaire.getIdentite().getMatricule());
+                //if(volontaire.getResidence() != null) idPaysResidence = dbRequests.insertPays(volontaire.getResidence().getPays());
+                //if(volontaire.getResidence() != null) idVilleResidence = dbRequests.insertVille(volontaire.getResidence().getVille());
+                //if(volontaire.getTelephone() != null) idTelephone = dbRequests.insertTelephone(volontaire.getTelephone().getGsm(), volontaire.getTelephone().getAutreGsm(), volontaire.getTelephone().getTelephoneFix(), volontaire.getTelephone().getTelephoneProfesionnelle(), volontaire.getTelephone().getFax());
+                //if(volontaire.getUrgence() != null) idPersonneUrgence = dbRequests.insertPersonneUrgence(volontaire.getUrgence().getNom(), volontaire.getUrgence().getPrenom(), volontaire.getUrgence().getTelephone());
+                //if(volontaire.getResidence() != null) idAdresseResidence = dbRequests.insertAdresse(volontaire.getResidence().getRue(), volontaire.getResidence().getNuméro(), volontaire.getResidence().getCodePostal(), volontaire.getResidence().getBoite(), idPaysResidence, idVilleResidence, volontaire.getIdentite().getMatricule());
+                                //if(volontaire.getIdentite() != null) dbRequests.insertVolontaire(volontaire.getIdentite().getMatricule(), volontaire.getIdentite().getNom(), volontaire.getIdentite().getPrenom(), volontaire.getIdentite().getNomJeuneFille(), volontaire.getIdentite().getDateNaissance(), volontaire.getIdentite().getSexe(), (volontaire.getAdresse() == null ? null : volontaire.getAdresse().getEmail()), "", idPersonneUrgence, idDecouverte, -1, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, -1);
+
+                /*NEW*/
+                idDecouverte = dbRequests.insertDecouvertes(volontaire.getDecouverte());
+                idRenseignement = dbRequests.insertRenseignement(volontaire.getComplementaire());
+                idAdresseLegale = dbRequests.insertAdresseLegale(volontaire.getAdresse(), volontaire.getIdentite().getMatricule());
+                idAdresseResidence = dbRequests.insertAdresseResidence(volontaire.getResidence(), volontaire.getIdentite().getMatricule());
+                idTelephone = dbRequests.insertTelephone(volontaire.getTelephone(), volontaire.getIdentite().getMatricule());
+                idPersonneUrgence = dbRequests.insertPersonneUrgence(volontaire.getUrgence(), volontaire.getIdentite().getMatricule());
+                dbRequests.insertVolontaire(volontaire.getIdentite(), volontaire.getAdresse(), "", idPersonneUrgence, idDecouverte, -1, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, -1);
+
+
+
+            }else{
+                dbRequests.getMysql().rollback();
+                return new PacketCom(States.NOUVEAU_VOLONTAIRE_NON, "Volontaire déja existant");
+            }
+            dbRequests.getMysql().commit();
+            return new PacketCom(States.NOUVEAU_VOLONTAIRE_OUI, null);
+        }catch(Exception ex){
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NOUVEAU_VOLONTAIRE_NON, "Une erreur s'est produite");
+        }
+    }
+
+    private PacketCom actionEditVolontaire(String type, Object contenu) {
+        Volontaire volontaire = (Volontaire)contenu;
+        String matricule = null;
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"volontaires", "PersonneUrgence", "Decouverte", "langue", "Renseignements", "LanguesConnue", "Formation", "Pays", "Ville", "Telephone", "Adresse"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_VOLONTAIRE_NON, "Impossible de modifier le volontaire");
+        }
+        try {
+            matricule = dbRequests.getMatricule(volontaire.getIdentite().getNom(), volontaire.getIdentite().getPrenom());
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_VOLONTAIRE_NON, "Impossible de modifier le volontaire");
+        }
+        if(matricule != null && matricule.equals(volontaire.getIdentite().getMatricule())){
+            matricule = volontaire.getIdentite().getMatricule();
+        }else if(matricule != null){
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_VOLONTAIRE_NON, "ce volontaire existe déja");
+        }else{
+            matricule = volontaire.getIdentite().getMatricule();
+        }
+        try {
+            dbRequests.editIdentite(matricule, volontaire.getIdentite());
+            dbRequests.editDecouverte(matricule, volontaire.getDecouverte());
+            dbRequests.editComplementaire(matricule, volontaire.getComplementaire());
+            dbRequests.editAdresseLegale(matricule, volontaire.getAdresse());
+            dbRequests.editAdresseResidence(matricule, volontaire.getResidence());
+            dbRequests.editTelephone(matricule, volontaire.getTelephone());
+            dbRequests.editPersonneUrgence(matricule, volontaire.getUrgence());
+
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_VOLONTAIRE_NON, "Impossible de modifier le volontaire");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.EDIT_VOLONTAIRE_OUI, "Modification du volontaire réussie");
+    }
+
+    private PacketCom actionGetVolontaire(String type, Object contenu) {
+        String[] data = (String[]) contenu;
+        String nom = data[0];
+        String prenom = data[1];
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"volontaires", "PersonneUrgence", "Decouverte", "langue", "Renseignements", "LanguesConnue", "Formation", "Pays", "Ville", "Telephone", "Adresse"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_VOLONTAIRE_NON, "Impossible de récupérer le volontaire");
+        }
+
+        String matricule;
+        try {
+            matricule = dbRequests.getMatricule(nom, prenom);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_VOLONTAIRE_NON, "Impossible de récupérer le volontaire");
+        }
+        if(matricule == null){
+            return new PacketCom(States.GET_VOLONTAIRE_NON, "Impossible de récupérer le volontaire");
+        }
+        Volontaire volontaire = null;
+        try {
+            volontaire = dbRequests.getVolontaire(matricule);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_VOLONTAIRE_NON, "Impossible de récupérer le volontaire");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.GET_VOLONTAIRE_OUI, (Object)volontaire);
+    }
+
+    private PacketCom actionDeleteVolontaire(String type, Object contenu) {
+        String[] data = (String[])contenu;
+        String nom = data[0];
+        String prenom = data[1];
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Volontaires", "PersonneUrgence", "Prestation", "Renseignements", "FormationsSuivie", "Formation", "Adresse", "AssignationCaseHoraire", "FormationActivite", "FormationSuivieActivite", "Activite", "LanguesConnue", "Telephone"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_VOLONTAIRE_NON, "Impossible de supprimer le volontaire");
+        }
+        String matricule = null;
+        try {
+            matricule = dbRequests.getMatricule(nom, prenom);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_VOLONTAIRE_NON, "Impossible de supprimer le volontaire");
+        }
+
+        if(matricule == null){
+            return new PacketCom(States.DELETE_VOLONTAIRE_NON, "Le volontaire n'existe pas");
+        }
+        try {
+            dbRequests.supprimerVolontaire(matricule);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_VOLONTAIRE_NON, "Impossible de supprimer le volontaire");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.DELETE_VOLONTAIRE_OUI, null);
+    }
+
     private PacketCom actionGetVolontaires(String type, Object contenu, String portee) {
         PacketCom packetReponse = null;
         if(portee.equals("all")){
@@ -134,14 +359,19 @@ public class ProtocoleServeur implements Protocolable{
             }
             LinkedList<String[]> listeVolontaire = null;
             try {
-                listeVolontaire = dbRequests.getVolontairesAll();
+                dbRequests.getMysql().lockTable(new String[]{"volontaires", "Adresse", "Ville"});
             } catch (Exception ex) {
                 Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                dbRequests.getMysql().rollback();
+                packetReponse = new PacketCom(States.GET_VOLONTAIRE_ALL_NON, "Impossible de récupérer la liste des volontaires");
             }
-            if(listeVolontaire != null){
+            try {
+                listeVolontaire = dbRequests.getVolontairesAll();
                 packetReponse = new PacketCom(States.GET_VOLONTAIRE_ALL_OUI, (Object)listeVolontaire);
-            }else{
-                //TODO: traiter si la liste est vide.
+            } catch (Exception ex) {
+                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                dbRequests.getMysql().rollback();
+                packetReponse = new PacketCom(States.GET_VOLONTAIRE_ALL_NON, "Impossible de récupérer la liste des volontaires");
             }
         }else{
             if(!droitsOffi.contains("READ_DATA_MYSELF")){
@@ -150,96 +380,130 @@ public class ProtocoleServeur implements Protocolable{
             }
             //TODO: si on ne veut pas tout.
         }
+        dbRequests.getMysql().commit();
         return packetReponse;
     }
 
     private PacketCom actionGetDroits(String type, Object contenu) {
+        PacketCom packetReponse = null;
         if(!droitsOffi.contains("SEE_MANAGE_RIGHTS")){
             PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
             return packetRetour;
         }
-        PacketCom packetReponse = null;
         LinkedList<String[]> listeDroits = null;
         try {
-            listeDroits = dbRequests.getDroits();
+            dbRequests.getMysql().lockTable(new String[]{"Droits"});
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_DROITS_ALL_NON, "Impossible de récupérer la liste des droits");
         }
-        if(listeDroits != null){
+        try {
+            listeDroits = dbRequests.getDroits();
             packetReponse = new PacketCom(States.GET_DROITS_ALL_OUI, (Object)listeDroits);
-        }else{
-            //TODO: traiter si la liste est vide.
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_DROITS_ALL_NON, "Impossible de récupérer la liste des droits");
         }
+        dbRequests.getMysql().commit();
         return packetReponse;
     }
 
     private PacketCom actionGetGroupes(String type, Object contenu) {
+        PacketCom packetReponse = null;
         if(!droitsOffi.contains("SEE_MANAGE_GROUP")){
             PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
             return packetRetour;
         }
-        PacketCom packetReponse = null;
         LinkedList<String[]> listeGroupes = null;
         try {
-            listeGroupes = dbRequests.getGroupes();
+            dbRequests.getMysql().lockTable(new String[]{"Groupes"});
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_GROUPES_ALL_NON, "Impossible de récupérer la liste des groupes");
         }
-        if(listeGroupes != null){
+        try {
+            listeGroupes = dbRequests.getGroupes();
             packetReponse = new PacketCom(States.GET_GROUPES_ALL_OUI, (Object)listeGroupes);
-        }else{
-            //TODO: traiter si la liste est vide.
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_GROUPES_ALL_NON, "Impossible de récupérer la liste des groupes");
         }
+        dbRequests.getMysql().commit();
         return packetReponse;
     }
 
     private PacketCom actionGetUtilisateurs(String type, Object contenu) {
+        PacketCom packetReponse = null;
         if(!droitsOffi.contains("SEE_MANAGE_USER")){
             PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
             return packetRetour;
         }
-        PacketCom packetReponse = null;
         LinkedList<String[]> listeUtilisateurs = null;
         try {
-            listeUtilisateurs = dbRequests.getUtilisateurs();
+            dbRequests.getMysql().lockTable(new String[]{"Utilisateurs"});
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_UTILISATEURS_ALL_NON, "Impossible de récupérer la liste des utilisateurs");
         }
-        if(listeUtilisateurs != null){
+        try {
+            listeUtilisateurs = dbRequests.getUtilisateurs();
             packetReponse = new PacketCom(States.GET_UTILISATEURS_ALL_OUI, (Object)listeUtilisateurs);
-        }else{
-            //TODO: traiter si la liste est vide.
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_UTILISATEURS_ALL_NON, "Impossible de récupérer la liste des utilisateurs");
         }
+        dbRequests.getMysql().commit();
         return packetReponse;
     }
 
     private PacketCom actionGetMyDroits(String type, Object contenu) {
         PacketCom packetReponse = null;
-        LinkedList<String> droits = null;
+        LinkedList<String> listeDroits = null;
         try {
-            droits = dbRequests.getMyDroits(idUser);
-            droitsOffi = droits;
+            dbRequests.getMysql().lockTable(new String[]{"Droits", "Utilisateurs", "Appartenir", "Groupes", "PossederDroit"});
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_MY_DROITS_NON, "Impossible de récupérer la liste des droits");
         }
-        if(droits != null){
-            packetReponse = new PacketCom(States.GET_MY_DROITS_OUI, (Object)droits);
-        }else{
-            //TODO: traiter si la liste est vide.
+        try {
+            listeDroits = dbRequests.getMyDroits(idUser);
+            droitsOffi = listeDroits;
+            packetReponse = new PacketCom(States.GET_MY_DROITS_OUI, (Object)listeDroits);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_MY_DROITS_NON, "Impossible de récupérer la liste des droits");
         }
+        dbRequests.getMysql().commit();
         return packetReponse;
     }
 
     private PacketCom actionGetDetailsUser(String type, Object contenu) {
+        PacketCom packetReponse = null;
         String login = (String)contenu;
-        int id = -1;
+        int idUser = -1;
         try {
-            id = dbRequests.getIdUser(login);
+            dbRequests.getMysql().lockTable(new String[]{"Utilisateurs"});
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-            return new PacketCom(States.GET_DETAILS_USER_NON, "ERROR");
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_DETAILS_USER_NON, "Impossible de récupérer les détails de l'utilisateur");
         }
-        if(id == this.idUser){
+        try {
+            idUser = dbRequests.getIdUser(login);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_DETAILS_USER_NON, "Impossible de récupérer les détails de l'utilisateur");
+        }
+        if(idUser == this.idUser){
             if(!droitsOffi.contains("READ_DATA_MYSELF")){
                 PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
                 return packetRetour;
@@ -252,61 +516,19 @@ public class ProtocoleServeur implements Protocolable{
         }
         Map<String, String> dataUser = null;
         try {
-            dataUser = dbRequests.getDataUser(id);
+            dataUser = dbRequests.getDataUser(idUser);
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_DETAILS_USER_NON, "Impossible de récupérer les détails de l'utilisateur");
         }
         if(dataUser != null){
-            return new PacketCom(States.GET_DETAILS_USER_OUI, (Object)dataUser);
+            packetReponse = new PacketCom(States.GET_DETAILS_USER_OUI, (Object)dataUser);
         }else{
-            return new PacketCom(States.GET_DETAILS_USER_NON, "ERROR");
+            packetReponse = new PacketCom(States.GET_DETAILS_USER_NON, "Impossible de récupérer les détails de l'utilisateur");
         }
-    }
-
-    private PacketCom insererVolontaire(Volontaire volontaire) {
-        String matricule = volontaire.getIdentite().getNom() + "-" + volontaire.getIdentite().getPrenom();
-
-        boolean check = false;
-        try {
-            check = dbRequests.checkMatricule(matricule);
-        } catch (Exception ex) {
-            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if(!check){
-            int idPersonneUrgence = -1;
-            int idDecouverte = -1;
-            int idLangueMaternelle = -1;
-            int idRenseignement = -1;
-            int idPaysLegal = -1;
-            int idVilleLegal = -1;
-            int idAdresseLegale = -1;
-            int idPaysResidence = -1;
-            int idVilleResidence = -1;
-            int idAdresseResidence = -1;
-            int idTelephone = -1;
-            try {
-                if(volontaire.getUrgence() != null) idPersonneUrgence = dbRequests.insertPersonneUrgence(volontaire.getUrgence().getNom(), volontaire.getUrgence().getPrenom(), volontaire.getUrgence().getTelephone());
-                if(volontaire.getDecouverte() != null) idDecouverte = dbRequests.insertDecouvertes(volontaire.getDecouverte().getListeDescription());
-                if(volontaire.getComplementaire() != null) idLangueMaternelle = dbRequests.insertLangueMaternelle(volontaire.getComplementaire().getLangueMaternelle());
-                if(volontaire.getComplementaire() != null) idRenseignement = dbRequests.insertRenseignement(volontaire.getComplementaire().getActivitePro(), volontaire.getComplementaire().getActivite(), volontaire.getComplementaire().getQualification(), (volontaire.getComplementaire().isPermis() ? "Oui" : "Non"), volontaire.getComplementaire().getCategorie(), volontaire.getComplementaire().getDateObtention(), (volontaire.getComplementaire().isSelectionMedicale() ? "Oui" : "Non"), volontaire.getComplementaire().getDateValidité(), idLangueMaternelle);
-                if(volontaire.getComplementaire() != null) dbRequests.insertLanguesConnue(idRenseignement, volontaire.getComplementaire().getListeLangue());
-                if(volontaire.getFormations() != null) dbRequests.insertFormationsSuivie(matricule, volontaire.getFormations().getListeFormation());
-                if(volontaire.getAdresse() != null) idPaysLegal = dbRequests.insertPaysLegal(volontaire.getAdresse().getPays());
-                if(volontaire.getAdresse() != null) idVilleLegal = dbRequests.insertVilleLegal(volontaire.getAdresse().getVille());
-                if(volontaire.getAdresse() != null) idAdresseLegale = dbRequests.insertAdresseLegale(volontaire.getAdresse().getRue(), volontaire.getAdresse().getNuméro(), volontaire.getAdresse().getCodePostal(), volontaire.getAdresse().getBoite(), idPaysLegal, idVilleLegal, matricule);
-                if(volontaire.getResidence() != null) idPaysResidence = dbRequests.insertPaysResidence(volontaire.getResidence().getPays());
-                if(volontaire.getResidence() != null) idVilleResidence = dbRequests.insertVilleResidence(volontaire.getResidence().getVille());
-                if(volontaire.getResidence() != null) idAdresseResidence = dbRequests.insertAdresseResidence(volontaire.getResidence().getRue(), volontaire.getResidence().getNuméro(), volontaire.getResidence().getCodePostal(), volontaire.getResidence().getBoite(), volontaire.getResidence(), idPaysResidence, idVilleResidence, matricule);
-                if(volontaire.getTelephone() != null) idTelephone = dbRequests.insertTelephone(volontaire.getTelephone().getGsm(), volontaire.getTelephone().getAutreGsm(), volontaire.getTelephone().getTelephoneFix(), volontaire.getTelephone().getTelephoneProfesionnelle(), volontaire.getTelephone().getFax());
-                dbRequests.insertVolontaire(matricule, volontaire.getIdentite().getNom(), volontaire.getIdentite().getPrenom(), volontaire.getIdentite().getNomJeuneFille(), volontaire.getIdentite().getDateNaissance(), volontaire.getIdentite().getSexe(), (volontaire.getAdresse() == null ? null : volontaire.getAdresse().getEmail()), "", idPersonneUrgence, idDecouverte, -1, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, -1);
-            } catch (Exception ex) {
-                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-                return new PacketCom(States.NOUVEAU_VOLONTAIRE_NON, "Une erreur s'est produite.");
-            }
-            return new PacketCom(States.NOUVEAU_VOLONTAIRE_OUI, null);
-        }else{
-            return new PacketCom(States.NOUVEAU_VOLONTAIRE_NON, "Volontaire déja existant");
-        }
+        dbRequests.getMysql().commit();
+        return packetReponse;
     }
 
     private PacketCom actionGetEquipes(String type, Object contenu) {
@@ -317,15 +539,21 @@ public class ProtocoleServeur implements Protocolable{
         PacketCom packetReponse = null;
         LinkedList<String[]> listeEquipes = null;
         try {
-            listeEquipes = dbRequests.getEquipes();
+            dbRequests.getMysql().lockTable(new String[]{"Equipe", "Lier"});
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_EQUIPES_ALL_NON, "Impossible de récupérer la liste des équipes");
         }
-        if(listeEquipes != null){
+        try {
+            listeEquipes = dbRequests.getEquipes();
             packetReponse = new PacketCom(States.GET_EQUIPES_ALL_OUI, (Object)listeEquipes);
-        }else{
-            //TODO: traiter si la liste est vide.
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_EQUIPES_ALL_NON, "Impossible de récupérer la liste des équipes");
         }
+        dbRequests.getMysql().commit();
         return packetReponse;
     }
 
@@ -366,45 +594,62 @@ public class ProtocoleServeur implements Protocolable{
 
     private PacketCom actionNouvelleEquipe(String type, Object contenu) {
         Equipe equipe = (Equipe) contenu;
-        int idEquipe;
+        PacketCom packetReponse = null;
+        int idEquipe = -1;
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Equipe", "Lier", "volontaires"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NOUVELLE_EQUIPE_NON, (Object)ex.getMessage());
+        }
         try {
             idEquipe = dbRequests.insertEquipe(equipe.getNom());
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-            return new PacketCom(States.NOUVELLE_EQUIPE_NON, (Object)"Nom d'équipe déja utilisé");
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NOUVELLE_EQUIPE_NON, (Object)ex.getMessage());
+        }
+        if(idEquipe == -1){
+            return new PacketCom(States.NOUVELLE_EQUIPE_NON, "Impossible de trouver l'équipe");
         }
         for(TupleRecherche tuple : equipe.getVolontaires()){
-            String matricule;
+            String matricule = null;
             try {
                 matricule = dbRequests.getMatricule(tuple.getNom(), tuple.getPrenom());
                 dbRequests.insertMembreEquipe(idEquipe, matricule);
             } catch (Exception ex) {
                 Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                dbRequests.getMysql().rollback();
                 return new PacketCom(States.NOUVELLE_EQUIPE_NON, (Object)ex.getMessage());
             }
         }
+        dbRequests.getMysql().commit();
         return new PacketCom(States.NOUVELLE_EQUIPE_OUI, null);
     }
 
     private PacketCom actionGetFormation(String type, Object contenu) {
-        /*if(!droitsOffi.contains("SEE_MANAGE_GROUP")){
-            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
-            return packetRetour;
-        }*/
         //TODO - Créer un droit pour récup les formations
         PacketCom packetReponse = null;
         LinkedList<String> listeFormations = null;
         try {
-            listeFormations = dbRequests.getFormations();
+            dbRequests.getMysql().lockTable(new String[]{"formation"});
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_LISTE_FORMATIONS_NON, "Impossible de trouver les formations");
         }
-        if(listeFormations != null){
+        try {
+            listeFormations = dbRequests.getFormations();
             packetReponse = new PacketCom(States.GET_LISTE_FORMATIONS_OUI, (Object)listeFormations);
-        }else{
-            //TODO: traiter si la liste est vide.
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_LISTE_FORMATIONS_NON, "Impossible de trouver les formations");
         }
+        dbRequests.getMysql().commit();
         return packetReponse;
+
     }
 
     private PacketCom actionGetGrillesHoraires(String type, Object contenu) {
@@ -412,54 +657,63 @@ public class ProtocoleServeur implements Protocolable{
         PacketCom packetReponse = null;
         LinkedList<String[]> listeGrillesHoraires = null;
         try {
-            listeGrillesHoraires = dbRequests.getGrillesHoraires();
+            dbRequests.getMysql().lockTable(new String[]{"grillehoraire"});
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_LISTE_FORMATIONS_NON, "Impossible de trouver les formations");
         }
-        if(listeGrillesHoraires != null){
+        try {
+            listeGrillesHoraires = dbRequests.getGrillesHoraires();
             packetReponse = new PacketCom(States.GET_GRILLES_HORAIRES_OUI, (Object)listeGrillesHoraires);
-        }else{
-            //TODO: traiter si la liste est vide.
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_LISTE_FORMATIONS_NON, "Impossible de trouver les formations");
         }
+        dbRequests.getMysql().commit();
         return packetReponse;
     }
 
     private PacketCom actionGetGrille(String type, Object contenu) {
+        PacketCom packetReponse = null;
         Object[] data = (Object[]) contenu;
         int semaine = (int)data[0];
         int année = (int)data[1];
         String ambulance = (String)data[2];
         String lieu = (String)data[3];
+        int idGrilleHoraire = -1;
         try {
-            dbRequests.lockGrille(semaine, année, ambulance, lieu);
+            dbRequests.getMysql().lockTable(new String[]{"grillehoraire", "CaseHoraire", "assignationCaseHoraire"});
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_GRILLE_NON, "Grille inconnue");
         }
-
-        int idGrilleHoraire = -1;
         try {
             idGrilleHoraire = dbRequests.getIdGrilleHoraire(semaine, année, ambulance, lieu);
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-            return new PacketCom(States.GET_GRILLE_NON, "Grille inconnue");
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_GRILLE_NON, "Grille inconnue");
         }
-
 
         Grille grille = null;
         try {
             grille = dbRequests.getGrille(idGrilleHoraire);
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-            return new PacketCom(States.GET_GRILLE_NON, "Impossible de récupérer la grille");
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_GRILLE_NON, "Grille inconnue");
         }
-
 
         LinkedList<Key> cellules = null;
         try {
             cellules = dbRequests.getCellules(idGrilleHoraire);
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-            return new PacketCom(States.GET_GRILLE_NON, "cellules inconnue");
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_GRILLE_NON, "Cellules de la grille irrécupérable");
         }
 
         grille.setGrilles(cellules);
@@ -467,18 +721,31 @@ public class ProtocoleServeur implements Protocolable{
             dbRequests.getVolontaireGrille(grille, idGrilleHoraire);
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-            return new PacketCom(States.GET_GRILLE_NON, "Erreur lors de la récupération des volontaires pour la grille");
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_GRILLE_NON, "Volontaires de la grille inconnue");
         }
 
+        dbRequests.getMysql().commit();
         return new PacketCom(States.GET_GRILLE_OUI, (Object)grille);
     }
 
     private PacketCom actionNewGrillesHoraires(String type, Object contenu) {
         Grille grille = (Grille)contenu;
-        int idGrilleHoraire;
+        int idGrilleHoraire = -1;
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"grillehoraire", "volontaires", "caseHoraire", "AssignationCaseHoraire"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur de création de nouvelle grille");
+        }
+
         try {
             idGrilleHoraire = dbRequests.insertGrilleHoraire(grille.getSemaine(), grille.getDateDebut(), grille.getDateFin(), grille.getNomAmbulance(), grille.getLieu(), grille.getAnnee());
         } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
             return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "La grille horaire pour la semaine " + grille.getSemaine() + " déja existante");
         }
 
@@ -494,22 +761,32 @@ public class ProtocoleServeur implements Protocolable{
                 prenom = split[1];
                 try {
                     matricule = dbRequests.getMatricule(nom, prenom);
+                    matriculed = true;
                 } catch (Exception ex) {
                     Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-                    return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur au niveau de l'insertion de la recupération du matricule");
+                    dbRequests.getMysql().rollback();
+                    return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Volontaires introuvable dans la grille");
                 }
-                matriculed = true;
             }
-            int idCaseHoraire;
+            int idCaseHoraire= -1;
             try {
                 idCaseHoraire = dbRequests.insertCellule(key.getValue().getJour(), key.getValue().getDate(), key.getValue().getHeure(), key.getValue().getRole(), key.getValue().getRow(), key.getValue().getColumn(), idGrilleHoraire);
-                if(matriculed){
-                    dbRequests.insertAssignationCaseHoraire(idCaseHoraire, matricule);
-                }
             } catch (Exception ex) {
-                return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur au niveau de l'insertion de la case horaire");
+                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                dbRequests.getMysql().rollback();
+                return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Impossible d'insérer la cellule dans la grille");
+            }
+            if(matriculed){
+                try {
+                    dbRequests.insertAssignationCaseHoraire(idCaseHoraire, matricule);
+                } catch (Exception ex) {
+                    Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                    dbRequests.getMysql().rollback();
+                    return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Impossible d'insérer la cellule dans la grille");
+                }
             }
         }
+        dbRequests.getMysql().commit();
         return new PacketCom(States.NEW_GRILLE_HORAIRE_OUI, null);
     }
 
@@ -517,12 +794,22 @@ public class ProtocoleServeur implements Protocolable{
         Object[] data = (Object[]) contenu;
         Grille oldGrille = (Grille)data[0];
         Grille newGrille = (Grille)data[1];
-        int idGrilleHoraire;
+        int idGrilleHoraire = -1;
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"grillehoraire", "volontaires", "caseHoraire", "AssignationCaseHoraire"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur d'édition de grille");
+        }
+
         try {
             idGrilleHoraire = dbRequests.editGrilleHoraire(oldGrille.getSemaine(), oldGrille.getAnnee(), oldGrille.getNomAmbulance(), oldGrille.getLieu());
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-            return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "La grille horaire pour la semaine " + oldGrille.getSemaine() + " est introuvable");
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur d'édition de grille");
         }
 
         for(Key key : newGrille.getGrilles()){
@@ -538,42 +825,63 @@ public class ProtocoleServeur implements Protocolable{
                     matricule = dbRequests.getMatricule(nom, prenom);
                 } catch (Exception ex) {
                     Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-                    return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur au niveau de l'insertion de la recupération du matricule");
+                    dbRequests.getMysql().rollback();
+                    return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur d'édition de grille");
                 }
             }
             int idCaseHoraire = -1;
-            try {
-                String newHeure = null;
-                for(Key keyOld : oldGrille.getGrilles()){
-                    if(keyOld.getX() == key.getX() && keyOld.getY() == key.getY()){
-                        newHeure = key.getValue().getHeure();
+            String newHeure = null;
+            for(Key keyOld : oldGrille.getGrilles()){
+                if(keyOld.getX() == key.getX() && keyOld.getY() == key.getY()){
+                    newHeure = key.getValue().getHeure();
+                    try {
                         idCaseHoraire = dbRequests.EditCellule(keyOld.getValue().getJour(), keyOld.getValue().getDate(), keyOld.getValue().getHeure(), keyOld.getValue().getRole(), keyOld.getValue().getRow(), keyOld.getValue().getColumn(), idGrilleHoraire, key.getValue().getHeure());
+                    } catch (Exception ex) {
+                        Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                        dbRequests.getMysql().rollback();
+                        return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur d'édition de grille");
+                    }
+                    if(keyOld.getValue().getNomPrenom() == null && key.getValue().getNomPrenom() == null){
 
-                        if(keyOld.getValue().getNomPrenom() == null && key.getValue().getNomPrenom() == null){
-
-                        }else{
-                            if((keyOld.getValue().getNomPrenom() == null && key.getValue().getNomPrenom() != null)){
+                    }else{
+                        if((keyOld.getValue().getNomPrenom() == null && key.getValue().getNomPrenom() != null)){
+                            try {
                                 dbRequests.EditAssignationCaseHoraire(idCaseHoraire, matricule);
-                            }else if(keyOld.getValue().getNomPrenom() != null && key.getValue().getNomPrenom() == null){
+                            } catch (Exception ex) {
+                                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                                dbRequests.getMysql().rollback();
+                                return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur d'édition de grille");
+                            }
+                        }else if(keyOld.getValue().getNomPrenom() != null && key.getValue().getNomPrenom() == null){
+                            try {
                                 dbRequests.EditAssignationCaseHoraire(idCaseHoraire, matricule);
-                            }else if(!keyOld.getValue().getNomPrenom().equals(key.getValue().getNomPrenom())){
+                            } catch (Exception ex) {
+                                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                                dbRequests.getMysql().rollback();
+                                return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur d'édition de grille");
+                            }
+                        }else if(!keyOld.getValue().getNomPrenom().equals(key.getValue().getNomPrenom())){
+                            try {
                                 dbRequests.EditAssignationCaseHoraire(idCaseHoraire, matricule);
+                            } catch (Exception ex) {
+                                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                                dbRequests.getMysql().rollback();
+                                return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur d'édition de grille");
                             }
                         }
-                        break;
                     }
+                    break;
                 }
-
-            } catch (Exception ex) {
-                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
-                return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur au niveau de l'insertion de la case horaire");
             }
         }
         try {
             dbRequests.unlockGrille(idGrilleHoraire);
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur d'édition de grille");
         }
+        dbRequests.getMysql().commit();
         return new PacketCom(States.EDIT_GRILLE_HORAIRE_OUI, null);
     }
 
@@ -589,11 +897,15 @@ public class ProtocoleServeur implements Protocolable{
             locked = dbRequests.checkLockGrille(semaine, année, ambulance, lieu);
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
             return new PacketCom(States.GET_GRILLE_NON, "Grille inconnue");
         }
+
         if(!locked){
+            dbRequests.getMysql().commit();
             return new PacketCom(States.GRILLE_UNLOCKED, null);
         }else{
+            dbRequests.getMysql().commit();
             return new PacketCom(States.GRILLE_LOCKED, null);
         }
     }
@@ -608,8 +920,287 @@ public class ProtocoleServeur implements Protocolable{
             dbRequests.unlockGrille(semaine, année, ambulance, lieu);
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
             return new PacketCom(States.UNLOCK_GRILLE_NON, null);
         }
+        dbRequests.getMysql().commit();
         return new PacketCom(States.UNLOCK_GRILLE_OUI, null);
+    }
+
+    private PacketCom actionDisconnect(String type, Object contenu) {
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"utilisateurs"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.ERROR, "Erreur de déconnection");
+        }
+        try {
+            dbRequests.userUnlogged(idUser);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.ERROR, "Erreur de déconnection");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.DISCONNECT, "déconnection ok");
+    }
+
+    private PacketCom actionGetGroupe(String type, Object contenu) {
+        String nom = (String)contenu;
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Groupes", "Droits", "PossederDroit"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_GROUPE_NON, "Impossible de récupérer le groupe");
+        }
+
+        Groupe groupe = null;
+        try {
+            groupe = dbRequests.getGroupe(nom);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_GROUPE_NON, "Impossible de récupérer le groupe");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.GET_GROUPE_OUI, (Object)groupe);
+    }
+
+    private PacketCom actionNewGroupe(String type, Object contenu) {
+        Groupe groupe = (Groupe)contenu;
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Groupes", "Droits", "PossederDroit"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_GROUPE_NON, "Impossible d'ajouter le groupe");
+        }
+
+        Groupe exist;
+        try {
+            exist = dbRequests.getGroupe(groupe.getNom());
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_GROUPE_NON, "Impossible d'ajouter le groupe");
+        }
+        if(exist != null){
+            return new PacketCom(States.NEW_GROUPE_NON, "Groupe déja existant");
+        }
+
+        try {
+            dbRequests.nouveauGroupe(groupe);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_GROUPE_NON, "Impossible d'ajouter le groupe");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.NEW_GROUPE_OUI, null);
+    }
+
+    private PacketCom actionEditGroupe(String type, Object contenu) {
+        Groupe[] groupes = (Groupe[])contenu;
+        Groupe oldGroupe = groupes[0];
+        Groupe newGroupe = groupes[1];
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Groupes", "Droits", "PossederDroit"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_GROUPE_NON, "Impossible de modifier le groupe");
+        }
+
+        Groupe exist = null;
+        if(!oldGroupe.getNom().equals(newGroupe.getNom())){
+            try {
+                exist = dbRequests.getGroupe(newGroupe.getNom());
+            } catch (Exception ex) {
+                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_GROUPE_NON, "Impossible de modifier le groupe");
+            }
+        }
+        if(exist != null){
+            return new PacketCom(States.EDIT_GROUPE_NON, "Groupe déja existant");
+        }
+
+        try {
+            dbRequests.modifierGroupe(oldGroupe, newGroupe);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_GROUPE_NON, "Impossible de modifier le groupe");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.EDIT_GROUPE_OUI, null);
+    }
+
+    private PacketCom actionDeleteGroupe(String type, Object contenu) {
+        String nom = (String)contenu;
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Groupes", "Droits", "PossederDroit"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_GROUPE_NON, "Impossible de supprimer le groupe");
+        }
+
+        try {
+            dbRequests.supprimerGroupe(nom);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_GROUPE_NON, "Impossible de supprimer le groupe");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.DELETE_GROUPE_OUI, null);
+    }
+
+    private PacketCom actionGetUtilisateur(String type, Object contenu) {
+        PacketCom packetReponse = null;
+        String login = (String)contenu;
+        int idUser = -1;
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Utilisateurs", "Appartenir", "Groupes"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_UTILISATEUR_NON, "Impossible de récupérer les détails de l'utilisateur");
+        }
+        try {
+            idUser = dbRequests.getIdUser(login);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_UTILISATEUR_NON, "Impossible de récupérer les détails de l'utilisateur");
+        }
+        if(idUser == this.idUser){
+            if(!droitsOffi.contains("READ_DATA_MYSELF")){
+                PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
+                return packetRetour;
+            }
+        }else{
+            if(!droitsOffi.contains("READ_DATA_ALL")){
+                PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
+                return packetRetour;
+            }
+        }
+        Utilisateur utilisateur = null;
+        try {
+            utilisateur = dbRequests.getUtilisateur(idUser);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_UTILISATEUR_NON, "Impossible de récupérer les détails de l'utilisateur");
+        }
+        if(utilisateur != null){
+            packetReponse = new PacketCom(States.GET_UTILISATEUR_OUI, (Object)utilisateur);
+        }else{
+            packetReponse = new PacketCom(States.GET_UTILISATEUR_NON, "Impossible de récupérer les détails de l'utilisateur");
+        }
+        dbRequests.getMysql().commit();
+        return packetReponse;
+    }
+
+    private PacketCom actionNouveauUtilisateur(String type, Object contenu) {
+        Utilisateur utilisateur = (Utilisateur)contenu;
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Utilisateurs", "Appartenir", "Groupes"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_UTILISATEUR_NON, "Impossible d'ajouter l'utilisateur");
+        }
+
+        int idUser = -1;
+        try {
+            idUser = dbRequests.getIdUser(utilisateur.getLogin());
+        } catch (Exception ex) {
+        }
+
+        if(idUser != -1){
+            return new PacketCom(States.NEW_UTILISATEUR_NON, "Utilisateur déja existant");
+        }
+
+        try {
+            dbRequests.nouveauUtilisateur(utilisateur);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_UTILISATEUR_NON, "Impossible d'ajouter l'utilisateur");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.NEW_UTILISATEUR_OUI, null);
+    }
+
+    private PacketCom actionDeleteUtilisateur(String type, Object contenu) {
+        String login = (String)contenu;
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Utilisateurs", "Appartenir", "Groupes"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_UTILISATEUR_NON, "Impossible de supprimer l'utilisateur");
+        }
+
+        try {
+            dbRequests.supprimerUtilisateur(login);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_UTILISATEUR_NON, "Impossible de supprimer l'utilisateur");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.DELETE_UTILISATEUR_OUI, null);
+    }
+
+    private PacketCom actionEditUtilisateur(String type, Object contenu) {
+        Utilisateur[] utilisateur = (Utilisateur[])contenu;
+        Utilisateur oldUtilisateur = utilisateur[0];
+        Utilisateur newUtilisateur = utilisateur[1];
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Utilisateurs", "Appartenir", "Groupes"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_UTILISATEUR_NON, "Impossible de modifier l'utilisateur");
+        }
+
+        int idUser = -1;
+        try {
+            idUser = dbRequests.getIdUser(newUtilisateur.getLogin());
+        } catch (Exception ex) {
+        }
+        if(!oldUtilisateur.getLogin().equals(newUtilisateur.getLogin())){
+            if(idUser != -1){
+                return new PacketCom(States.EDIT_UTILISATEUR_NON, "Utilisateur déja existant");
+            }
+        }
+
+        try {
+            dbRequests.modifierUtilisateur(oldUtilisateur, newUtilisateur);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_UTILISATEUR_NON, "Impossible de modifier l'utilisateur");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.EDIT_UTILISATEUR_OUI, null);
     }
 }

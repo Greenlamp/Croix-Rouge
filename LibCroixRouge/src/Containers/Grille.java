@@ -52,6 +52,7 @@ public class Grille implements Serializable{
     }
 
     public void setLieu(String lieu) {
+        if(lieu != null && lieu.isEmpty()) lieu = null;
         this.lieu = lieu;
     }
 
@@ -68,6 +69,7 @@ public class Grille implements Serializable{
     }
 
     public void setDateDebut(String dateDebut) {
+        if(dateDebut != null && dateDebut.isEmpty()) dateDebut = null;
         this.dateDebut = dateDebut;
     }
 
@@ -76,6 +78,7 @@ public class Grille implements Serializable{
     }
 
     public void setDateFin(String dateFin) {
+        if(dateFin != null && dateFin.isEmpty()) dateFin = null;
         this.dateFin = dateFin;
     }
 
@@ -84,6 +87,7 @@ public class Grille implements Serializable{
     }
 
     public void setNomAmbulance(String nomAmbulance) {
+        if(nomAmbulance != null && nomAmbulance.isEmpty()) nomAmbulance = null;
         this.nomAmbulance = nomAmbulance;
     }
 

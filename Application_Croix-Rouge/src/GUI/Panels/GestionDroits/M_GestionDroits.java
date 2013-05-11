@@ -2,8 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package GUI.Panels;
+package GUI.Panels.GestionDroits;
 
+import GUI.Panels.M_Consultation;
+import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
 import PacketCom.PacketCom;
@@ -17,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author Greenlamp
  */
-public class M_GestionGroupes extends javax.swing.JPanel {
+public class M_GestionDroits extends javax.swing.JPanel {
 
     /**
      * Creates new form M_GestionDroits
@@ -25,11 +27,11 @@ public class M_GestionGroupes extends javax.swing.JPanel {
     Main parent = null;
     NetworkClient socket = null;
 
-    public M_GestionGroupes() {
+    public M_GestionDroits() {
         initComponents();
     }
 
-    M_GestionGroupes(Main parent, NetworkClient socket) {
+    public M_GestionDroits(Main parent, NetworkClient socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;
@@ -47,62 +49,72 @@ public class M_GestionGroupes extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        Baccueil1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        JlisteGroupes = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        JlisteDroits = new javax.swing.JTable();
 
-        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("Gestion des groupes");
+        jLabel1.setText("Gestion des droits");
+
+        Baccueil1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        Baccueil1.setForeground(new java.awt.Color(0, 0, 255));
+        Baccueil1.setText("ACCUEIL");
+        Baccueil1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Baccueil1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(Baccueil1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addContainerGap(388, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(Baccueil1))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
-        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
-        JlisteGroupes.setModel(new javax.swing.table.DefaultTableModel(
+        JlisteDroits.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Nom", "Niveau"
+                "Nom", "Description"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(JlisteGroupes);
-
-        jButton1.setText("Nouveau");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Supprimer");
+        jScrollPane1.setViewportView(JlisteDroits);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -110,25 +122,15 @@ public class M_GestionGroupes extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1240, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -153,14 +155,14 @@ public class M_GestionGroupes extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void Baccueil1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Baccueil1ActionPerformed
+        parent.changeState(Main.LOGGED);
+    }//GEN-LAST:event_Baccueil1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable JlisteGroupes;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton Baccueil;
+    private javax.swing.JButton Baccueil1;
+    private javax.swing.JTable JlisteDroits;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -168,7 +170,7 @@ public class M_GestionGroupes extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void refreshListe() {
-        PacketCom packet = new PacketCom(States.GET_GROUPES_ALL, null);
+        PacketCom packet = new PacketCom(States.GET_DROITS_ALL, null);
         socket.send(packet);
         try {
             PacketCom packetReponse = socket.receive();
@@ -182,14 +184,14 @@ public class M_GestionGroupes extends javax.swing.JPanel {
         String type = packetReponse.getType();
         Object contenu = packetReponse.getObjet();
 
-        if(type.equals(States.GET_GROUPES_ALL_OUI)){
+        if(type.equals(States.GET_DROITS_ALL_OUI)){
             LinkedList<String[]> listeDroits = (LinkedList<String[]>) contenu;
             for(String[] droit : listeDroits){
                 Vector vector = new Vector();
                 for(String elm : droit){
                     vector.addElement(elm);
                 }
-                SwingUtils.addToTable(JlisteGroupes, vector);
+                SwingUtils.addToTable(JlisteDroits, vector);
             }
         }else{
             System.out.println("Erreur.");

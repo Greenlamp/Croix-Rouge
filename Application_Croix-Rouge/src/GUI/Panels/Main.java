@@ -9,15 +9,20 @@ import Containers.Complementaire;
 import Containers.Decouverte;
 import Containers.Formations;
 import Containers.Grille;
+import Containers.Groupe;
 import Containers.Identite;
-import Containers.Key;
 import Containers.Residence;
 import Containers.Telephone;
 import Containers.Urgence;
+import Containers.Utilisateur;
 import Containers.Volontaire;
 import EquipeVolontaire.M_ConsulterEquipesVolontaire;
 import EquipeVolontaire.M_NewEditEquipeVolontaire;
 import EquipeVolontaire.M_SearchCrit;
+import GUI.Panels.GestionDroits.M_GestionDroits;
+import GUI.Panels.GestionGroupes.M_GestionGroupes;
+import GUI.Panels.GestionGroupes.M_NewEditGroupes;
+import GUI.Panels.GestionUtilisateurs.M_GestionUtilisateurs;
 import GUI.Panels.GestionUtilisateurs.M_NewEditUtilisateurs;
 import GrillesHoraires.M_ConsulterGrillesHoraires;
 import GrillesHoraires.M_NewEditGrilleHoraire;
@@ -28,18 +33,26 @@ import NouveauVolontaire.M_NouveauVolontaireP3;
 import NouveauVolontaire.M_NouveauVolontaireP4;
 import NouveauVolontaire.M_NouveauVolontaireP5;
 import NouveauVolontaire.M_NouveauVolontaireP6;
+import NouveauVolontaire2.M_Adresse;
+import NouveauVolontaire2.M_Decouverte;
+import NouveauVolontaire2.M_Formations;
+import NouveauVolontaire2.M_Identite;
+import NouveauVolontaire2.M_RenseignementsComplementaires;
+import NouveauVolontaire2.M_Residence;
+import NouveauVolontaire2.M_Téléphone;
+import NouveauVolontaire2.M_Urgence;
 import PacketCom.PacketCom;
 import Recherche.TupleRecherche;
 import States.States;
 import java.awt.Image;
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
+import java.io.IOException;
 import java.util.LinkedList;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JMenu;
 import javax.swing.JOptionPane;
-import sun.util.calendar.Gregorian;
 
 /**
  *
@@ -71,9 +84,21 @@ public class Main extends javax.swing.JFrame {
     public static String SEARCH_CRIT = "SEARCH_CRIT";
     public static String GESTION_GRILLES_HORAIRES = "GESTION_GRILLES_HORAIRES";
     public static String EDITNEWGRILLLE = "EDITNEWGRILLLE";
+    public static String NOUVEAU_VOLONTAIRE = "NOUVEAU_VOLONTAIRE";
+    public static String NOUVEAU_VOLONTAIRE_PAGE_2 = "NOUVEAU_VOLONTAIRE_PAGE_2";
+    public static String NOUVEAU_VOLONTAIRE_PAGE_3 = "NOUVEAU_VOLONTAIRE_PAGE_3";
+    public static String NOUVEAU_VOLONTAIRE_PAGE_4 = "NOUVEAU_VOLONTAIRE_PAGE_4";
+    public static String NOUVEAU_VOLONTAIRE_PAGE_5 = "NOUVEAU_VOLONTAIRE_PAGE_5";
+    public static String NOUVEAU_VOLONTAIRE_PAGE_6 = "NOUVEAU_VOLONTAIRE_PAGE_6";
+    public static String NOUVEAU_VOLONTAIRE_PAGE_7 = "NOUVEAU_VOLONTAIRE_PAGE_7";
+    public static String NOUVEAU_VOLONTAIRE_PAGE_8 = "NOUVEAU_VOLONTAIRE_PAGE_8";
+    public static String NOUVEAU_VOLONTAIRE_PAGE_9 = "NOUVEAU_VOLONTAIRE_PAGE_9";
+    public static String NOUVEAU_GROUPE = "NOUVEAU_GROUPE";
+    public static String EDIT_GROUPE = "EDIT_GROUPE";
+    public static String NOUVEAU_UTILISATEUR = "NOUVEAU_UTILISATEUR";
+    public static String EDIT_UTILISATEUR = "EDIT_UTILISATEUR";
 
     private boolean connected = false;
-    private String groupe = null;
     private LinkedList<String> droits = null;
 
     private String loginUser = null;
@@ -84,13 +109,18 @@ public class Main extends javax.swing.JFrame {
 
     NetworkClient socket = null;
 
-    Volontaire volontaire = new Volontaire();
+    Volontaire volontaire = null;
+    private String matricule = null;
 
     private Grille grille = null;
     private Grille grilleOld = null;
     private int celluleRow;
     private int celluleColumn;
     private String typeGrille;
+
+    private Groupe groupe = null;
+
+    private Utilisateur utilisateur = null;
 
 
     public Main() {
@@ -99,7 +129,6 @@ public class Main extends javax.swing.JFrame {
         Image image = icone.getImage();
         setIconImage(image);
         socket = new NetworkClient("127.0.0.1", 12345, false);
-        hide("all");
         refreshPanel();
     }
 
@@ -113,19 +142,6 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         Gscene = new javax.swing.JPanel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        Mfichier = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        Mmenu = new javax.swing.JMenu();
-        Mconsulter = new javax.swing.JMenuItem();
-        MnouveauVolontaire = new javax.swing.JMenuItem();
-        MgererEquipe = new javax.swing.JMenuItem();
-        MgererGrillesHoraires = new javax.swing.JMenuItem();
-        Madministration = new javax.swing.JMenu();
-        MgestionDroits = new javax.swing.JMenuItem();
-        MgestionGroupes = new javax.swing.JMenuItem();
-        MgestionUtilisateurs = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Application de Gestion de la Croix-Rouge");
@@ -137,88 +153,6 @@ public class Main extends javax.swing.JFrame {
 
         Gscene.setLayout(new java.awt.BorderLayout());
 
-        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Croix-Rouge.jpg"))); // NOI18N
-        jMenu1.setFocusable(false);
-        jMenuBar1.add(jMenu1);
-
-        Mfichier.setText("Fichier");
-
-        jMenuItem6.setText("Déconnexion");
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem6ActionPerformed(evt);
-            }
-        });
-        Mfichier.add(jMenuItem6);
-
-        jMenuBar1.add(Mfichier);
-
-        Mmenu.setText("Menu");
-
-        Mconsulter.setText("Consulter");
-        Mconsulter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MconsulterActionPerformed(evt);
-            }
-        });
-        Mmenu.add(Mconsulter);
-
-        MnouveauVolontaire.setText("Nouveau volontaire");
-        MnouveauVolontaire.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MnouveauVolontaireActionPerformed(evt);
-            }
-        });
-        Mmenu.add(MnouveauVolontaire);
-
-        MgererEquipe.setText("Gérer equipes de volontaires");
-        MgererEquipe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MgererEquipeActionPerformed(evt);
-            }
-        });
-        Mmenu.add(MgererEquipe);
-
-        MgererGrillesHoraires.setText("Gérer grilles horaires");
-        MgererGrillesHoraires.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MgererGrillesHorairesActionPerformed(evt);
-            }
-        });
-        Mmenu.add(MgererGrillesHoraires);
-
-        jMenuBar1.add(Mmenu);
-
-        Madministration.setText("Administration");
-
-        MgestionDroits.setText("Gestion Droits");
-        MgestionDroits.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MgestionDroitsActionPerformed(evt);
-            }
-        });
-        Madministration.add(MgestionDroits);
-
-        MgestionGroupes.setText("Gestion Groupes");
-        MgestionGroupes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MgestionGroupesActionPerformed(evt);
-            }
-        });
-        Madministration.add(MgestionGroupes);
-
-        MgestionUtilisateurs.setText("Gestion Utilisateurs");
-        MgestionUtilisateurs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MgestionUtilisateursActionPerformed(evt);
-            }
-        });
-        Madministration.add(MgestionUtilisateurs);
-
-        jMenuBar1.add(Madministration);
-
-        setJMenuBar(jMenuBar1);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -227,7 +161,7 @@ public class Main extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Gscene, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
+            .addComponent(Gscene, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
         );
 
         pack();
@@ -236,72 +170,10 @@ public class Main extends javax.swing.JFrame {
         setLocation((screenSize.width-dialogSize.width)/2,(screenSize.height-dialogSize.height)/2);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void MconsulterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MconsulterActionPerformed
-        if(this.actualState.equals(Main.UNLOGGED)){
-            return;
-        }
-        this.actualState = Main.CONSULTATION;
-        refreshPanel();
-    }//GEN-LAST:event_MconsulterActionPerformed
-
-    private void MnouveauVolontaireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnouveauVolontaireActionPerformed
-        if(this.actualState.equals(Main.UNLOGGED)){
-            return;
-        }
-        this.actualState = Main.NOUVEAU_VOLONTAIREP1;
-        refreshPanel();
-    }//GEN-LAST:event_MnouveauVolontaireActionPerformed
-
-    private void MgestionDroitsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MgestionDroitsActionPerformed
-        if(this.actualState.equals(Main.UNLOGGED)){
-            return;
-        }
-        this.actualState = Main.GESTION_DROITS;
-        refreshPanel();
-    }//GEN-LAST:event_MgestionDroitsActionPerformed
-
-    private void MgestionGroupesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MgestionGroupesActionPerformed
-        if(this.actualState.equals(Main.UNLOGGED)){
-            return;
-        }
-        this.actualState = Main.GESTION_GROUPES;
-        refreshPanel();
-    }//GEN-LAST:event_MgestionGroupesActionPerformed
-
-    private void MgestionUtilisateursActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MgestionUtilisateursActionPerformed
-        if(this.actualState.equals(Main.UNLOGGED)){
-            return;
-        }
-        this.actualState = Main.GESTION_UTILISATEURS;
-        refreshPanel();
-    }//GEN-LAST:event_MgestionUtilisateursActionPerformed
-
-    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        this.socket.disconnect();
-        Main main = new Main();
-        main.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jMenuItem6ActionPerformed
-
-    private void MgererGrillesHorairesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MgererGrillesHorairesActionPerformed
-        if(this.actualState.equals(Main.UNLOGGED)){
-            return;
-        }
-        this.actualState = Main.GESTION_GRILLES_HORAIRES;
-        refreshPanel();
-    }//GEN-LAST:event_MgererGrillesHorairesActionPerformed
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        disconnect();
         unlockGrille();
     }//GEN-LAST:event_formWindowClosing
-
-    private void MgererEquipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MgererEquipeActionPerformed
-        /*if(this.actualState.equals(Main.UNLOGGED)){
-            return;
-        }
-        this.actualState = Main.GESTION_EQUIPES;
-        refreshPanel();*/
-    }//GEN-LAST:event_MgererEquipeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -339,19 +211,6 @@ public class Main extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Gscene;
-    private javax.swing.JMenu Madministration;
-    private javax.swing.JMenuItem Mconsulter;
-    private javax.swing.JMenu Mfichier;
-    private javax.swing.JMenuItem MgererEquipe;
-    private javax.swing.JMenuItem MgererGrillesHoraires;
-    private javax.swing.JMenuItem MgestionDroits;
-    private javax.swing.JMenuItem MgestionGroupes;
-    private javax.swing.JMenuItem MgestionUtilisateurs;
-    private javax.swing.JMenu Mmenu;
-    private javax.swing.JMenuItem MnouveauVolontaire;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem6;
     // End of variables declaration//GEN-END:variables
 
 
@@ -364,7 +223,7 @@ public class Main extends javax.swing.JFrame {
     }
 
     public void changeState(String state) {
-        this.actualState = state;
+        this.setActualState(state);
         refreshPanel();
     }
 
@@ -372,22 +231,26 @@ public class Main extends javax.swing.JFrame {
         this.droits = droits;
     }
 
-    void setLoginUser(String loginUser) {
+    public void setLoginUser(String loginUser) {
         this.loginUser = loginUser;
+        this.loadBackup();
     }
 
     private void refreshPanel() {
         cleanState();
-        if(this.actualState.equals(Main.UNLOGGED)){
+        if(this.getActualState().equals(Main.UNLOGGED)){
             M_Connexion mConnexion = new M_Connexion(this, this.socket);
             Gscene.add(mConnexion);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.LOGGED)){
+        }else if(this.getActualState().equals(Main.LOGGED)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
-            hide("interdit");
-        }else if(this.actualState.equals(Main.CONSULTATION)){
+
+            Menu menu = new Menu(this);
+            Gscene.add(menu);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.CONSULTATION)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -395,7 +258,77 @@ public class Main extends javax.swing.JFrame {
             M_Consultation mConsultation = new M_Consultation(this, this.socket);
             Gscene.add(mConsultation);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.NOUVEAU_VOLONTAIREP1)){
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIRE)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            //M_NouveauVolontaire m_NouveauVolontaire = new M_NouveauVolontaire(this, this.socket);
+            //Gscene.add(m_NouveauVolontaire);
+
+            M_Identite mIdentite = new M_Identite(this, socket);
+            Gscene.add(mIdentite);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIRE_PAGE_2)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            //M_NouveauVolontaire m_NouveauVolontaire = new M_NouveauVolontaire(this, this.socket);
+            //Gscene.add(m_NouveauVolontaire);
+
+            M_Decouverte mDecouverte = new M_Decouverte(this, socket);
+            Gscene.add(mDecouverte);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIRE_PAGE_3)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_RenseignementsComplementaires mRenseignementsComplementaires = new M_RenseignementsComplementaires(this, socket);
+            Gscene.add(mRenseignementsComplementaires);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIRE_PAGE_4)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_Adresse mAdresse = new M_Adresse(this, socket);
+            Gscene.add(mAdresse);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIRE_PAGE_5)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_Residence mResidence = new M_Residence(this, socket);
+            Gscene.add(mResidence);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIRE_PAGE_6)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_Téléphone mTéléphone = new M_Téléphone(this, socket);
+            Gscene.add(mTéléphone);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIRE_PAGE_7)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_Urgence mUrgence = new M_Urgence(this, socket);
+            Gscene.add(mUrgence);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIRE_PAGE_8)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_Formations mFormations = new M_Formations(this, socket);
+            Gscene.add(mFormations);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP1)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -403,7 +336,7 @@ public class Main extends javax.swing.JFrame {
             M_NouveauVolontaireP1 m_NouveauVolontaireP1 = new M_NouveauVolontaireP1(this, this.socket);
             Gscene.add(m_NouveauVolontaireP1);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.NOUVEAU_VOLONTAIREP2)){
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP2)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -411,7 +344,7 @@ public class Main extends javax.swing.JFrame {
             M_NouveauVolontaireP2 m_NouveauVolontaireP2 = new M_NouveauVolontaireP2(this, this.socket);
             Gscene.add(m_NouveauVolontaireP2);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.NOUVEAU_VOLONTAIREP3)){
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP3)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -419,7 +352,7 @@ public class Main extends javax.swing.JFrame {
             M_NouveauVolontaireP3 m_NouveauVolontaireP3 = new M_NouveauVolontaireP3(this, this.socket);
             Gscene.add(m_NouveauVolontaireP3);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.NOUVEAU_VOLONTAIREP4)){
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP4)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -427,7 +360,7 @@ public class Main extends javax.swing.JFrame {
             M_NouveauVolontaireP4 m_NouveauVolontaireP4 = new M_NouveauVolontaireP4(this, this.socket);
             Gscene.add(m_NouveauVolontaireP4);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.NOUVEAU_VOLONTAIREP5)){
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP5)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -435,7 +368,7 @@ public class Main extends javax.swing.JFrame {
             M_NouveauVolontaireP5 m_NouveauVolontaireP5 = new M_NouveauVolontaireP5(this, this.socket);
             Gscene.add(m_NouveauVolontaireP5);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.NOUVEAU_VOLONTAIREP6)){
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP6)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -443,7 +376,7 @@ public class Main extends javax.swing.JFrame {
             M_NouveauVolontaireP6 m_NouveauVolontaireP6 = new M_NouveauVolontaireP6(this, this.socket);
             Gscene.add(m_NouveauVolontaireP6);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.GESTION_DROITS)){
+        }else if(this.getActualState().equals(Main.GESTION_DROITS)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -451,7 +384,7 @@ public class Main extends javax.swing.JFrame {
             M_GestionDroits mGestionDroits = new M_GestionDroits(this, this.socket);
             Gscene.add(mGestionDroits);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.GESTION_GROUPES)){
+        }else if(this.getActualState().equals(Main.GESTION_GROUPES)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -459,7 +392,7 @@ public class Main extends javax.swing.JFrame {
             M_GestionGroupes mGestionGroupes = new M_GestionGroupes(this, this.socket);
             Gscene.add(mGestionGroupes);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.GESTION_UTILISATEURS)){
+        }else if(this.getActualState().equals(Main.GESTION_UTILISATEURS)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -467,15 +400,15 @@ public class Main extends javax.swing.JFrame {
             M_GestionUtilisateurs mGestionUtilisateurs = new M_GestionUtilisateurs(this, this.socket);
             Gscene.add(mGestionUtilisateurs);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.EDITNEWUSER)){
+        }else if(this.getActualState().equals(Main.EDITNEWUSER)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
 
-            M_NewEditUtilisateurs fenetre = new M_NewEditUtilisateurs(this, this.socket, "Modifier un utilisateur", loginUser);
+            M_NewEditUtilisateurs fenetre = new M_NewEditUtilisateurs(this, this.socket, "Modifier un utilisateur");
             Gscene.add(fenetre);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.EDITNEWGRILLLE)){
+        }else if(this.getActualState().equals(Main.EDITNEWGRILLLE)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -483,7 +416,7 @@ public class Main extends javax.swing.JFrame {
             M_NewEditGrilleHoraire m_NewEditGrilleHoraire = new M_NewEditGrilleHoraire(this, this.socket, "Nouvelle grille d'horaire");
             Gscene.add(m_NewEditGrilleHoraire);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.GESTION_EQUIPES)){
+        }else if(this.getActualState().equals(Main.GESTION_EQUIPES)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -491,7 +424,7 @@ public class Main extends javax.swing.JFrame {
             M_ConsulterEquipesVolontaire mConsulterEquipesVolontaire = new M_ConsulterEquipesVolontaire(this, socket);
             Gscene.add(mConsulterEquipesVolontaire);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.EDITNEWEQUIPE)){
+        }else if(this.getActualState().equals(Main.EDITNEWEQUIPE)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -499,7 +432,7 @@ public class Main extends javax.swing.JFrame {
             M_NewEditEquipeVolontaire mNewEditEquipeVolontaire = new M_NewEditEquipeVolontaire(this, socket);
             Gscene.add(mNewEditEquipeVolontaire);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.SEARCH_CRIT)){
+        }else if(this.getActualState().equals(Main.SEARCH_CRIT)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -507,7 +440,39 @@ public class Main extends javax.swing.JFrame {
             M_SearchCrit mSearchCrit = new M_SearchCrit(this, socket);
             Gscene.add(mSearchCrit);
             Gscene.revalidate();
-        }else if(this.actualState.equals(Main.GESTION_GRILLES_HORAIRES)){
+        }else if(this.getActualState().equals(Main.NOUVEAU_GROUPE)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditGroupes mNewEditGroupes = new M_NewEditGroupes(this, socket, "Nouveau groupe");
+            Gscene.add(mNewEditGroupes);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.EDIT_GROUPE)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditGroupes mNewEditGroupes = new M_NewEditGroupes(this, socket, "Modifier un groupe");
+            Gscene.add(mNewEditGroupes);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_UTILISATEUR)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditUtilisateurs mNewEditUtilisateurs = new M_NewEditUtilisateurs(this, socket, "Nouveau utilisateur");
+            Gscene.add(mNewEditUtilisateurs);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.EDIT_UTILISATEUR)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditUtilisateurs mNewEditUtilisateurs = new M_NewEditUtilisateurs(this, socket, "Modifier un utilisateur");
+            Gscene.add(mNewEditUtilisateurs);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.GESTION_GRILLES_HORAIRES)){
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
@@ -515,45 +480,6 @@ public class Main extends javax.swing.JFrame {
             M_ConsulterGrillesHoraires m_ConsulterGrillesHoraires = new M_ConsulterGrillesHoraires(this, socket);
             Gscene.add(m_ConsulterGrillesHoraires);
             Gscene.revalidate();
-        }
-    }
-
-    private void cacherInterdit() {
-        //Cacher bouton administration
-        if(!droits.contains("SEE_ADMIN")){
-            Madministration.setVisible(false);
-        }
-    }
-
-    private void hide(String type){
-        if(type.equals("all")){
-            Madministration.setVisible(false);
-            MgestionDroits.setVisible(false);
-            MgestionGroupes.setVisible(false);
-            MgestionUtilisateurs.setVisible(false);
-            MnouveauVolontaire.setVisible(false);
-            MgererEquipe.setVisible(false);
-            MgererGrillesHoraires.setVisible(false);
-        }else if(type.equals("interdit")){
-            if(droits.contains("SEE_ADMIN")){
-                Madministration.setVisible(true);
-            }
-            if(droits.contains("SEE_MANAGE_RIGHTS")){
-                MgestionDroits.setVisible(true);
-            }
-            if(droits.contains("SEE_MANAGE_GROUP")){
-                MgestionGroupes.setVisible(true);
-            }
-            if(droits.contains("SEE_MANAGE_USER")){
-                MgestionUtilisateurs.setVisible(true);
-            }
-            if(droits.contains("CREATE_VOLUNTEER")){
-                MnouveauVolontaire.setVisible(true);
-            }
-            if(droits.contains("SEE_MANAGER_TEAM")){
-                MgererEquipe.setVisible(true);
-            }
-            MgererGrillesHoraires.setVisible(true);
         }
     }
 
@@ -620,12 +546,15 @@ public class Main extends javax.swing.JFrame {
             setGrille(null);
             setGrilleOld(null);
         }
-        if(!actualState.equals(Main.NOUVEAU_VOLONTAIREP1) && !actualState.equals(Main.NOUVEAU_VOLONTAIREP2) && !actualState.equals(NOUVEAU_VOLONTAIREP3) && !actualState.equals(NOUVEAU_VOLONTAIREP4) && !actualState.equals(NOUVEAU_VOLONTAIREP5) && !actualState.equals(NOUVEAU_VOLONTAIREP6) && !actualState.equals(NOUVEAU_VOLONTAIREP7) && !actualState.equals(NOUVEAU_VOLONTAIREP8)){
-            setVolontaireP1(null, null, null);
-            setVolontaireP2(null, null);
-            setVolontaireP3(null);
-            setVolontaireP4(null);
-            setVolontaireP5(null);
+        if(!actualState.equals(Main.NOUVEAU_VOLONTAIRE) && !actualState.equals(Main.NOUVEAU_VOLONTAIRE_PAGE_2) && !actualState.equals(Main.NOUVEAU_VOLONTAIRE_PAGE_3) && !actualState.equals(Main.NOUVEAU_VOLONTAIRE_PAGE_4) && !actualState.equals(Main.NOUVEAU_VOLONTAIRE_PAGE_5) && !actualState.equals(Main.NOUVEAU_VOLONTAIRE_PAGE_6) && !actualState.equals(Main.NOUVEAU_VOLONTAIRE_PAGE_7) && !actualState.equals(Main.NOUVEAU_VOLONTAIRE_PAGE_8) && !actualState.equals(Main.NOUVEAU_VOLONTAIRE_PAGE_9)){
+            matricule = null;
+            //volontaire = null;
+        }
+        if(!actualState.equals(Main.NOUVEAU_GROUPE) && ! actualState.equals(Main.EDIT_GROUPE)){
+            groupe = null;
+        }
+        if(!actualState.equals(Main.NOUVEAU_UTILISATEUR) && ! actualState.equals(Main.EDIT_UTILISATEUR)){
+            utilisateur = null;
         }
     }
 
@@ -674,5 +603,90 @@ public class Main extends javax.swing.JFrame {
                 Logger.getLogger(M_ConsulterGrillesHoraires.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public static void Log(Exception e){
+        FileHandler fh = null;
+        try {
+            fh = new FileHandler("log.txt", true);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Logger logger = Logger.getLogger("logger");
+        logger.addHandler(fh);
+        logger.log(Level.SEVERE, null, e);
+    }
+
+    public String getActualState() {
+        return actualState;
+    }
+
+    public void setActualState(String actualState) {
+        this.actualState = actualState;
+    }
+
+    public void disconnect() {
+        if(connected){
+            PacketCom packet = new PacketCom(States.DISCONNECT, null);
+            socket.send(packet);
+            try {
+                socket.receive();
+            } catch (Exception ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            connected = false;
+        }
+        this.socket.disconnect();
+        Main main = new Main();
+        main.setVisible(true);
+        this.dispose();
+    }
+
+    public String getMatricule() {
+        return matricule;
+    }
+
+    public void setMatricule(String matricule) {
+        this.matricule = matricule;
+    }
+
+    public void setVolontaire(Volontaire volontaire) {
+        this.volontaire = volontaire;
+        this.volontaire.backupTexte(loginUser);
+    }
+
+    public void cleanBackup() {
+        if(this.volontaire != null){
+            this.volontaire.clearBackupTexte(loginUser);
+            this.volontaire = null;
+            this.matricule = null;
+        }
+    }
+
+    public void loadBackup(){
+        Volontaire volontaire = new Volontaire();
+        volontaire.loadBackupTexte(loginUser);
+        if(volontaire.getIdentite() != null){
+            this.volontaire = volontaire;
+        }
+    }
+
+    public Groupe getGroupe() {
+        return this.groupe;
+    }
+
+    public void setGroupe(Groupe groupe) {
+        this.groupe = groupe;
+    }
+
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
+
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
     }
 }

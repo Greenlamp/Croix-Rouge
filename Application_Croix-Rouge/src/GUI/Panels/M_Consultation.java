@@ -4,6 +4,7 @@
  */
 package GUI.Panels;
 
+import Containers.Volontaire;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
 import PacketCom.PacketCom;
@@ -49,10 +50,10 @@ public class M_Consultation extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        Baccueil = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        Jliste = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        Gtableau = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
@@ -60,12 +61,23 @@ public class M_Consultation extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Consultation");
 
+        Baccueil.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        Baccueil.setForeground(new java.awt.Color(0, 0, 255));
+        Baccueil.setText("ACCUEIL");
+        Baccueil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BaccueilActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(Baccueil)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -73,13 +85,15 @@ public class M_Consultation extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(Baccueil))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
-        Jliste.setModel(new javax.swing.table.DefaultTableModel(
+        Gtableau.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -95,16 +109,19 @@ public class M_Consultation extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(Jliste);
-
-        jButton1.setText("Nouveau");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        Gtableau.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                GtableauMouseClicked(evt);
             }
         });
+        jScrollPane1.setViewportView(Gtableau);
 
         jButton2.setText("Supprimer");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -115,8 +132,6 @@ public class M_Consultation extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1240, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -125,11 +140,9 @@ public class M_Consultation extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -155,13 +168,40 @@ public class M_Consultation extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void GtableauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GtableauMouseClicked
+        if(evt.getClickCount() == 2){
+            int row = Gtableau.getSelectedRow();
+            String nom = (String)Gtableau.getValueAt(row, 0);
+            String prenom = (String)Gtableau.getValueAt(row, 1);
+            Volontaire volontaire = getVolontaire(nom, prenom);
+            if(volontaire == null){
+                parent.setMatricule(null);
+                parent.afficherMessage("Impossible de récupérer le volontaire");
+            }else{
+                parent.setVolontaire(volontaire);
+                parent.setMatricule(volontaire.getIdentite().getMatricule());
+                parent.changeState(Main.NOUVEAU_VOLONTAIRE);
+            }
+        }
+    }//GEN-LAST:event_GtableauMouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int row = Gtableau.getSelectedRow();
+        if(row == -1){
+            return;
+        }
+        String nom = (String)Gtableau.getValueAt(row, 0);
+        String prenom = (String)Gtableau.getValueAt(row, 1);
+        deleteVolontaire(nom, prenom);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void BaccueilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BaccueilActionPerformed
+        parent.changeState(Main.LOGGED);
+    }//GEN-LAST:event_BaccueilActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable Jliste;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton Baccueil;
+    private javax.swing.JTable Gtableau;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -191,7 +231,7 @@ public class M_Consultation extends javax.swing.JPanel {
                 for(String elm : volontaire){
                     vector.addElement(elm);
                 }
-                SwingUtils.addToTable(Jliste, vector);
+                SwingUtils.addToTable(Gtableau, vector);
             }
         }else{
             System.out.println("Erreur.");
@@ -200,5 +240,54 @@ public class M_Consultation extends javax.swing.JPanel {
 
     private void chechRight() {
 
+    }
+
+    private Volontaire getVolontaire(String nom, String prenom) {
+        PacketCom retour = null;
+        String[] data = {nom, prenom};
+        PacketCom packetCom = new PacketCom(States.GET_VOLONTAIRE, (Object)data);
+        socket.send(packetCom);
+        try {
+            retour = socket.receive();
+        } catch (Exception ex) {
+            Logger.getLogger(M_Consultation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return traitementRetour(retour);
+    }
+
+    private Volontaire traitementRetour(PacketCom retour) {
+        if(retour == null){
+            return null;
+        }
+        String type = retour.getType();
+        Object contenu = retour.getObjet();
+        if(type.equals(States.GET_VOLONTAIRE_OUI)){
+            Volontaire volontaire = (Volontaire)contenu;
+            return volontaire;
+        }else{
+            return null;
+        }
+    }
+
+    private void deleteVolontaire(String nom, String prenom) {
+        String[] data = {nom, prenom};
+        PacketCom packet = new PacketCom(States.DELETE_VOLONTAIRE, (Object)data);
+        socket.send(packet);
+        try {
+            PacketCom retour = socket.receive();
+            String type = retour.getType();
+            if(type.equals(States.DELETE_VOLONTAIRE_OUI)){
+                parent.afficherMessage("Suppression du volontaire réussi");
+            }else if(type.equals(States.DELETE_VOLONTAIRE_NON)){
+                String message = (String)retour.getObjet();
+                parent.afficherMessage(message);
+            }else{
+                String message = (String)retour.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(M_Consultation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        parent.changeState(Main.CONSULTATION);
     }
 }

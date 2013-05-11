@@ -187,6 +187,7 @@ public class M_Connexion extends javax.swing.JPanel {
             if(type.equals(States.LOGIN_OUI)){
                 LinkedList<String> droits = getDroits();
                 parent.setDroits(droits);
+                parent.setLoginUser(Glogin.getText());
                 parent.changeState(Main.LOGGED);
             }else if(type.equals(States.LOGIN_NON_USER)){
                 LuserIncorrect.setVisible(true);
@@ -194,9 +195,13 @@ public class M_Connexion extends javax.swing.JPanel {
             }else if(type.equals(States.LOGIN_NON_PASS)){
                 LpassIncorrect.setVisible(true);
                 parent.disconnectSql();
+            }else if(type.equals(States.LOGIN_NON)){
+                String message = (String)packetCom.getObjet();
+                parent.afficherMessage(message);
+                parent.disconnectSql();
             }
         } catch (Exception ex) {
-            Logger.getLogger(M_Connexion.class.getName()).log(Level.SEVERE, null, ex);
+            parent.afficherMessage("Le serveur n'est pas allumé");
         }
     }//GEN-LAST:event_BvaliderActionPerformed
 

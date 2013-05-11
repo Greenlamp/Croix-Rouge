@@ -32,12 +32,14 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
     Main parent = null;
     NetworkClient socket = null;
     Volontaire volontaire = null;
+    String matricule = null;
 
     public M_NouveauVolontaireP1(Main parent, NetworkClient socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;
         ComboBoxAnnee();
+        matricule = parent.getMatricule();
         volontaire = parent.getVolontaire();
         if(volontaire.getIdentite() != null){
             fillChampIdentite();
@@ -93,7 +95,6 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
         jLabel15 = new javax.swing.JLabel();
         Gpays = new javax.swing.JComboBox();
         jLabel27 = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         GpaysResidence = new javax.swing.JComboBox();
         jLabel30 = new javax.swing.JLabel();
@@ -116,9 +117,11 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        Bterminer = new javax.swing.JButton();
+        Bannuler = new javax.swing.JButton();
+        Bsuivant = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -202,9 +205,6 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
         jLabel27.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel27.setText("Adresse");
 
-        jLabel28.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel28.setText("Identité");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -257,16 +257,13 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(GcodePostal, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel13))))
-                    .addComponent(jLabel28))
+                                .addComponent(jLabel13)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel28)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Gnom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -419,7 +416,7 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
                 .addComponent(jLabel30)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(GpaysResidence, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(242, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(153, 153, 153));
@@ -436,24 +433,24 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
         jLabel24.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel24.setText("6");
 
-        jButton2.setText("Terminer");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        Bterminer.setText("Terminer");
+        Bterminer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                BterminerActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Annuler");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        Bannuler.setText("Annuler");
+        Bannuler.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                BannulerActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Suivant");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        Bsuivant.setText("Suivant");
+        Bsuivant.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                BsuivantActionPerformed(evt);
             }
         });
 
@@ -463,20 +460,19 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel21)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel22)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel23)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel24))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Bannuler, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Bterminer, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(93, 93, 93)
+                .addComponent(Bsuivant, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -487,13 +483,32 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
                     .addComponent(jLabel21)
                     .addComponent(jLabel22)
                     .addComponent(jLabel23)
-                    .addComponent(jLabel24))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2))
+                    .addComponent(jLabel24)
+                    .addComponent(Bannuler)
+                    .addComponent(Bterminer)
+                    .addComponent(Bsuivant))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel5.setBackground(new java.awt.Color(255, 0, 51));
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel16.setText("Identité");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel16)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel16)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -505,12 +520,13 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 572, Short.MAX_VALUE)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 760, Short.MAX_VALUE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -519,22 +535,25 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(153, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void BsuivantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BsuivantActionPerformed
         if(checkChamps()){
             enregistrerData();
             parent.changeState(Main.NOUVEAU_VOLONTAIREP2);
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_BsuivantActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void BterminerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BterminerActionPerformed
         if(checkChamps()){
             enregistrerData();
             boolean cont = false;
@@ -558,7 +577,7 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
                 parent.changeState(Main.LOGGED);
             }
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_BterminerActionPerformed
 
     private void GfemmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GfemmeActionPerformed
         if(Gfemme.isSelected()){
@@ -568,11 +587,14 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_GfemmeActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void BannulerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BannulerActionPerformed
         parent.changeState(Main.LOGGED);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_BannulerActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Bannuler;
+    private javax.swing.JButton Bsuivant;
+    private javax.swing.JButton Bterminer;
     private javax.swing.JComboBox Gannee;
     private javax.swing.JTextField Gboite;
     private javax.swing.JTextField GboiteResidence;
@@ -595,9 +617,6 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
     private javax.swing.JTextField Gville;
     private javax.swing.JTextField GvilleResidence;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -605,13 +624,13 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
@@ -633,6 +652,7 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     // End of variables declaration//GEN-END:variables
 
     private void ComboBoxAnnee() {
@@ -644,7 +664,7 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
     private void fillChampIdentite() {
         Gnom.setText(volontaire.getIdentite().getNom());
         Gprenom.setText(volontaire.getIdentite().getPrenom());
-        if(volontaire.getIdentite().getSexe() == 'M'){
+        if(volontaire.getIdentite().getSexe() == "M"){
             Ghomme.setSelected(true);
         }else{
             Gfemme.setSelected(true);
@@ -669,9 +689,9 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
     private void fillChampAdresse() {
         Gemail.setText(volontaire.getAdresse().getEmail());
         Grue.setText(volontaire.getAdresse().getRue());
-        Gnumero.setText((volontaire.getAdresse().getNuméro() == -1 ? "" : ""+volontaire.getAdresse().getNuméro()));
-        Gboite.setText((volontaire.getAdresse().getBoite() == -1 ? "" : ""+volontaire.getAdresse().getBoite()));
-        GcodePostal.setText((volontaire.getAdresse().getCodePostal() == -1 ? "" : ""+volontaire.getAdresse().getCodePostal()));
+        //Gnumero.setText((volontaire.getAdresse().getNuméro() == -1 ? "" : ""+volontaire.getAdresse().getNuméro()));
+        Gboite.setText(volontaire.getAdresse().getBoite());
+        //GcodePostal.setText((volontaire.getAdresse().getCodePostal() == -1 ? "" : ""+volontaire.getAdresse().getCodePostal()));
         Gville.setText(volontaire.getAdresse().getVille());
 
         boolean found = false;
@@ -685,9 +705,9 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
 
     private void fillChampResidence() {
         GrueResidence.setText(volontaire.getResidence().getRue());
-        GnumeroResidence.setText((volontaire.getResidence().getNuméro() == -1 ? "" : ""+volontaire.getResidence().getNuméro()));
-        GboiteResidence.setText((volontaire.getResidence().getBoite() == -1 ? "" : ""+volontaire.getResidence().getBoite()));
-        GcodePostalResidence.setText((volontaire.getResidence().getCodePostal() == -1 ? "" : ""+volontaire.getResidence().getCodePostal()));
+        //GnumeroResidence.setText((volontaire.getResidence().getNuméro() == -1 ? "" : ""+volontaire.getResidence().getNuméro()));
+        GboiteResidence.setText(volontaire.getResidence().getBoite());
+        //GcodePostalResidence.setText((volontaire.getResidence().getCodePostal() == -1 ? "" : ""+volontaire.getResidence().getCodePostal()));
         GvilleResidence.setText(volontaire.getResidence().getVille());
 
         boolean found = false;
@@ -701,9 +721,14 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
 
     private void enregistrerData() {
         Identite identite = new Identite();
+            if(matricule != null){
+                identite.setMatricule(matricule);
+            }else{
+                identite.setMatricule(Gnom.getText() + " " + Gprenom.getText());
+            }
             identite.setNom(Gnom.getText());
             identite.setPrenom(Gprenom.getText());
-            identite.setSexe((Ghomme.isSelected() ? 'h' : 'f'));
+            identite.setSexe((Ghomme.isSelected() ? "h" : "f"));
             identite.setNomJeuneFille(GnomFille.getText());
 
             String jour = Gjour.getSelectedItem().toString();
@@ -723,30 +748,30 @@ public class M_NouveauVolontaireP1 extends javax.swing.JPanel {
             adresse.setEmail(Gemail.getText());
 
             adresse.setRue(Grue.getText());
-            adresse.setNuméro(Integer.parseInt(Gnumero.getText()));
+            //adresse.setNuméro(Integer.parseInt(Gnumero.getText()));
             try{
-                adresse.setBoite(Integer.parseInt(Gboite.getText()));
+                adresse.setBoite(Gboite.getText());
             }catch(Exception ex){
 
             }
-            adresse.setCodePostal(Integer.parseInt(GcodePostal.getText()));
+            //adresse.setCodePostal(Integer.parseInt(GcodePostal.getText()));
             adresse.setVille(Gville.getText());
             adresse.setPays(Gpays.getSelectedItem().toString());
 
         Residence residence = new Residence();
             residence.setRue(GrueResidence.getText());
             try{
-                residence.setNuméro(Integer.parseInt(GnumeroResidence.getText()));
+                //residence.setNuméro(Integer.parseInt(GnumeroResidence.getText()));
             }catch(Exception ex){
 
             }
             try{
-                residence.setBoite(Integer.parseInt(GboiteResidence.getText()));
+                residence.setBoite(GboiteResidence.getText());
             }catch(Exception ex){
 
             }
             try{
-                residence.setCodePostal(Integer.parseInt(GcodePostalResidence.getText()));
+                //residence.setCodePostal(Integer.parseInt(GcodePostalResidence.getText()));
             }catch(Exception ex){
 
             }

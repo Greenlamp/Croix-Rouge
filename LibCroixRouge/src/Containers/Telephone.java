@@ -5,7 +5,12 @@
 
 package Containers;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Telephone implements Serializable{
@@ -28,6 +33,7 @@ public class Telephone implements Serializable{
     }
 
     public void setGsm(String gsm) {
+        if(gsm != null && gsm.isEmpty()) gsm = null;
         this.gsm = gsm;
     }
 
@@ -36,6 +42,7 @@ public class Telephone implements Serializable{
     }
 
     public void setAutreGsm(String autreGsm) {
+        if(autreGsm != null && autreGsm.isEmpty()) autreGsm = null;
         this.autreGsm = autreGsm;
     }
 
@@ -44,6 +51,7 @@ public class Telephone implements Serializable{
     }
 
     public void setTelephoneFix(String telephoneFix) {
+        if(telephoneFix != null && telephoneFix.isEmpty()) telephoneFix = null;
         this.telephoneFix = telephoneFix;
     }
 
@@ -52,6 +60,7 @@ public class Telephone implements Serializable{
     }
 
     public void setTelephoneProfesionnelle(String telephoneProfesionnelle) {
+        if(telephoneProfesionnelle != null && telephoneProfesionnelle.isEmpty()) telephoneProfesionnelle = null;
         this.telephoneProfesionnelle = telephoneProfesionnelle;
     }
 
@@ -60,6 +69,52 @@ public class Telephone implements Serializable{
     }
 
     public void setFax(String fax) {
+        if(fax != null && fax.isEmpty()) fax = null;
         this.fax = fax;
+    }
+
+    void backupTexte(ByteArrayOutputStream sb) {
+        if(this.getGsm() == null){
+            ajouterLigne(sb, "");
+        }else{
+            ajouterLigne(sb, this.getGsm());
+        }
+        if(this.getAutreGsm() == null){
+            ajouterLigne(sb, "");
+        }else{
+            ajouterLigne(sb, this.getAutreGsm());
+        }
+        if(this.getTelephoneFix() == null){
+            ajouterLigne(sb, "");
+        }else{
+            ajouterLigne(sb, this.getTelephoneFix());
+        }
+        if(this.getTelephoneProfesionnelle() == null){
+            ajouterLigne(sb, "");
+        }else{
+            ajouterLigne(sb, this.getTelephoneProfesionnelle());
+        }
+        if(this.getFax() == null){
+            ajouterLigne(sb, "");
+        }else{
+            ajouterLigne(sb, this.getFax());
+        }
+    }
+
+    void loadBackupTexte(BufferedReader buff) throws IOException {
+        setGsm(buff.readLine());
+        setAutreGsm(buff.readLine());
+        setTelephoneFix(buff.readLine());
+        setTelephoneProfesionnelle(buff.readLine());
+        setFax(buff.readLine());
+    }
+
+    private void ajouterLigne(ByteArrayOutputStream sb, String text) {
+        try {
+            sb.write(text.getBytes());
+            sb.write("\n".getBytes());
+        } catch (IOException ex) {
+            Logger.getLogger(Telephone.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

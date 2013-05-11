@@ -2,8 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package GUI.Panels;
+package GUI.Panels.GestionUtilisateurs;
 
+
+import Containers.Utilisateur;
+import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
 import PacketCom.PacketCom;
@@ -26,11 +29,7 @@ public class M_GestionUtilisateurs extends javax.swing.JPanel {
     Main parent = null;
     NetworkClient socket = null;
 
-    public M_GestionUtilisateurs() {
-        initComponents();
-    }
-
-    M_GestionUtilisateurs(Main parent, NetworkClient socket) {
+    public M_GestionUtilisateurs(Main parent, NetworkClient socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;
@@ -48,9 +47,10 @@ public class M_GestionUtilisateurs extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        Baccueil = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        JlisteUtilisateurs = new javax.swing.JTable();
+        Gtableau = new javax.swing.JTable();
         Bnouveau = new javax.swing.JButton();
         Bsupprimer = new javax.swing.JButton();
 
@@ -59,47 +59,60 @@ public class M_GestionUtilisateurs extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Gestion des utilisateurs");
 
+        Baccueil.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        Baccueil.setForeground(new java.awt.Color(0, 0, 255));
+        Baccueil.setText("ACCUEIL");
+        Baccueil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BaccueilActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(Baccueil)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addContainerGap(370, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(Baccueil))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
-        JlisteUtilisateurs.setModel(new javax.swing.table.DefaultTableModel(
+        Gtableau.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Login", "prioritaire"
+                "Login", "prioritaire", "date dernière connexion"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        JlisteUtilisateurs.addMouseListener(new java.awt.event.MouseAdapter() {
+        Gtableau.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                JlisteUtilisateursMouseClicked(evt);
+                GtableauMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(JlisteUtilisateurs);
+        jScrollPane1.setViewportView(Gtableau);
 
         Bnouveau.setText("Nouveau");
         Bnouveau.addActionListener(new java.awt.event.ActionListener() {
@@ -122,7 +135,7 @@ public class M_GestionUtilisateurs extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1240, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(Bnouveau)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -138,8 +151,8 @@ public class M_GestionUtilisateurs extends javax.swing.JPanel {
                     .addComponent(Bnouveau)
                     .addComponent(Bsupprimer))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -165,24 +178,38 @@ public class M_GestionUtilisateurs extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BnouveauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BnouveauActionPerformed
-        // TODO add your handling code here:
+        parent.changeState(Main.NOUVEAU_UTILISATEUR);
     }//GEN-LAST:event_BnouveauActionPerformed
 
     private void BsupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BsupprimerActionPerformed
-        // TODO add your handling code here:
+        int row = Gtableau.getSelectedRow();
+        if(row == -1){
+            return;
+        }
+        String login = (String)Gtableau.getValueAt(row, 0);
+        deleteUtilisateur(login);
     }//GEN-LAST:event_BsupprimerActionPerformed
 
-    private void JlisteUtilisateursMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JlisteUtilisateursMouseClicked
+    private void GtableauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GtableauMouseClicked
         if(evt.getClickCount() == 2){
-            parent.setLoginUser(getLoginUser(evt));
-            parent.changeState(Main.EDITNEWUSER);
+            int row = Gtableau.getSelectedRow();
+            String login = (String)Gtableau.getValueAt(row, 0);
+            Utilisateur utilisateur = getUtilisateur(login);
+            parent.setUtilisateur(utilisateur);
+            parent.changeState(Main.EDIT_UTILISATEUR);
         }
-    }//GEN-LAST:event_JlisteUtilisateursMouseClicked
+    }//GEN-LAST:event_GtableauMouseClicked
+
+    private void BaccueilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BaccueilActionPerformed
+        parent.changeState(Main.LOGGED);
+    }//GEN-LAST:event_BaccueilActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Baccueil;
+    private javax.swing.JButton Baccueil1;
     private javax.swing.JButton Bnouveau;
     private javax.swing.JButton Bsupprimer;
-    private javax.swing.JTable JlisteUtilisateurs;
+    private javax.swing.JTable Gtableau;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -196,7 +223,7 @@ public class M_GestionUtilisateurs extends javax.swing.JPanel {
             PacketCom packetReponse = socket.receive();
             reponseFromServeur(packetReponse);
         } catch (Exception ex) {
-            Logger.getLogger(M_Consultation.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(M_GestionUtilisateurs.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -211,7 +238,7 @@ public class M_GestionUtilisateurs extends javax.swing.JPanel {
                 for(String elm : droit){
                     vector.addElement(elm);
                 }
-                SwingUtils.addToTable(JlisteUtilisateurs, vector);
+                SwingUtils.addToTable(Gtableau, vector);
             }
         }else{
             System.out.println("Erreur.");
@@ -219,8 +246,51 @@ public class M_GestionUtilisateurs extends javax.swing.JPanel {
     }
 
     private String getLoginUser(MouseEvent evt) {
-        int row = JlisteUtilisateurs.rowAtPoint(evt.getPoint());
-        String login = JlisteUtilisateurs.getValueAt(row, 0).toString();
+        int row = Gtableau.rowAtPoint(evt.getPoint());
+        String login = Gtableau.getValueAt(row, 0).toString();
         return login;
+    }
+
+    private Utilisateur getUtilisateur(String login) {
+        PacketCom packet = new PacketCom(States.GET_UTILISATEUR, (Object)login);
+        socket.send(packet);
+        try {
+            PacketCom retour = socket.receive();
+            String type = retour.getType();
+            if(type.equals(States.GET_UTILISATEUR_OUI)){
+                Utilisateur utilisateur = (Utilisateur)retour.getObjet();
+                return utilisateur;
+            }else if(type.equals(States.GET_UTILISATEUR_NON)){
+                String message = (String)retour.getObjet();
+                parent.afficherMessage(message);
+            }else{
+                String message = (String)retour.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(M_GestionUtilisateurs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    private void deleteUtilisateur(String login) {
+        PacketCom packet = new PacketCom(States.DELETE_UTILISATEUR, (Object)login);
+        socket.send(packet);
+        try {
+            PacketCom retour = socket.receive();
+            String type = retour.getType();
+            if(type.equals(States.DELETE_UTILISATEUR_OUI)){
+                parent.afficherMessage("Suppression de l'utilisateur réussi");
+            }else if(type.equals(States.DELETE_UTILISATEUR_NON)){
+                String message = (String)retour.getObjet();
+                parent.afficherMessage(message);
+            }else{
+                String message = (String)retour.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(M_GestionUtilisateurs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        parent.changeState(Main.GESTION_UTILISATEURS);
     }
 }

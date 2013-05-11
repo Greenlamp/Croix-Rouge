@@ -87,6 +87,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         Gtitre = new javax.swing.JLabel();
+        Baccueil = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Ggrille = new javax.swing.JTable();
@@ -115,12 +116,23 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         Gtitre.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Gtitre.setText("Titre");
 
+        Baccueil.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        Baccueil.setForeground(new java.awt.Color(0, 0, 255));
+        Baccueil.setText("ACCUEIL");
+        Baccueil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BaccueilActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(Baccueil)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Gtitre)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -128,8 +140,10 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Gtitre)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Gtitre)
+                    .addComponent(Baccueil))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
@@ -308,7 +322,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Benregistrer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(9, 9, 9)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -460,7 +474,12 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_BenregistrerActionPerformed
 
+    private void BaccueilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BaccueilActionPerformed
+        parent.changeState(Main.LOGGED);
+    }//GEN-LAST:event_BaccueilActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Baccueil;
     private javax.swing.JButton Benregistrer;
     private javax.swing.JButton Bmodifier;
     private javax.swing.JTextField Gambulance;

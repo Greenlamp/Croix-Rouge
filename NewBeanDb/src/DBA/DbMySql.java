@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package Database;
+package DBA;
 
 import FileAccess.FileAccess;
 import Util.Parametres;
@@ -40,6 +40,7 @@ public class DbMySql {
 
         try {
             connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         } catch (SQLException ex) {
             Logger.getLogger(DbMySql.class.getName()).log(Level.SEVERE, null, ex);
             try {
@@ -82,6 +83,7 @@ public class DbMySql {
     public void commit() {
         try {
             if(isTransacted()){
+                pSelect("COMMIT", null);
                 connection.commit();
                 unlockTable();
                 setTransacted(false);

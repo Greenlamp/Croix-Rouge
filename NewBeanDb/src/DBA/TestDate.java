@@ -3,18 +3,14 @@
  * and open the template in the editor.
  */
 
-package Database;
+package DBA;
 
 import EasyDate.EasyDate;
 import Util.Parametres;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.util.calendar.Gregorian;
 
 
 public class TestDate {

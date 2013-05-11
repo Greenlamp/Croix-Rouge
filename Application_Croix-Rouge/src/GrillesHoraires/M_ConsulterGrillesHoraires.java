@@ -46,6 +46,7 @@ public class M_ConsulterGrillesHoraires extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        Baccueil = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Gtableau = new javax.swing.JTable();
@@ -57,21 +58,34 @@ public class M_ConsulterGrillesHoraires extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Grilles horaires");
 
+        Baccueil.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        Baccueil.setForeground(new java.awt.Color(0, 0, 255));
+        Baccueil.setText("ACCUEIL");
+        Baccueil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BaccueilActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(Baccueil)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Baccueil)
+                    .addComponent(jLabel1))
+                .addContainerGap())
         );
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
@@ -136,7 +150,7 @@ public class M_ConsulterGrillesHoraires extends javax.swing.JPanel {
                     .addComponent(Bnouveau)
                     .addComponent(Bsupprimer))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -194,7 +208,12 @@ public class M_ConsulterGrillesHoraires extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_GtableauMouseClicked
 
+    private void BaccueilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BaccueilActionPerformed
+        parent.changeState(Main.LOGGED);
+    }//GEN-LAST:event_BaccueilActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Baccueil;
     private javax.swing.JButton Bnouveau;
     private javax.swing.JButton Bsupprimer;
     private javax.swing.JTable Gtableau;

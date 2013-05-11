@@ -29,6 +29,8 @@ public class ProtocoleClient implements Protocolable{
 
         if (type.equals(States.LOGIN_OUI)) {
             return packet;
+        }else if (type.equals(States.LOGIN_NON)) {
+            return packet;
         }else if (type.equals(States.LOGIN_NON_USER)) {
             return packet;
         }else if (type.equals(States.LOGIN_NON_PASS)) {
@@ -90,6 +92,52 @@ public class ProtocoleClient implements Protocolable{
         }else if (type.equals(States.UNLOCK_GRILLE_OUI)) {
             return packet;
         }else if (type.equals(States.UNLOCK_GRILLE_NON)) {
+            return packet;
+        }else if (type.equals(States.GET_VOLONTAIRE_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_VOLONTAIRE_NON)) {
+            return packet;
+        }else if (type.equals(States.EDIT_VOLONTAIRE_OUI)) {
+            return packet;
+        }else if (type.equals(States.EDIT_VOLONTAIRE_NON)) {
+            return packet;
+        }else if (type.equals(States.GET_GROUPE_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_GROUPE_NON)) {
+            return packet;
+        }else if (type.equals(States.NEW_GROUPE_OUI)) {
+            return packet;
+        }else if (type.equals(States.NEW_GROUPE_NON)) {
+            return packet;
+        }else if (type.equals(States.EDIT_GROUPE_OUI)) {
+            return packet;
+        }else if (type.equals(States.EDIT_GROUPE_NON)) {
+            return packet;
+        }else if (type.equals(States.DELETE_GROUPE_OUI)) {
+            return packet;
+        }else if (type.equals(States.DELETE_GROUPE_NON)) {
+            return packet;
+        }else if (type.equals(States.DELETE_GROUPE_NON)) {
+            return packet;
+        }else if (type.equals(States.GET_UTILISATEUR_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_UTILISATEUR_NON)) {
+            return packet;
+        }else if (type.equals(States.DELETE_UTILISATEUR_OUI)) {
+            return packet;
+        }else if (type.equals(States.DELETE_UTILISATEUR_NON)) {
+            return packet;
+        }else if (type.equals(States.EDIT_UTILISATEUR_OUI)) {
+            return packet;
+        }else if (type.equals(States.EDIT_UTILISATEUR_NON)) {
+            return packet;
+        }else if (type.equals(States.NEW_UTILISATEUR_OUI)) {
+            return packet;
+        }else if (type.equals(States.NEW_UTILISATEUR_NON)) {
+            return packet;
+        }else if (type.equals(States.DELETE_VOLONTAIRE_OUI)) {
+            return packet;
+        }else if (type.equals(States.DELETE_VOLONTAIRE_NON)) {
             return packet;
         }else{
             return new PacketCom(States.ERROR, "ERROR");

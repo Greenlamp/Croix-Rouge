@@ -16,16 +16,25 @@ import java.util.logging.Logger;
 
 public class EasyDate {
     public static String getDateHour(Timestamp timestamp){
+        if(timestamp == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String out = sdf.format(new Date(timestamp.getTime()));
         return out;
     }
     public static String getDateOnly(Timestamp timestamp){
+        if(timestamp == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String out = sdf.format(new Date(timestamp.getTime()));
         return out;
     }
     public static String getHourOnly(Timestamp timestamp){
+        if(timestamp == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         String out = sdf.format(new Date(timestamp.getTime()));
         return out;
@@ -33,16 +42,25 @@ public class EasyDate {
 
 
     public static String getDateHour(java.util.Date date){
+        if(date == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String out = sdf.format(date);
         return out;
     }
     public static String getDateOnly(java.util.Date date){
+        if(date == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String out = sdf.format(date);
         return out;
     }
     public static String getHourOnly(java.util.Date date){
+        if(date == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         String out = sdf.format(date);
         return out;
@@ -50,16 +68,25 @@ public class EasyDate {
 
 
     public static String getDateHour(java.sql.Date date){
+        if(date == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String out = sdf.format(new Date(date.getTime()));
         return out;
     }
     public static String getDateOnly(java.sql.Date date){
+        if(date == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String out = sdf.format(new Date(date.getTime()));
         return out;
     }
     public static String getHourOnly(java.sql.Date date){
+        if(date == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         String out = sdf.format(new Date(date.getTime()));
         return out;
@@ -67,6 +94,9 @@ public class EasyDate {
 
 
     public static String getDateHour(String date){
+        if(date == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String out = null;
         try {
@@ -77,6 +107,9 @@ public class EasyDate {
         return out;
     }
     public static String getDateOnly(String date){
+        if(date == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String out = null;
         try {
@@ -87,6 +120,9 @@ public class EasyDate {
         return out;
     }
     public static String getHourOnly(String date){
+        if(date == null){
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         String out = null;
         try {
@@ -98,6 +134,9 @@ public class EasyDate {
     }
 
     public static boolean isValidDate(String date, String format){
+        if(date == null){
+            return false;
+        }
         if(format == null){
             format = "dd/MM/yyyy";
         }
@@ -111,7 +150,7 @@ public class EasyDate {
         } catch (Exception ex) {
             return false;
         }
-        
+
         try{
             if(!date.equals(after)){
                 return false;

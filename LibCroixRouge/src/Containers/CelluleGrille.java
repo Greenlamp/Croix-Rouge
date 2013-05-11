@@ -40,6 +40,7 @@ public class CelluleGrille implements Serializable{
     }
 
     public void setJour(String jour) {
+        if(jour != null && jour.isEmpty()) jour = null;
         this.jour = jour;
     }
 
@@ -48,6 +49,7 @@ public class CelluleGrille implements Serializable{
     }
 
     public void setHeure(String heure) {
+        if(heure != null && heure.isEmpty()) heure = null;
         this.heure = heure;
     }
 
@@ -56,6 +58,7 @@ public class CelluleGrille implements Serializable{
     }
 
     public void setRole(String role) {
+        if(role != null && role.isEmpty()) role = null;
         this.role = role;
     }
 
@@ -64,6 +67,7 @@ public class CelluleGrille implements Serializable{
     }
 
     public void setNomPrenom(String nomPrenom) {
+        if(nomPrenom != null && nomPrenom.isEmpty()) nomPrenom = null;
         this.nomPrenom = nomPrenom;
     }
 
@@ -88,6 +92,7 @@ public class CelluleGrille implements Serializable{
     }
 
     public void setDate(String date) {
+        if(date != null && date.isEmpty()) date = null;
         this.date = date;
     }
 }

@@ -49,19 +49,6 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        G1 = new javax.swing.JCheckBox();
-        G2 = new javax.swing.JCheckBox();
-        G3 = new javax.swing.JCheckBox();
-        G4 = new javax.swing.JCheckBox();
-        G5 = new javax.swing.JCheckBox();
-        G6 = new javax.swing.JCheckBox();
-        G7 = new javax.swing.JCheckBox();
-        G8 = new javax.swing.JCheckBox();
-        G9 = new javax.swing.JCheckBox();
-        Gprecision = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
@@ -71,6 +58,19 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        G1 = new javax.swing.JRadioButton();
+        G2 = new javax.swing.JRadioButton();
+        G3 = new javax.swing.JRadioButton();
+        G4 = new javax.swing.JRadioButton();
+        G5 = new javax.swing.JRadioButton();
+        G6 = new javax.swing.JRadioButton();
+        G7 = new javax.swing.JRadioButton();
+        G8 = new javax.swing.JRadioButton();
+        G9 = new javax.swing.JRadioButton();
+        Gprecision = new javax.swing.JTextField();
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -91,95 +91,6 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel4.setBackground(new java.awt.Color(153, 153, 153));
-
-        jLabel25.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel25.setText("Comment avez-vous découvert le volontariat");
-
-        jLabel26.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel26.setText("à la Croix-Rouge ?");
-
-        G1.setBackground(new java.awt.Color(153, 153, 153));
-        G1.setText("Un volontaire m'en a parlé");
-
-        G2.setBackground(new java.awt.Color(153, 153, 153));
-        G2.setText("Par un article/annonce dans la presse");
-
-        G3.setBackground(new java.awt.Color(153, 153, 153));
-        G3.setText("Via un stand Croix-Rouge présent sur un évènement");
-
-        G4.setBackground(new java.awt.Color(153, 153, 153));
-        G4.setText("Par un reportage à la TV ou à la radio");
-
-        G5.setBackground(new java.awt.Color(153, 153, 153));
-        G5.setText("Grâce au site web");
-
-        G6.setBackground(new java.awt.Color(153, 153, 153));
-        G6.setText("Au cours d'une formation aux premiers secours");
-
-        G7.setBackground(new java.awt.Color(153, 153, 153));
-        G7.setText("Par facebook");
-
-        G8.setBackground(new java.awt.Color(153, 153, 153));
-        G8.setText("Par une affiche");
-
-        G9.setBackground(new java.awt.Color(153, 153, 153));
-        G9.setText("Autre, précisez");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Gprecision)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(G9)
-                            .addComponent(G8)
-                            .addComponent(G7)
-                            .addComponent(G6)
-                            .addComponent(G5)
-                            .addComponent(G4)
-                            .addComponent(G3)
-                            .addComponent(G2)
-                            .addComponent(G1)
-                            .addComponent(jLabel25)
-                            .addComponent(jLabel26))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel25)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel26)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(G1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(G2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(G3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(G4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(G5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(G6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(G7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(G8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(G9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Gprecision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -226,24 +137,22 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel21)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel22)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel23)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel24))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(817, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,15 +162,109 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
                     .addComponent(jLabel21)
                     .addComponent(jLabel22)
                     .addComponent(jLabel23)
-                    .addComponent(jLabel24))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2)
                     .addComponent(jButton4)
                     .addComponent(jButton5))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBackground(new java.awt.Color(153, 153, 153));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setText("Comment avez-vous découvert le volontariat");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setText("à la Croix-Rouge ?");
+
+        G1.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(G1);
+        G1.setText("Un volontaire m'en a parlé");
+
+        G2.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(G2);
+        G2.setText("Par un article/annonce dans la presse");
+
+        G3.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(G3);
+        G3.setText("Via un stand Croix-Rouge présent sur un évènement");
+
+        G4.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(G4);
+        G4.setText("Par un reportage à la TV ou à la radio");
+
+        G5.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(G5);
+        G5.setText("Grâce au site web");
+
+        G6.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(G6);
+        G6.setText("Au cours d'une formation aux premiers secours");
+
+        G7.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(G7);
+        G7.setText("Par facebook");
+
+        G8.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(G8);
+        G8.setText("Par une affiche");
+
+        G9.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(G9);
+        G9.setText("Autre, précisez");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Gprecision)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(G9)
+                            .addComponent(G8)
+                            .addComponent(G7)
+                            .addComponent(G5)
+                            .addComponent(G4)
+                            .addComponent(G3)
+                            .addComponent(G2)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(G1)
+                            .addComponent(G6))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2))
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(G1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(G2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(G3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(G4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(G5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(G6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(G7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(G8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(G9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Gprecision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -273,10 +276,10 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 775, Short.MAX_VALUE)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -285,10 +288,10 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(353, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 297, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -327,15 +330,15 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox G1;
-    private javax.swing.JCheckBox G2;
-    private javax.swing.JCheckBox G3;
-    private javax.swing.JCheckBox G4;
-    private javax.swing.JCheckBox G5;
-    private javax.swing.JCheckBox G6;
-    private javax.swing.JCheckBox G7;
-    private javax.swing.JCheckBox G8;
-    private javax.swing.JCheckBox G9;
+    private javax.swing.JRadioButton G1;
+    private javax.swing.JRadioButton G2;
+    private javax.swing.JRadioButton G3;
+    private javax.swing.JRadioButton G4;
+    private javax.swing.JRadioButton G5;
+    private javax.swing.JRadioButton G6;
+    private javax.swing.JRadioButton G7;
+    private javax.swing.JRadioButton G8;
+    private javax.swing.JRadioButton G9;
     private javax.swing.JTextField Gprecision;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton2;
@@ -343,86 +346,64 @@ public class M_NouveauVolontaireP3 extends javax.swing.JPanel {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
     // End of variables declaration//GEN-END:variables
 
     private void fillChampDecouverte() {
-        if(volontaire.getDecouverte().getListeDescription().contains(G1.getText())){
+        if(volontaire.getDecouverte().getDescription().equals(G1.getText())){
             G1.setSelected(true);
-            volontaire.getDecouverte().getListeDescription().remove(G1.getText());
-        }
-        if(volontaire.getDecouverte().getListeDescription().contains(G2.getText())){
+        }else if(volontaire.getDecouverte().getDescription().equals(G2.getText())){
             G2.setSelected(true);
-            volontaire.getDecouverte().getListeDescription().remove(G2.getText());
-        }
-        if(volontaire.getDecouverte().getListeDescription().contains(G3.getText())){
+        }else if(volontaire.getDecouverte().getDescription().equals(G3.getText())){
             G3.setSelected(true);
-            volontaire.getDecouverte().getListeDescription().remove(G3.getText());
-        }
-        if(volontaire.getDecouverte().getListeDescription().contains(G4.getText())){
+        }else if(volontaire.getDecouverte().getDescription().equals(G4.getText())){
             G4.setSelected(true);
-            volontaire.getDecouverte().getListeDescription().remove(G4.getText());
-        }
-        if(volontaire.getDecouverte().getListeDescription().contains(G5.getText())){
+        }else if(volontaire.getDecouverte().getDescription().equals(G5.getText())){
             G5.setSelected(true);
-            volontaire.getDecouverte().getListeDescription().remove(G5.getText());
-        }
-        if(volontaire.getDecouverte().getListeDescription().contains(G6.getText())){
+        }else if(volontaire.getDecouverte().getDescription().equals(G6.getText())){
             G6.setSelected(true);
-            volontaire.getDecouverte().getListeDescription().remove(G6.getText());
-        }
-        if(volontaire.getDecouverte().getListeDescription().contains(G7.getText())){
+        }else if(volontaire.getDecouverte().getDescription().equals(G7.getText())){
             G7.setSelected(true);
-            volontaire.getDecouverte().getListeDescription().remove(G7.getText());
-        }
-        if(volontaire.getDecouverte().getListeDescription().contains(G8.getText())){
+        }else if(volontaire.getDecouverte().getDescription().equals(G8.getText())){
             G8.setSelected(true);
-            volontaire.getDecouverte().getListeDescription().remove(G8.getText());
-        }
-        try{
-            Gprecision.setText(volontaire.getDecouverte().getListeDescription().getFirst());
-            G9.setSelected(true);
-        }catch(Exception ex){
+        }else{
+            try{
+                Gprecision.setText(volontaire.getDecouverte().getDescription());
+                G9.setSelected(true);
+            }catch(Exception ex){
 
+            }
         }
     }
 
     private void enregistrerData() {
         Decouverte decouverte = new Decouverte();
         if(G1.isSelected()){
-            decouverte.addDescription(G1.getText());
-        }
-        if(G2.isSelected()){
-            decouverte.addDescription(G2.getText());
-        }
-        if(G3.isSelected()){
-            decouverte.addDescription(G3.getText());
-        }
-        if(G4.isSelected()){
-            decouverte.addDescription(G4.getText());
-        }
-        if(G5.isSelected()){
-            decouverte.addDescription(G5.getText());
-        }
-        if(G6.isSelected()){
-            decouverte.addDescription(G6.getText());
-        }
-        if(G7.isSelected()){
-            decouverte.addDescription(G7.getText());
-        }
-        if(G8.isSelected()){
-            decouverte.addDescription(G8.getText());
-        }
-        if(G9.isSelected()){
-            decouverte.addDescription(Gprecision.getText());
+            decouverte.setDescription(G1.getText());
+        }else if(G2.isSelected()){
+            decouverte.setDescription(G2.getText());
+        }else if(G3.isSelected()){
+            decouverte.setDescription(G3.getText());
+        }else if(G4.isSelected()){
+            decouverte.setDescription(G4.getText());
+        }else if(G5.isSelected()){
+            decouverte.setDescription(G5.getText());
+        }else if(G6.isSelected()){
+            decouverte.setDescription(G6.getText());
+        }else if(G7.isSelected()){
+            decouverte.setDescription(G7.getText());
+        }else if(G8.isSelected()){
+            decouverte.setDescription(G8.getText());
+        }else if(G9.isSelected()){
+            decouverte.setDescription(Gprecision.getText());
         }
 
         parent.setVolontaireP3(decouverte);

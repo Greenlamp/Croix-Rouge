@@ -5,22 +5,27 @@
 
 package Containers;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Residence implements Serializable{
     private String rue;
-    private int numéro;
-    private int boite;
-    private int codePostal;
+    private String numéro;
+    private String boite;
+    private String codePostal;
     private String ville;
     private String pays;
 
     public Residence(){
         setRue(null);
-        setNuméro(-1);
-        setBoite(-1);
-        setCodePostal(-1);
+        setNuméro(null);
+        setBoite(null);
+        setCodePostal(null);
         setVille(null);
         setPays(null);
     }
@@ -30,30 +35,25 @@ public class Residence implements Serializable{
     }
 
     public void setRue(String rue) {
+        if(rue != null && rue.isEmpty()) rue = null;
         this.rue = rue;
     }
 
-    public int getNuméro() {
+    public String getNuméro() {
         return numéro;
     }
 
-    public void setNuméro(int numéro) {
+    public void setNuméro(String numéro) {
+        if(numéro != null && numéro.isEmpty()) numéro = null;
         this.numéro = numéro;
     }
 
-    public int getBoite() {
-        return boite;
-    }
-
-    public void setBoite(int boiteR) {
-        this.boite = boiteR;
-    }
-
-    public int getCodePostal() {
+    public String getCodePostal() {
         return codePostal;
     }
 
-    public void setCodePostal(int codePostal) {
+    public void setCodePostal(String codePostal) {
+        if(codePostal != null && codePostal.isEmpty()) codePostal = null;
         this.codePostal = codePostal;
     }
 
@@ -62,6 +62,7 @@ public class Residence implements Serializable{
     }
 
     public void setVille(String ville) {
+        if(ville != null && ville.isEmpty()) ville = null;
         this.ville = ville;
     }
 
@@ -70,6 +71,67 @@ public class Residence implements Serializable{
     }
 
     public void setPays(String pays) {
+        if(pays != null && pays.isEmpty()) pays = null;
         this.pays = pays;
+    }
+
+    public String getBoite() {
+        return boite;
+    }
+
+    public void setBoite(String boite) {
+        if(boite != null && boite.isEmpty()) boite = null;
+        this.boite = boite;
+    }
+
+    void backupTexte(ByteArrayOutputStream sb) {
+        if(this.getRue() == null){
+            ajouterLigne(sb, "");
+        }else{
+            ajouterLigne(sb, this.getRue());
+        }
+        if(this.getNuméro() == null){
+            ajouterLigne(sb, "");
+        }else{
+            ajouterLigne(sb, this.getNuméro());
+        }
+        if(this.getBoite() == null){
+            ajouterLigne(sb, "");
+        }else{
+            ajouterLigne(sb, this.getBoite());
+        }
+        if(this.getCodePostal() == null){
+            ajouterLigne(sb, "");
+        }else{
+            ajouterLigne(sb, this.getCodePostal());
+        }
+        if(this.getVille() == null){
+            ajouterLigne(sb, "");
+        }else{
+            ajouterLigne(sb, this.getVille());
+        }
+        if(this.getPays() == null){
+            ajouterLigne(sb, "");
+        }else{
+            ajouterLigne(sb, this.getPays());
+        }
+    }
+
+    void loadBackupTexte(BufferedReader buff) throws IOException {
+        setRue(buff.readLine());
+        setNuméro(buff.readLine());
+        setBoite(buff.readLine());
+        setCodePostal(buff.readLine());
+        setVille(buff.readLine());
+        setPays(buff.readLine());
+    }
+
+    private void ajouterLigne(ByteArrayOutputStream sb, String text) {
+        try {
+            sb.write(text.getBytes());
+            sb.write("\n".getBytes());
+        } catch (IOException ex) {
+            Logger.getLogger(Residence.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
