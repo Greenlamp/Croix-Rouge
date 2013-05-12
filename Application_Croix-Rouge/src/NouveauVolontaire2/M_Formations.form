@@ -452,6 +452,9 @@
                       </StringArray>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GjourObtenuBEPSActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JComboBox" name="GmoisObtenuBEPS">
                   <Properties>
@@ -545,6 +548,9 @@
                       </StringArray>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GjourValableBEPSActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel20">
                   <Properties>
@@ -2927,42 +2933,42 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel93" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="GjourObtenuB13" min="-2" max="-2" attributes="0"/>
+                                  <Component id="GjourObtenuA1" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jLabel94" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="GmoisObtenuB13" min="-2" max="-2" attributes="0"/>
+                                  <Component id="GmoisObtenuA1" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jLabel95" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="GanneeObtenuB13" min="-2" pref="77" max="-2" attributes="0"/>
+                                  <Component id="GanneeObtenuA1" min="-2" pref="77" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="Gautre4" alignment="1" min="-2" pref="231" max="-2" attributes="0"/>
+                                      <Component id="GpreA1" alignment="1" min="-2" pref="231" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel97" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="GjourValableB12" min="-2" max="-2" attributes="0"/>
+                                              <Component id="GjourValableA1" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jLabel98" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="GmoisValableB12" min="-2" max="-2" attributes="0"/>
+                                              <Component id="GmoisValableA1" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jLabel99" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="GanneeValableB12" min="-2" pref="77" max="-2" attributes="0"/>
+                                              <Component id="GanneeValableA1" min="-2" pref="77" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jCheckBox13" min="-2" max="-2" attributes="0"/>
+                                              <Component id="GpermanentA1" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel96" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="GnumCertificationB12" min="-2" pref="268" max="-2" attributes="0"/>
+                                              <Component id="GnumA1" min="-2" pref="268" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="Gb12" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="GA1" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace min="0" pref="26" max="32767" attributes="0"/>
@@ -2976,32 +2982,32 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="Gautre4" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="Gb12" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GpreA1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GA1" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="GjourObtenuB13" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GmoisObtenuB13" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GjourObtenuA1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GmoisObtenuA1" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel95" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GanneeObtenuB13" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GanneeObtenuA1" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel93" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel94" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel96" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GnumCertificationB12" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GnumA1" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel97" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GjourValableB12" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GmoisValableB12" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GjourValableA1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GmoisValableA1" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel99" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GanneeValableB12" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GanneeValableA1" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel98" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBox13" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GpermanentA1" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -3009,7 +3015,7 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JCheckBox" name="Gb12">
+                <Component class="javax.swing.JCheckBox" name="GA1">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="99" green="99" red="99" type="rgb"/>
@@ -3020,48 +3026,49 @@
                     <Property name="text" type="java.lang.String" value="Autre, pr&#xe9;cisez"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="Gautre4">
+                <Component class="javax.swing.JTextField" name="GpreA1">
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel93">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Obtenu le"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GjourObtenuB13">
+                <Component class="javax.swing.JComboBox" name="GjourObtenuA1">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="31">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
-                        <StringItem index="12" value="13"/>
-                        <StringItem index="13" value="14"/>
-                        <StringItem index="14" value="15"/>
-                        <StringItem index="15" value="16"/>
-                        <StringItem index="16" value="17"/>
-                        <StringItem index="17" value="18"/>
-                        <StringItem index="18" value="19"/>
-                        <StringItem index="19" value="20"/>
-                        <StringItem index="20" value="21"/>
-                        <StringItem index="21" value="22"/>
-                        <StringItem index="22" value="23"/>
-                        <StringItem index="23" value="24"/>
-                        <StringItem index="24" value="25"/>
-                        <StringItem index="25" value="26"/>
-                        <StringItem index="26" value="27"/>
-                        <StringItem index="27" value="28"/>
-                        <StringItem index="28" value="29"/>
-                        <StringItem index="29" value="30"/>
-                        <StringItem index="30" value="31"/>
+                      <StringArray count="32">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
+                        <StringItem index="13" value="13"/>
+                        <StringItem index="14" value="14"/>
+                        <StringItem index="15" value="15"/>
+                        <StringItem index="16" value="16"/>
+                        <StringItem index="17" value="17"/>
+                        <StringItem index="18" value="18"/>
+                        <StringItem index="19" value="19"/>
+                        <StringItem index="20" value="20"/>
+                        <StringItem index="21" value="21"/>
+                        <StringItem index="22" value="22"/>
+                        <StringItem index="23" value="23"/>
+                        <StringItem index="24" value="24"/>
+                        <StringItem index="25" value="25"/>
+                        <StringItem index="26" value="26"/>
+                        <StringItem index="27" value="27"/>
+                        <StringItem index="28" value="28"/>
+                        <StringItem index="29" value="29"/>
+                        <StringItem index="30" value="30"/>
+                        <StringItem index="31" value="31"/>
                       </StringArray>
                     </Property>
                   </Properties>
@@ -3071,32 +3078,36 @@
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GmoisObtenuB13">
+                <Component class="javax.swing.JComboBox" name="GmoisObtenuA1">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="12">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
+                      <StringArray count="13">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
                       </StringArray>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GmoisObtenuA1ActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel95">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GanneeObtenuB13">
+                <Component class="javax.swing.JComboBox" name="GanneeObtenuA1">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
@@ -3108,48 +3119,49 @@
                     <Property name="text" type="java.lang.String" value="Certification n&#xb0;"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="GnumCertificationB12">
+                <Component class="javax.swing.JTextField" name="GnumA1">
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel97">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Valable jusqu&apos;au "/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GjourValableB12">
+                <Component class="javax.swing.JComboBox" name="GjourValableA1">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="31">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
-                        <StringItem index="12" value="13"/>
-                        <StringItem index="13" value="14"/>
-                        <StringItem index="14" value="15"/>
-                        <StringItem index="15" value="16"/>
-                        <StringItem index="16" value="17"/>
-                        <StringItem index="17" value="18"/>
-                        <StringItem index="18" value="19"/>
-                        <StringItem index="19" value="20"/>
-                        <StringItem index="20" value="21"/>
-                        <StringItem index="21" value="22"/>
-                        <StringItem index="22" value="23"/>
-                        <StringItem index="23" value="24"/>
-                        <StringItem index="24" value="25"/>
-                        <StringItem index="25" value="26"/>
-                        <StringItem index="26" value="27"/>
-                        <StringItem index="27" value="28"/>
-                        <StringItem index="28" value="29"/>
-                        <StringItem index="29" value="30"/>
-                        <StringItem index="30" value="31"/>
+                      <StringArray count="32">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
+                        <StringItem index="13" value="13"/>
+                        <StringItem index="14" value="14"/>
+                        <StringItem index="15" value="15"/>
+                        <StringItem index="16" value="16"/>
+                        <StringItem index="17" value="17"/>
+                        <StringItem index="18" value="18"/>
+                        <StringItem index="19" value="19"/>
+                        <StringItem index="20" value="20"/>
+                        <StringItem index="21" value="21"/>
+                        <StringItem index="22" value="22"/>
+                        <StringItem index="23" value="23"/>
+                        <StringItem index="24" value="24"/>
+                        <StringItem index="25" value="25"/>
+                        <StringItem index="26" value="26"/>
+                        <StringItem index="27" value="27"/>
+                        <StringItem index="28" value="28"/>
+                        <StringItem index="29" value="29"/>
+                        <StringItem index="30" value="30"/>
+                        <StringItem index="31" value="31"/>
                       </StringArray>
                     </Property>
                   </Properties>
@@ -3159,39 +3171,43 @@
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GmoisValableB12">
+                <Component class="javax.swing.JComboBox" name="GmoisValableA1">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="12">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
+                      <StringArray count="13">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
                       </StringArray>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GmoisValableA1ActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel99">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GanneeValableB12">
+                <Component class="javax.swing.JComboBox" name="GanneeValableA1">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox13">
+                <Component class="javax.swing.JCheckBox" name="GpermanentA1">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="99" green="99" red="99" type="rgb"/>
@@ -3217,42 +3233,42 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel118" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="GjourObtenuB16" min="-2" max="-2" attributes="0"/>
+                                  <Component id="GjourObtenuA3" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jLabel119" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="GmoisObtenuB16" min="-2" max="-2" attributes="0"/>
+                                  <Component id="GmoisObtenuA3" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jLabel120" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="GanneeObtenuB16" min="-2" pref="77" max="-2" attributes="0"/>
+                                  <Component id="GanneeObtenuA3" min="-2" pref="77" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="Gautre7" alignment="1" min="-2" pref="231" max="-2" attributes="0"/>
+                                      <Component id="GpreA3" alignment="1" min="-2" pref="231" max="-2" attributes="0"/>
                                       <Group type="103" alignment="1" groupAlignment="1" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel122" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="GjourValableB15" min="-2" max="-2" attributes="0"/>
+                                              <Component id="GjourValableA3" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jLabel123" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="GmoisValableB15" min="-2" max="-2" attributes="0"/>
+                                              <Component id="GmoisValableA3" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jLabel124" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="GanneeValableB15" min="-2" pref="77" max="-2" attributes="0"/>
+                                              <Component id="GanneeValableA3" min="-2" pref="77" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jCheckBox16" min="-2" max="-2" attributes="0"/>
+                                              <Component id="GpermanentA3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel121" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="GnumCertificationB15" min="-2" pref="268" max="-2" attributes="0"/>
+                                              <Component id="GnumA3" min="-2" pref="268" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="Gb15" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="GA3" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace min="0" pref="26" max="32767" attributes="0"/>
@@ -3266,32 +3282,32 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="Gautre7" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="Gb15" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GpreA3" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GA3" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="GjourObtenuB16" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GmoisObtenuB16" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GjourObtenuA3" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GmoisObtenuA3" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel120" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GanneeObtenuB16" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GanneeObtenuA3" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel118" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel119" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel121" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GnumCertificationB15" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GnumA3" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel122" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GjourValableB15" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GmoisValableB15" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GjourValableA3" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GmoisValableA3" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel124" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GanneeValableB15" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GanneeValableA3" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel123" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBox16" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GpermanentA3" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -3299,7 +3315,7 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JCheckBox" name="Gb15">
+                <Component class="javax.swing.JCheckBox" name="GA3">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="99" green="99" red="99" type="rgb"/>
@@ -3310,48 +3326,49 @@
                     <Property name="text" type="java.lang.String" value="Autre, pr&#xe9;cisez"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="Gautre7">
+                <Component class="javax.swing.JTextField" name="GpreA3">
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel118">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Obtenu le"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GjourObtenuB16">
+                <Component class="javax.swing.JComboBox" name="GjourObtenuA3">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="31">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
-                        <StringItem index="12" value="13"/>
-                        <StringItem index="13" value="14"/>
-                        <StringItem index="14" value="15"/>
-                        <StringItem index="15" value="16"/>
-                        <StringItem index="16" value="17"/>
-                        <StringItem index="17" value="18"/>
-                        <StringItem index="18" value="19"/>
-                        <StringItem index="19" value="20"/>
-                        <StringItem index="20" value="21"/>
-                        <StringItem index="21" value="22"/>
-                        <StringItem index="22" value="23"/>
-                        <StringItem index="23" value="24"/>
-                        <StringItem index="24" value="25"/>
-                        <StringItem index="25" value="26"/>
-                        <StringItem index="26" value="27"/>
-                        <StringItem index="27" value="28"/>
-                        <StringItem index="28" value="29"/>
-                        <StringItem index="29" value="30"/>
-                        <StringItem index="30" value="31"/>
+                      <StringArray count="32">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
+                        <StringItem index="13" value="13"/>
+                        <StringItem index="14" value="14"/>
+                        <StringItem index="15" value="15"/>
+                        <StringItem index="16" value="16"/>
+                        <StringItem index="17" value="17"/>
+                        <StringItem index="18" value="18"/>
+                        <StringItem index="19" value="19"/>
+                        <StringItem index="20" value="20"/>
+                        <StringItem index="21" value="21"/>
+                        <StringItem index="22" value="22"/>
+                        <StringItem index="23" value="23"/>
+                        <StringItem index="24" value="24"/>
+                        <StringItem index="25" value="25"/>
+                        <StringItem index="26" value="26"/>
+                        <StringItem index="27" value="27"/>
+                        <StringItem index="28" value="28"/>
+                        <StringItem index="29" value="29"/>
+                        <StringItem index="30" value="30"/>
+                        <StringItem index="31" value="31"/>
                       </StringArray>
                     </Property>
                   </Properties>
@@ -3361,32 +3378,36 @@
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GmoisObtenuB16">
+                <Component class="javax.swing.JComboBox" name="GmoisObtenuA3">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="12">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
+                      <StringArray count="13">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
                       </StringArray>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GmoisObtenuA3ActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel120">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GanneeObtenuB16">
+                <Component class="javax.swing.JComboBox" name="GanneeObtenuA3">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
@@ -3398,48 +3419,49 @@
                     <Property name="text" type="java.lang.String" value="Certification n&#xb0;"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="GnumCertificationB15">
+                <Component class="javax.swing.JTextField" name="GnumA3">
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel122">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Valable jusqu&apos;au "/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GjourValableB15">
+                <Component class="javax.swing.JComboBox" name="GjourValableA3">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="31">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
-                        <StringItem index="12" value="13"/>
-                        <StringItem index="13" value="14"/>
-                        <StringItem index="14" value="15"/>
-                        <StringItem index="15" value="16"/>
-                        <StringItem index="16" value="17"/>
-                        <StringItem index="17" value="18"/>
-                        <StringItem index="18" value="19"/>
-                        <StringItem index="19" value="20"/>
-                        <StringItem index="20" value="21"/>
-                        <StringItem index="21" value="22"/>
-                        <StringItem index="22" value="23"/>
-                        <StringItem index="23" value="24"/>
-                        <StringItem index="24" value="25"/>
-                        <StringItem index="25" value="26"/>
-                        <StringItem index="26" value="27"/>
-                        <StringItem index="27" value="28"/>
-                        <StringItem index="28" value="29"/>
-                        <StringItem index="29" value="30"/>
-                        <StringItem index="30" value="31"/>
+                      <StringArray count="32">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
+                        <StringItem index="13" value="13"/>
+                        <StringItem index="14" value="14"/>
+                        <StringItem index="15" value="15"/>
+                        <StringItem index="16" value="16"/>
+                        <StringItem index="17" value="17"/>
+                        <StringItem index="18" value="18"/>
+                        <StringItem index="19" value="19"/>
+                        <StringItem index="20" value="20"/>
+                        <StringItem index="21" value="21"/>
+                        <StringItem index="22" value="22"/>
+                        <StringItem index="23" value="23"/>
+                        <StringItem index="24" value="24"/>
+                        <StringItem index="25" value="25"/>
+                        <StringItem index="26" value="26"/>
+                        <StringItem index="27" value="27"/>
+                        <StringItem index="28" value="28"/>
+                        <StringItem index="29" value="29"/>
+                        <StringItem index="30" value="30"/>
+                        <StringItem index="31" value="31"/>
                       </StringArray>
                     </Property>
                   </Properties>
@@ -3449,39 +3471,43 @@
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GmoisValableB15">
+                <Component class="javax.swing.JComboBox" name="GmoisValableA3">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="12">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
+                      <StringArray count="13">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
                       </StringArray>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GmoisValableA3ActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel124">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GanneeValableB15">
+                <Component class="javax.swing.JComboBox" name="GanneeValableA3">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox16">
+                <Component class="javax.swing.JCheckBox" name="GpermanentA3">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="99" green="99" red="99" type="rgb"/>
@@ -3507,42 +3533,42 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel125" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="GjourObtenuB17" min="-2" max="-2" attributes="0"/>
+                                  <Component id="GjourObtenuA2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jLabel126" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="GmoisObtenuB17" min="-2" max="-2" attributes="0"/>
+                                  <Component id="GmoisObtenuA2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jLabel127" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="GanneeObtenuB17" min="-2" pref="77" max="-2" attributes="0"/>
+                                  <Component id="GanneeObtenuA2" min="-2" pref="77" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="Gautre8" alignment="1" min="-2" pref="231" max="-2" attributes="0"/>
+                                      <Component id="GpreA2" alignment="1" min="-2" pref="231" max="-2" attributes="0"/>
                                       <Group type="103" alignment="1" groupAlignment="1" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel129" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="GjourValableB16" min="-2" max="-2" attributes="0"/>
+                                              <Component id="GjourValableA2" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jLabel130" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="GmoisValableB16" min="-2" max="-2" attributes="0"/>
+                                              <Component id="GmoisValableA2" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jLabel131" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="GanneeValableB16" min="-2" pref="77" max="-2" attributes="0"/>
+                                              <Component id="GanneeValableA2" min="-2" pref="77" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jCheckBox17" min="-2" max="-2" attributes="0"/>
+                                              <Component id="GpermanentA2" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel128" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="GnumCertificationB16" min="-2" pref="268" max="-2" attributes="0"/>
+                                              <Component id="GnumA2" min="-2" pref="268" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="Gb16" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="GA2" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace min="0" pref="26" max="32767" attributes="0"/>
@@ -3556,32 +3582,32 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="Gautre8" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="Gb16" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GpreA2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GA2" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="GjourObtenuB17" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GmoisObtenuB17" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GjourObtenuA2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GmoisObtenuA2" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel127" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GanneeObtenuB17" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GanneeObtenuA2" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel125" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel126" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel128" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GnumCertificationB16" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GnumA2" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel129" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GjourValableB16" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GmoisValableB16" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GjourValableA2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GmoisValableA2" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel131" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="GanneeValableB16" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GanneeValableA2" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel130" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBox17" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GpermanentA2" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -3589,7 +3615,7 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JCheckBox" name="Gb16">
+                <Component class="javax.swing.JCheckBox" name="GA2">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="99" green="99" red="99" type="rgb"/>
@@ -3600,48 +3626,49 @@
                     <Property name="text" type="java.lang.String" value="Autre, pr&#xe9;cisez"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="Gautre8">
+                <Component class="javax.swing.JTextField" name="GpreA2">
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel125">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Obtenu le"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GjourObtenuB17">
+                <Component class="javax.swing.JComboBox" name="GjourObtenuA2">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="31">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
-                        <StringItem index="12" value="13"/>
-                        <StringItem index="13" value="14"/>
-                        <StringItem index="14" value="15"/>
-                        <StringItem index="15" value="16"/>
-                        <StringItem index="16" value="17"/>
-                        <StringItem index="17" value="18"/>
-                        <StringItem index="18" value="19"/>
-                        <StringItem index="19" value="20"/>
-                        <StringItem index="20" value="21"/>
-                        <StringItem index="21" value="22"/>
-                        <StringItem index="22" value="23"/>
-                        <StringItem index="23" value="24"/>
-                        <StringItem index="24" value="25"/>
-                        <StringItem index="25" value="26"/>
-                        <StringItem index="26" value="27"/>
-                        <StringItem index="27" value="28"/>
-                        <StringItem index="28" value="29"/>
-                        <StringItem index="29" value="30"/>
-                        <StringItem index="30" value="31"/>
+                      <StringArray count="32">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
+                        <StringItem index="13" value="13"/>
+                        <StringItem index="14" value="14"/>
+                        <StringItem index="15" value="15"/>
+                        <StringItem index="16" value="16"/>
+                        <StringItem index="17" value="17"/>
+                        <StringItem index="18" value="18"/>
+                        <StringItem index="19" value="19"/>
+                        <StringItem index="20" value="20"/>
+                        <StringItem index="21" value="21"/>
+                        <StringItem index="22" value="22"/>
+                        <StringItem index="23" value="23"/>
+                        <StringItem index="24" value="24"/>
+                        <StringItem index="25" value="25"/>
+                        <StringItem index="26" value="26"/>
+                        <StringItem index="27" value="27"/>
+                        <StringItem index="28" value="28"/>
+                        <StringItem index="29" value="29"/>
+                        <StringItem index="30" value="30"/>
+                        <StringItem index="31" value="31"/>
                       </StringArray>
                     </Property>
                   </Properties>
@@ -3651,32 +3678,36 @@
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GmoisObtenuB17">
+                <Component class="javax.swing.JComboBox" name="GmoisObtenuA2">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="12">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
+                      <StringArray count="13">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
                       </StringArray>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GmoisObtenuA2ActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel127">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GanneeObtenuB17">
+                <Component class="javax.swing.JComboBox" name="GanneeObtenuA2">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
@@ -3688,48 +3719,49 @@
                     <Property name="text" type="java.lang.String" value="Certification n&#xb0;"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="GnumCertificationB16">
+                <Component class="javax.swing.JTextField" name="GnumA2">
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel129">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Valable jusqu&apos;au "/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GjourValableB16">
+                <Component class="javax.swing.JComboBox" name="GjourValableA2">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="31">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
-                        <StringItem index="12" value="13"/>
-                        <StringItem index="13" value="14"/>
-                        <StringItem index="14" value="15"/>
-                        <StringItem index="15" value="16"/>
-                        <StringItem index="16" value="17"/>
-                        <StringItem index="17" value="18"/>
-                        <StringItem index="18" value="19"/>
-                        <StringItem index="19" value="20"/>
-                        <StringItem index="20" value="21"/>
-                        <StringItem index="21" value="22"/>
-                        <StringItem index="22" value="23"/>
-                        <StringItem index="23" value="24"/>
-                        <StringItem index="24" value="25"/>
-                        <StringItem index="25" value="26"/>
-                        <StringItem index="26" value="27"/>
-                        <StringItem index="27" value="28"/>
-                        <StringItem index="28" value="29"/>
-                        <StringItem index="29" value="30"/>
-                        <StringItem index="30" value="31"/>
+                      <StringArray count="32">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
+                        <StringItem index="13" value="13"/>
+                        <StringItem index="14" value="14"/>
+                        <StringItem index="15" value="15"/>
+                        <StringItem index="16" value="16"/>
+                        <StringItem index="17" value="17"/>
+                        <StringItem index="18" value="18"/>
+                        <StringItem index="19" value="19"/>
+                        <StringItem index="20" value="20"/>
+                        <StringItem index="21" value="21"/>
+                        <StringItem index="22" value="22"/>
+                        <StringItem index="23" value="23"/>
+                        <StringItem index="24" value="24"/>
+                        <StringItem index="25" value="25"/>
+                        <StringItem index="26" value="26"/>
+                        <StringItem index="27" value="27"/>
+                        <StringItem index="28" value="28"/>
+                        <StringItem index="29" value="29"/>
+                        <StringItem index="30" value="30"/>
+                        <StringItem index="31" value="31"/>
                       </StringArray>
                     </Property>
                   </Properties>
@@ -3739,39 +3771,43 @@
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GmoisValableB16">
+                <Component class="javax.swing.JComboBox" name="GmoisValableA2">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="12">
-                        <StringItem index="0" value="01"/>
-                        <StringItem index="1" value="02"/>
-                        <StringItem index="2" value="03"/>
-                        <StringItem index="3" value="04"/>
-                        <StringItem index="4" value="05"/>
-                        <StringItem index="5" value="06"/>
-                        <StringItem index="6" value="07"/>
-                        <StringItem index="7" value="08"/>
-                        <StringItem index="8" value="09"/>
-                        <StringItem index="9" value="10"/>
-                        <StringItem index="10" value="11"/>
-                        <StringItem index="11" value="12"/>
+                      <StringArray count="13">
+                        <StringItem index="0" value="-"/>
+                        <StringItem index="1" value="01"/>
+                        <StringItem index="2" value="02"/>
+                        <StringItem index="3" value="03"/>
+                        <StringItem index="4" value="04"/>
+                        <StringItem index="5" value="05"/>
+                        <StringItem index="6" value="06"/>
+                        <StringItem index="7" value="07"/>
+                        <StringItem index="8" value="08"/>
+                        <StringItem index="9" value="09"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
                       </StringArray>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GmoisValableA2ActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel131">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="/"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="GanneeValableB16">
+                <Component class="javax.swing.JComboBox" name="GanneeValableA2">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox17">
+                <Component class="javax.swing.JCheckBox" name="GpermanentA2">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="99" green="99" red="99" type="rgb"/>

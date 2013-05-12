@@ -25,7 +25,7 @@ public class Apercu_Photocopie extends javax.swing.JDialog {
     /**
      * Creates new form Apercu_Photocopie
      */
-    File photocopie = null;
+    byte[] photocopie = null;
     int hauteur = 700;
     int largeur = 500;
     public Apercu_Photocopie(java.awt.Frame parent, boolean modal) {
@@ -34,7 +34,7 @@ public class Apercu_Photocopie extends javax.swing.JDialog {
         this.photocopie = null;
     }
 
-    public Apercu_Photocopie(java.awt.Frame parent, boolean modal, File photocopie) {
+    public Apercu_Photocopie(java.awt.Frame parent, boolean modal, byte[] photocopie) {
         super(parent, modal);
         initComponents();
         this.photocopie = photocopie;
@@ -143,19 +143,9 @@ public class Apercu_Photocopie extends javax.swing.JDialog {
         if(photocopie == null){
             return;
         }
-        int length = (int) photocopie.length();
-        byte[] data = new byte[length];
-        try {
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(photocopie));
-            bis.read(data, 0, length);
-            ImageIcon icon = new ImageIcon(data);
-            icon = resizeIcon(icon);
-            Glabel.setIcon(icon);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Apercu_Photocopie.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Apercu_Photocopie.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ImageIcon icon = new ImageIcon(photocopie);
+        icon = resizeIcon(icon);
+        Glabel.setIcon(icon);
     }
 
     private ImageIcon resizeIcon(ImageIcon icon) {

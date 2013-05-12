@@ -12,7 +12,11 @@ import GUI.Panels.Main;
 import Network.NetworkClient;
 import PacketCom.PacketCom;
 import States.States;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,11 +40,11 @@ public class M_Formations extends javax.swing.JPanel {
     String matricule = null;
     boolean edited = false;
 
-    File photocopieTMS = null;
-    File photocopieI = null;
-    File photocopieAMU = null;
-    File photocopieSISU = null;
-    File photocopieM = null;
+    byte[] photocopieTMS = null;
+    byte[] photocopieI = null;
+    byte[] photocopieAMU = null;
+    byte[] photocopieSISU = null;
+    byte[] photocopieM = null;
 
     public M_Formations(Main parent, NetworkClient socket) {
         initComponents();
@@ -242,59 +246,59 @@ public class M_Formations extends javax.swing.JPanel {
         jButton14 = new javax.swing.JButton();
         jPanel21 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
-        Gb12 = new javax.swing.JCheckBox();
-        Gautre4 = new javax.swing.JTextField();
+        GA1 = new javax.swing.JCheckBox();
+        GpreA1 = new javax.swing.JTextField();
         jLabel93 = new javax.swing.JLabel();
-        GjourObtenuB13 = new javax.swing.JComboBox();
+        GjourObtenuA1 = new javax.swing.JComboBox();
         jLabel94 = new javax.swing.JLabel();
-        GmoisObtenuB13 = new javax.swing.JComboBox();
+        GmoisObtenuA1 = new javax.swing.JComboBox();
         jLabel95 = new javax.swing.JLabel();
-        GanneeObtenuB13 = new javax.swing.JComboBox();
+        GanneeObtenuA1 = new javax.swing.JComboBox();
         jLabel96 = new javax.swing.JLabel();
-        GnumCertificationB12 = new javax.swing.JTextField();
+        GnumA1 = new javax.swing.JTextField();
         jLabel97 = new javax.swing.JLabel();
-        GjourValableB12 = new javax.swing.JComboBox();
+        GjourValableA1 = new javax.swing.JComboBox();
         jLabel98 = new javax.swing.JLabel();
-        GmoisValableB12 = new javax.swing.JComboBox();
+        GmoisValableA1 = new javax.swing.JComboBox();
         jLabel99 = new javax.swing.JLabel();
-        GanneeValableB12 = new javax.swing.JComboBox();
-        jCheckBox13 = new javax.swing.JCheckBox();
+        GanneeValableA1 = new javax.swing.JComboBox();
+        GpermanentA1 = new javax.swing.JCheckBox();
         jPanel22 = new javax.swing.JPanel();
-        Gb15 = new javax.swing.JCheckBox();
-        Gautre7 = new javax.swing.JTextField();
+        GA3 = new javax.swing.JCheckBox();
+        GpreA3 = new javax.swing.JTextField();
         jLabel118 = new javax.swing.JLabel();
-        GjourObtenuB16 = new javax.swing.JComboBox();
+        GjourObtenuA3 = new javax.swing.JComboBox();
         jLabel119 = new javax.swing.JLabel();
-        GmoisObtenuB16 = new javax.swing.JComboBox();
+        GmoisObtenuA3 = new javax.swing.JComboBox();
         jLabel120 = new javax.swing.JLabel();
-        GanneeObtenuB16 = new javax.swing.JComboBox();
+        GanneeObtenuA3 = new javax.swing.JComboBox();
         jLabel121 = new javax.swing.JLabel();
-        GnumCertificationB15 = new javax.swing.JTextField();
+        GnumA3 = new javax.swing.JTextField();
         jLabel122 = new javax.swing.JLabel();
-        GjourValableB15 = new javax.swing.JComboBox();
+        GjourValableA3 = new javax.swing.JComboBox();
         jLabel123 = new javax.swing.JLabel();
-        GmoisValableB15 = new javax.swing.JComboBox();
+        GmoisValableA3 = new javax.swing.JComboBox();
         jLabel124 = new javax.swing.JLabel();
-        GanneeValableB15 = new javax.swing.JComboBox();
-        jCheckBox16 = new javax.swing.JCheckBox();
+        GanneeValableA3 = new javax.swing.JComboBox();
+        GpermanentA3 = new javax.swing.JCheckBox();
         jPanel23 = new javax.swing.JPanel();
-        Gb16 = new javax.swing.JCheckBox();
-        Gautre8 = new javax.swing.JTextField();
+        GA2 = new javax.swing.JCheckBox();
+        GpreA2 = new javax.swing.JTextField();
         jLabel125 = new javax.swing.JLabel();
-        GjourObtenuB17 = new javax.swing.JComboBox();
+        GjourObtenuA2 = new javax.swing.JComboBox();
         jLabel126 = new javax.swing.JLabel();
-        GmoisObtenuB17 = new javax.swing.JComboBox();
+        GmoisObtenuA2 = new javax.swing.JComboBox();
         jLabel127 = new javax.swing.JLabel();
-        GanneeObtenuB17 = new javax.swing.JComboBox();
+        GanneeObtenuA2 = new javax.swing.JComboBox();
         jLabel128 = new javax.swing.JLabel();
-        GnumCertificationB16 = new javax.swing.JTextField();
+        GnumA2 = new javax.swing.JTextField();
         jLabel129 = new javax.swing.JLabel();
-        GjourValableB16 = new javax.swing.JComboBox();
+        GjourValableA2 = new javax.swing.JComboBox();
         jLabel130 = new javax.swing.JLabel();
-        GmoisValableB16 = new javax.swing.JComboBox();
+        GmoisValableA2 = new javax.swing.JComboBox();
         jLabel131 = new javax.swing.JLabel();
-        GanneeValableB16 = new javax.swing.JComboBox();
-        jCheckBox17 = new javax.swing.JCheckBox();
+        GanneeValableA2 = new javax.swing.JComboBox();
+        GpermanentA2 = new javax.swing.JCheckBox();
 
         jPanel2.setBackground(new java.awt.Color(255, 0, 0));
 
@@ -445,6 +449,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel5.setText("Obtenu le");
 
         GjourObtenuBEPS.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuBEPS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourObtenuBEPSActionPerformed(evt);
+            }
+        });
 
         GmoisObtenuBEPS.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
         GmoisObtenuBEPS.addActionListener(new java.awt.event.ActionListener() {
@@ -462,6 +471,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel7.setText("Valable jusqu'au");
 
         GjourValableBEPS.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableBEPS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourValableBEPSActionPerformed(evt);
+            }
+        });
 
         jLabel20.setText("/");
 
@@ -1580,17 +1594,22 @@ public class M_Formations extends javax.swing.JPanel {
 
         jPanel9.setBackground(new java.awt.Color(153, 153, 153));
 
-        Gb12.setBackground(new java.awt.Color(153, 153, 153));
-        Gb12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        Gb12.setText("Autre, précisez");
+        GA1.setBackground(new java.awt.Color(153, 153, 153));
+        GA1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        GA1.setText("Autre, précisez");
 
         jLabel93.setText("Obtenu le");
 
-        GjourObtenuB13.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuA1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
 
         jLabel94.setText("/");
 
-        GmoisObtenuB13.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisObtenuA1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisObtenuA1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GmoisObtenuA1ActionPerformed(evt);
+            }
+        });
 
         jLabel95.setText("/");
 
@@ -1598,16 +1617,21 @@ public class M_Formations extends javax.swing.JPanel {
 
         jLabel97.setText("Valable jusqu'au ");
 
-        GjourValableB12.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableA1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
 
         jLabel98.setText("/");
 
-        GmoisValableB12.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisValableA1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisValableA1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GmoisValableA1ActionPerformed(evt);
+            }
+        });
 
         jLabel99.setText("/");
 
-        jCheckBox13.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox13.setText("Permanent");
+        GpermanentA1.setBackground(new java.awt.Color(153, 153, 153));
+        GpermanentA1.setText("Permanent");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -1619,39 +1643,39 @@ public class M_Formations extends javax.swing.JPanel {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel93)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(GjourObtenuB13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(GjourObtenuA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel94)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(GmoisObtenuB13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(GmoisObtenuA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel95)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(GanneeObtenuB13, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(GanneeObtenuA1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Gautre4, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(GpreA1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
                                     .addComponent(jLabel97)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(GjourValableB12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(GjourValableA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel98)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(GmoisValableB12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(GmoisValableA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel99)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(GanneeValableB12, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(GanneeValableA1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jCheckBox13))
+                                    .addComponent(GpermanentA1))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
                                     .addComponent(jLabel96)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(GnumCertificationB12, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(Gb12, javax.swing.GroupLayout.Alignment.LEADING)))
+                                    .addComponent(GnumA1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(GA1, javax.swing.GroupLayout.Alignment.LEADING)))
                         .addGap(0, 26, Short.MAX_VALUE))))
         );
         jPanel9Layout.setVerticalGroup(
@@ -1659,45 +1683,50 @@ public class M_Formations extends javax.swing.JPanel {
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Gautre4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Gb12))
+                    .addComponent(GpreA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GA1))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(GjourObtenuB13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(GmoisObtenuB13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GjourObtenuA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GmoisObtenuA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel95)
-                    .addComponent(GanneeObtenuB13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GanneeObtenuA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel93)
                     .addComponent(jLabel94))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel96)
-                    .addComponent(GnumCertificationB12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(GnumA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel97)
-                    .addComponent(GjourValableB12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(GmoisValableB12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GjourValableA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GmoisValableA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel99)
-                    .addComponent(GanneeValableB12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GanneeValableA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel98)
-                    .addComponent(jCheckBox13))
+                    .addComponent(GpermanentA1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel22.setBackground(new java.awt.Color(153, 153, 153));
 
-        Gb15.setBackground(new java.awt.Color(153, 153, 153));
-        Gb15.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        Gb15.setText("Autre, précisez");
+        GA3.setBackground(new java.awt.Color(153, 153, 153));
+        GA3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        GA3.setText("Autre, précisez");
 
         jLabel118.setText("Obtenu le");
 
-        GjourObtenuB16.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuA3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
 
         jLabel119.setText("/");
 
-        GmoisObtenuB16.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisObtenuA3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisObtenuA3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GmoisObtenuA3ActionPerformed(evt);
+            }
+        });
 
         jLabel120.setText("/");
 
@@ -1705,16 +1734,21 @@ public class M_Formations extends javax.swing.JPanel {
 
         jLabel122.setText("Valable jusqu'au ");
 
-        GjourValableB15.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableA3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
 
         jLabel123.setText("/");
 
-        GmoisValableB15.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisValableA3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisValableA3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GmoisValableA3ActionPerformed(evt);
+            }
+        });
 
         jLabel124.setText("/");
 
-        jCheckBox16.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox16.setText("Permanent");
+        GpermanentA3.setBackground(new java.awt.Color(153, 153, 153));
+        GpermanentA3.setText("Permanent");
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -1726,39 +1760,39 @@ public class M_Formations extends javax.swing.JPanel {
                     .addGroup(jPanel22Layout.createSequentialGroup()
                         .addComponent(jLabel118)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(GjourObtenuB16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(GjourObtenuA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel119)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(GmoisObtenuB16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(GmoisObtenuA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel120)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(GanneeObtenuB16, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(GanneeObtenuA3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel22Layout.createSequentialGroup()
                         .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Gautre7, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(GpreA3, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel22Layout.createSequentialGroup()
                                     .addComponent(jLabel122)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(GjourValableB15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(GjourValableA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel123)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(GmoisValableB15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(GmoisValableA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel124)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(GanneeValableB15, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(GanneeValableA3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jCheckBox16))
+                                    .addComponent(GpermanentA3))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel22Layout.createSequentialGroup()
                                     .addComponent(jLabel121)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(GnumCertificationB15, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(Gb15, javax.swing.GroupLayout.Alignment.LEADING)))
+                                    .addComponent(GnumA3, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(GA3, javax.swing.GroupLayout.Alignment.LEADING)))
                         .addGap(0, 26, Short.MAX_VALUE))))
         );
         jPanel22Layout.setVerticalGroup(
@@ -1766,45 +1800,50 @@ public class M_Formations extends javax.swing.JPanel {
             .addGroup(jPanel22Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Gautre7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Gb15))
+                    .addComponent(GpreA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GA3))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(GjourObtenuB16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(GmoisObtenuB16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GjourObtenuA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GmoisObtenuA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel120)
-                    .addComponent(GanneeObtenuB16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GanneeObtenuA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel118)
                     .addComponent(jLabel119))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel121)
-                    .addComponent(GnumCertificationB15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(GnumA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel122)
-                    .addComponent(GjourValableB15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(GmoisValableB15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GjourValableA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GmoisValableA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel124)
-                    .addComponent(GanneeValableB15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GanneeValableA3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel123)
-                    .addComponent(jCheckBox16))
+                    .addComponent(GpermanentA3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel23.setBackground(new java.awt.Color(153, 153, 153));
 
-        Gb16.setBackground(new java.awt.Color(153, 153, 153));
-        Gb16.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        Gb16.setText("Autre, précisez");
+        GA2.setBackground(new java.awt.Color(153, 153, 153));
+        GA2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        GA2.setText("Autre, précisez");
 
         jLabel125.setText("Obtenu le");
 
-        GjourObtenuB17.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuA2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
 
         jLabel126.setText("/");
 
-        GmoisObtenuB17.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisObtenuA2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisObtenuA2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GmoisObtenuA2ActionPerformed(evt);
+            }
+        });
 
         jLabel127.setText("/");
 
@@ -1812,16 +1851,21 @@ public class M_Formations extends javax.swing.JPanel {
 
         jLabel129.setText("Valable jusqu'au ");
 
-        GjourValableB16.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableA2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
 
         jLabel130.setText("/");
 
-        GmoisValableB16.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisValableA2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        GmoisValableA2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GmoisValableA2ActionPerformed(evt);
+            }
+        });
 
         jLabel131.setText("/");
 
-        jCheckBox17.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox17.setText("Permanent");
+        GpermanentA2.setBackground(new java.awt.Color(153, 153, 153));
+        GpermanentA2.setText("Permanent");
 
         javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
@@ -1833,39 +1877,39 @@ public class M_Formations extends javax.swing.JPanel {
                     .addGroup(jPanel23Layout.createSequentialGroup()
                         .addComponent(jLabel125)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(GjourObtenuB17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(GjourObtenuA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel126)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(GmoisObtenuB17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(GmoisObtenuA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel127)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(GanneeObtenuB17, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(GanneeObtenuA2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel23Layout.createSequentialGroup()
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Gautre8, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(GpreA2, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel23Layout.createSequentialGroup()
                                     .addComponent(jLabel129)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(GjourValableB16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(GjourValableA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel130)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(GmoisValableB16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(GmoisValableA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel131)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(GanneeValableB16, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(GanneeValableA2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jCheckBox17))
+                                    .addComponent(GpermanentA2))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel23Layout.createSequentialGroup()
                                     .addComponent(jLabel128)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(GnumCertificationB16, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(Gb16, javax.swing.GroupLayout.Alignment.LEADING)))
+                                    .addComponent(GnumA2, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(GA2, javax.swing.GroupLayout.Alignment.LEADING)))
                         .addGap(0, 26, Short.MAX_VALUE))))
         );
         jPanel23Layout.setVerticalGroup(
@@ -1873,29 +1917,29 @@ public class M_Formations extends javax.swing.JPanel {
             .addGroup(jPanel23Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Gautre8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Gb16))
+                    .addComponent(GpreA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GA2))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(GjourObtenuB17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(GmoisObtenuB17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GjourObtenuA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GmoisObtenuA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel127)
-                    .addComponent(GanneeObtenuB17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GanneeObtenuA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel125)
                     .addComponent(jLabel126))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel128)
-                    .addComponent(GnumCertificationB16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(GnumA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel129)
-                    .addComponent(GjourValableB16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(GmoisValableB16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GjourValableA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GmoisValableA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel131)
-                    .addComponent(GanneeValableB16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GanneeValableA2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel130)
-                    .addComponent(jCheckBox17))
+                    .addComponent(GpermanentA2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1959,10 +2003,12 @@ public class M_Formations extends javax.swing.JPanel {
         JFileChooser fileChooser = new JFileChooser();
         int retour = fileChooser.showOpenDialog(this);
         if(retour == JFileChooser.APPROVE_OPTION){
-            photocopieTMS = fileChooser.getSelectedFile();
-            if(!checkFormat(photocopieTMS)){
+            File fichier = fileChooser.getSelectedFile();
+            if(!checkFormat(fichier)){
                 parent.afficherMessage("Format autorisé: jpg, jpeg, png, bmp");
-                photocopieI = null;
+                photocopieTMS = null;
+            }else{
+                photocopieTMS = FileToByte(fichier);
             }
         }
     }//GEN-LAST:event_BparcourirTMSActionPerformed
@@ -1971,10 +2017,12 @@ public class M_Formations extends javax.swing.JPanel {
         JFileChooser fileChooser = new JFileChooser();
         int retour = fileChooser.showOpenDialog(this);
         if(retour == JFileChooser.APPROVE_OPTION){
-            photocopieI = fileChooser.getSelectedFile();
-            if(!checkFormat(photocopieI)){
+            File fichier = fileChooser.getSelectedFile();
+            if(!checkFormat(fichier)){
                 parent.afficherMessage("Format autorisé: jpg, jpeg, png, bmp");
                 photocopieI = null;
+            }else{
+                photocopieI = FileToByte(fichier);
             }
         }
     }//GEN-LAST:event_BparcourirB5ActionPerformed
@@ -1983,10 +2031,12 @@ public class M_Formations extends javax.swing.JPanel {
         JFileChooser fileChooser = new JFileChooser();
         int retour = fileChooser.showOpenDialog(this);
         if(retour == JFileChooser.APPROVE_OPTION){
-            photocopieAMU = fileChooser.getSelectedFile();
-            if(!checkFormat(photocopieAMU)){
+            File fichier = fileChooser.getSelectedFile();
+            if(!checkFormat(fichier)){
                 parent.afficherMessage("Format autorisé: jpg, jpeg, png, bmp");
                 photocopieAMU = null;
+            }else{
+                photocopieAMU = FileToByte(fichier);
             }
         }
     }//GEN-LAST:event_BparcourirB3ActionPerformed
@@ -1995,10 +2045,12 @@ public class M_Formations extends javax.swing.JPanel {
         JFileChooser fileChooser = new JFileChooser();
         int retour = fileChooser.showOpenDialog(this);
         if(retour == JFileChooser.APPROVE_OPTION){
-            photocopieSISU = fileChooser.getSelectedFile();
-            if(!checkFormat(photocopieSISU)){
+            File fichier = fileChooser.getSelectedFile();
+            if(!checkFormat(fichier)){
                 parent.afficherMessage("Format autorisé: jpg, jpeg, png, bmp");
                 photocopieSISU = null;
+            }else{
+                photocopieSISU = FileToByte(fichier);
             }
         }
     }//GEN-LAST:event_BparcourirB6ActionPerformed
@@ -2007,10 +2059,12 @@ public class M_Formations extends javax.swing.JPanel {
         JFileChooser fileChooser = new JFileChooser();
         int retour = fileChooser.showOpenDialog(this);
         if(retour == JFileChooser.APPROVE_OPTION){
-            photocopieM = fileChooser.getSelectedFile();
-            if(!checkFormat(photocopieM)){
+            File fichier = fileChooser.getSelectedFile();
+            if(!checkFormat(fichier)){
                 parent.afficherMessage("Format autorisé: jpg, jpeg, png, bmp");
                 photocopieM = null;
+            }else{
+                photocopieM = FileToByte(fichier);
             }
         }
     }//GEN-LAST:event_BparcourirB7ActionPerformed
@@ -2033,7 +2087,7 @@ public class M_Formations extends javax.swing.JPanel {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         if(checkChamps()){
             creerClasse();
-            parent.changeState(Main.NOUVEAU_VOLONTAIRE_PAGE_5);
+            parent.changeState(Main.NOUVEAU_VOLONTAIRE_PAGE_9);
         }
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -2241,6 +2295,80 @@ public class M_Formations extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_GmoisValableMActionPerformed
 
+    private void GmoisObtenuA1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GmoisObtenuA1ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(source.getSelectedItem().toString().equals("-")){
+            GjourObtenuA1.setSelectedIndex(0);
+            GjourObtenuA1.setEnabled(false);
+        }else{
+            GjourObtenuA1.setEnabled(true);
+        }
+    }//GEN-LAST:event_GmoisObtenuA1ActionPerformed
+
+    private void GmoisValableA1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GmoisValableA1ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(source.getSelectedItem().toString().equals("-")){
+            GjourValableA1.setSelectedIndex(0);
+            GjourValableA1.setEnabled(false);
+        }else{
+            GjourValableA1.setEnabled(true);
+        }
+    }//GEN-LAST:event_GmoisValableA1ActionPerformed
+
+    private void GmoisObtenuA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GmoisObtenuA2ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(source.getSelectedItem().toString().equals("-")){
+            GjourObtenuA2.setSelectedIndex(0);
+            GjourObtenuA2.setEnabled(false);
+        }else{
+            GjourObtenuA2.setEnabled(true);
+        }
+    }//GEN-LAST:event_GmoisObtenuA2ActionPerformed
+
+    private void GmoisValableA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GmoisValableA2ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(source.getSelectedItem().toString().equals("-")){
+            GjourValableA2.setSelectedIndex(0);
+            GjourValableA2.setEnabled(false);
+        }else{
+            GjourValableA2.setEnabled(true);
+        }
+    }//GEN-LAST:event_GmoisValableA2ActionPerformed
+
+    private void GmoisObtenuA3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GmoisObtenuA3ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(source.getSelectedItem().toString().equals("-")){
+            GjourObtenuA3.setSelectedIndex(0);
+            GjourObtenuA3.setEnabled(false);
+        }else{
+            GjourObtenuA3.setEnabled(true);
+        }
+    }//GEN-LAST:event_GmoisObtenuA3ActionPerformed
+
+    private void GmoisValableA3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GmoisValableA3ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(source.getSelectedItem().toString().equals("-")){
+            GjourValableA3.setSelectedIndex(0);
+            GjourValableA3.setEnabled(false);
+        }else{
+            GjourValableA3.setEnabled(true);
+        }
+    }//GEN-LAST:event_GmoisValableA3ActionPerformed
+
+    private void GjourObtenuBEPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourObtenuBEPSActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-")){
+            GmoisObtenuBEPS.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourObtenuBEPSActionPerformed
+
+    private void GjourValableBEPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourValableBEPSActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-")){
+            GmoisValableBEPS.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourValableBEPSActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Baccueil1;
     private javax.swing.JButton BparcourirB3;
@@ -2248,6 +2376,9 @@ public class M_Formations extends javax.swing.JPanel {
     private javax.swing.JButton BparcourirB6;
     private javax.swing.JButton BparcourirB7;
     private javax.swing.JButton BparcourirTMS;
+    private javax.swing.JCheckBox GA1;
+    private javax.swing.JCheckBox GA2;
+    private javax.swing.JCheckBox GA3;
     private javax.swing.JCheckBox GAMU;
     private javax.swing.JCheckBox GBDS;
     private javax.swing.JCheckBox GBEPS;
@@ -2256,48 +2387,42 @@ public class M_Formations extends javax.swing.JPanel {
     private javax.swing.JCheckBox GSISU;
     private javax.swing.JCheckBox GTMS;
     private javax.swing.JComboBox GanneeExamenBDS;
+    private javax.swing.JComboBox GanneeObtenuA1;
+    private javax.swing.JComboBox GanneeObtenuA2;
+    private javax.swing.JComboBox GanneeObtenuA3;
     private javax.swing.JComboBox GanneeObtenuAMU;
-    private javax.swing.JComboBox GanneeObtenuB13;
-    private javax.swing.JComboBox GanneeObtenuB16;
-    private javax.swing.JComboBox GanneeObtenuB17;
     private javax.swing.JComboBox GanneeObtenuBDS;
     private javax.swing.JComboBox GanneeObtenuBEPS;
     private javax.swing.JComboBox GanneeObtenuI;
     private javax.swing.JComboBox GanneeObtenuM;
     private javax.swing.JComboBox GanneeObtenuSISU;
     private javax.swing.JComboBox GanneeObtenuTMS;
+    private javax.swing.JComboBox GanneeValableA1;
+    private javax.swing.JComboBox GanneeValableA2;
+    private javax.swing.JComboBox GanneeValableA3;
     private javax.swing.JComboBox GanneeValableAMU;
-    private javax.swing.JComboBox GanneeValableB12;
-    private javax.swing.JComboBox GanneeValableB15;
-    private javax.swing.JComboBox GanneeValableB16;
     private javax.swing.JComboBox GanneeValableBDS;
     private javax.swing.JComboBox GanneeValableBEPS;
     private javax.swing.JComboBox GanneeValableI;
     private javax.swing.JComboBox GanneeValableM;
     private javax.swing.JComboBox GanneeValableSISU;
     private javax.swing.JComboBox GanneeValableTMS;
-    private javax.swing.JTextField Gautre4;
-    private javax.swing.JTextField Gautre7;
-    private javax.swing.JTextField Gautre8;
-    private javax.swing.JCheckBox Gb12;
-    private javax.swing.JCheckBox Gb15;
-    private javax.swing.JCheckBox Gb16;
     private javax.swing.JTextField GbadgeNumAMU;
     private javax.swing.JComboBox GjourExamenBDS;
+    private javax.swing.JComboBox GjourObtenuA1;
+    private javax.swing.JComboBox GjourObtenuA2;
+    private javax.swing.JComboBox GjourObtenuA3;
     private javax.swing.JComboBox GjourObtenuAMU;
-    private javax.swing.JComboBox GjourObtenuB13;
-    private javax.swing.JComboBox GjourObtenuB16;
-    private javax.swing.JComboBox GjourObtenuB17;
     private javax.swing.JComboBox GjourObtenuBDS;
     private javax.swing.JComboBox GjourObtenuBEPS;
     private javax.swing.JComboBox GjourObtenuI;
     private javax.swing.JComboBox GjourObtenuM;
     private javax.swing.JComboBox GjourObtenuSISU;
     private javax.swing.JComboBox GjourObtenuTMS;
+    private javax.swing.JComboBox GjourValableA1;
+    private javax.swing.JComboBox GjourValableA2;
+    private javax.swing.JComboBox GjourValableA3;
     private javax.swing.JComboBox GjourValableAMU;
-    private javax.swing.JComboBox GjourValableB12;
-    private javax.swing.JComboBox GjourValableB15;
-    private javax.swing.JComboBox GjourValableB16;
     private javax.swing.JComboBox GjourValableBDS;
     private javax.swing.JComboBox GjourValableBEPS;
     private javax.swing.JComboBox GjourValableI;
@@ -2306,35 +2431,38 @@ public class M_Formations extends javax.swing.JPanel {
     private javax.swing.JComboBox GjourValableTMS;
     private javax.swing.JTextField GlieuBDS;
     private javax.swing.JComboBox GmoisExamenBDS;
+    private javax.swing.JComboBox GmoisObtenuA1;
+    private javax.swing.JComboBox GmoisObtenuA2;
+    private javax.swing.JComboBox GmoisObtenuA3;
     private javax.swing.JComboBox GmoisObtenuAMU;
-    private javax.swing.JComboBox GmoisObtenuB13;
-    private javax.swing.JComboBox GmoisObtenuB16;
-    private javax.swing.JComboBox GmoisObtenuB17;
     private javax.swing.JComboBox GmoisObtenuBDS;
     private javax.swing.JComboBox GmoisObtenuBEPS;
     private javax.swing.JComboBox GmoisObtenuI;
     private javax.swing.JComboBox GmoisObtenuM;
     private javax.swing.JComboBox GmoisObtenuSISU;
     private javax.swing.JComboBox GmoisObtenuTMS;
+    private javax.swing.JComboBox GmoisValableA1;
+    private javax.swing.JComboBox GmoisValableA2;
+    private javax.swing.JComboBox GmoisValableA3;
     private javax.swing.JComboBox GmoisValableAMU;
-    private javax.swing.JComboBox GmoisValableB12;
-    private javax.swing.JComboBox GmoisValableB15;
-    private javax.swing.JComboBox GmoisValableB16;
     private javax.swing.JComboBox GmoisValableBDS;
     private javax.swing.JComboBox GmoisValableBEPS;
     private javax.swing.JComboBox GmoisValableI;
     private javax.swing.JComboBox GmoisValableM;
     private javax.swing.JComboBox GmoisValableSISU;
     private javax.swing.JComboBox GmoisValableTMS;
+    private javax.swing.JTextField GnumA1;
+    private javax.swing.JTextField GnumA2;
+    private javax.swing.JTextField GnumA3;
     private javax.swing.JTextField GnumBadgeSISU;
-    private javax.swing.JTextField GnumCertificationB12;
-    private javax.swing.JTextField GnumCertificationB15;
-    private javax.swing.JTextField GnumCertificationB16;
     private javax.swing.JTextField GnumInamiM;
     private javax.swing.JTextField GnumSantePubliqueI;
     private javax.swing.JTextField GnumServiceAMU;
     private javax.swing.JTextField GnumeroBEPS;
     private javax.swing.JTextField GnumeroTMS;
+    private javax.swing.JCheckBox GpermanentA1;
+    private javax.swing.JCheckBox GpermanentA2;
+    private javax.swing.JCheckBox GpermanentA3;
     private javax.swing.JCheckBox GpermanentAMU;
     private javax.swing.JCheckBox GpermanentBDS;
     private javax.swing.JCheckBox GpermanentBEPS;
@@ -2342,6 +2470,9 @@ public class M_Formations extends javax.swing.JPanel {
     private javax.swing.JCheckBox GpermanentM;
     private javax.swing.JCheckBox GpermanentSISU;
     private javax.swing.JCheckBox GpermanentTMS;
+    private javax.swing.JTextField GpreA1;
+    private javax.swing.JTextField GpreA2;
+    private javax.swing.JTextField GpreA3;
     private javax.swing.JLabel Gtitre;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
@@ -2357,9 +2488,6 @@ public class M_Formations extends javax.swing.JPanel {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JCheckBox jCheckBox13;
-    private javax.swing.JCheckBox jCheckBox16;
-    private javax.swing.JCheckBox jCheckBox17;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel114;
@@ -2487,32 +2615,64 @@ public class M_Formations extends javax.swing.JPanel {
             GanneeValableSISU.addItem(i);
             GanneeObtenuM.addItem(i);
             GanneeValableM.addItem(i);
+            GanneeObtenuA1.addItem(i);
+            GanneeValableA1.addItem(i);
+            GanneeObtenuA2.addItem(i);
+            GanneeValableA2.addItem(i);
+            GanneeObtenuA2.addItem(i);
+            GanneeValableA2.addItem(i);
+            GanneeObtenuA3.addItem(i);
+            GanneeValableA3.addItem(i);
         }
     }
 
     private void completerChampFormation() {
         Formations formations = volontaire.getFormations();
+        boolean a1 = false;
+        boolean a2 = false;
+        boolean a3 = false;
+        boolean found = false;
         for(Formation formation : formations.getListeFormation()){
+            found = false;
             if(GBEPS.getText().equals(formation.getNom())){
                 completerChampBEPS(formation);
+                found = true;
             }
             if(GBDS.getText().equals(formation.getNom())){
                 completerChampsBDS(formation);
+                found = true;
             }
             if(GTMS.getText().equals(formation.getNom())){
                 completerChampsTMS(formation);
+                found = true;
             }
             if(GI.getText().equals(formation.getNom())){
                 completerChampsI(formation);
+                found = true;
             }
             if(GAMU.getText().equals(formation.getNom())){
                 completerChampsAMU(formation);
+                found = true;
             }
             if(GSISU.getText().equals(formation.getNom())){
                 completerChampsSISU(formation);
+                found = true;
             }
             if(GM.getText().equals(formation.getNom())){
                 completerChampsM(formation);
+                found = true;
+            }
+            if(!found){
+                if(!a1){
+                    completerChampsA1(formation);
+                    a1 = true;
+                }else if(!a2){
+                    completerChampsA2(formation);
+                    a2 = true;
+                }else if(!a3){
+                    completerChampsA3(formation);
+                    a3 = true;
+                }
             }
         }
     }
@@ -2543,6 +2703,15 @@ public class M_Formations extends javax.swing.JPanel {
         }
         if(GM.isSelected()){
             addFormationM(formations);
+        }
+        if(GA1.isSelected()){
+            addFormationA1(formations);
+        }
+        if(GA2.isSelected()){
+            addFormationA2(formations);
+        }
+        if(GA3.isSelected()){
+            addFormationA3(formations);
         }
         if(volontaire == null){
             volontaire = new Volontaire();
@@ -2798,7 +2967,7 @@ public class M_Formations extends javax.swing.JPanel {
         formation.setPermanent(permanent);
         formation.setNom(nom);
         formation.setNumero(numero);
-        formation.setPhotocopie(photocopieTMS);
+        formation.setBlobPhotocopie(photocopieTMS);
         formations.addFormation(formation);
     }
 
@@ -2844,7 +3013,7 @@ public class M_Formations extends javax.swing.JPanel {
         formation.setPermanent(permanent);
         formation.setNom(nom);
         formation.setNumero(numeroSante);
-        formation.setPhotocopie(photocopieI);
+        formation.setBlobPhotocopie(photocopieI);
         formations.addFormation(formation);
     }
 
@@ -2893,7 +3062,7 @@ public class M_Formations extends javax.swing.JPanel {
         formation.setNom(nom);
         formation.setNumero(numero);
         formation.setNumeroService112(numero112);
-        formation.setPhotocopie(photocopieAMU);
+        formation.setBlobPhotocopie(photocopieAMU);
         formations.addFormation(formation);
     }
 
@@ -2940,7 +3109,7 @@ public class M_Formations extends javax.swing.JPanel {
         formation.setPermanent(permanent);
         formation.setNom(nom);
         formation.setNumero(numero);
-        formation.setPhotocopie(photocopieSISU);
+        formation.setBlobPhotocopie(photocopieSISU);
         formations.addFormation(formation);
     }
 
@@ -2987,7 +3156,145 @@ public class M_Formations extends javax.swing.JPanel {
         formation.setPermanent(permanent);
         formation.setNom(nom);
         formation.setNumero(numero);
-        formation.setPhotocopie(photocopieM);
+        formation.setBlobPhotocopie(photocopieM);
+        formations.addFormation(formation);
+    }
+
+    private void addFormationA1(Formations formations) {
+        Formation formation = new Formation();
+        String nom = GpreA1.getText();
+        String numero = GnumA1.getText();
+        boolean permanent = GpermanentA1.isSelected();
+
+        String jourObtenu = GjourObtenuA1.getSelectedItem().toString();
+        String moisObtenu = GmoisObtenuA1.getSelectedItem().toString();
+        String anneeObtenu = GanneeObtenuA1.getSelectedItem().toString();
+        String dateObtenu = jourObtenu + "/" + moisObtenu + "/" + anneeObtenu;
+
+        String jourValable = GjourValableA1.getSelectedItem().toString();
+        String moisValable = GmoisValableA1.getSelectedItem().toString();
+        String anneeValable = GanneeValableA1.getSelectedItem().toString();
+        String dateValable = jourValable + "/" + moisValable + "/" + anneeValable;
+
+        if(!EasyDate.isValidDate(dateObtenu, null)){
+            String fragment = getFragment(jourObtenu, moisObtenu, anneeObtenu);
+            formation.setFragmentDateObtention(fragment);
+        }else{
+            try {
+                formation.setDateObtention(new SimpleDateFormat("dd/MM/yyyy").parse(dateObtenu));
+            } catch (ParseException ex) {
+                Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if(permanent){
+            formation.setDatePeremption(null);
+        }else if(!EasyDate.isValidDate(dateValable, null)){
+            String fragment = getFragment(jourValable, moisValable, anneeValable);
+            formation.setFragmentDateExpiration(fragment);
+        }else{
+            try {
+                formation.setDatePeremption(new SimpleDateFormat("dd/MM/yyyy").parse(dateValable));
+            } catch (ParseException ex) {
+                Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        formation.setPermanent(permanent);
+        formation.setNom(nom);
+        formation.setNumero(numero);
+        formations.addFormation(formation);
+    }
+
+    private void addFormationA2(Formations formations) {
+        Formation formation = new Formation();
+        String nom = GpreA2.getText();
+        String numero = GnumA2.getText();
+        boolean permanent = GpermanentA2.isSelected();
+
+        String jourObtenu = GjourObtenuA2.getSelectedItem().toString();
+        String moisObtenu = GmoisObtenuA2.getSelectedItem().toString();
+        String anneeObtenu = GanneeObtenuA2.getSelectedItem().toString();
+        String dateObtenu = jourObtenu + "/" + moisObtenu + "/" + anneeObtenu;
+
+        String jourValable = GjourValableA2.getSelectedItem().toString();
+        String moisValable = GmoisValableA2.getSelectedItem().toString();
+        String anneeValable = GanneeValableA2.getSelectedItem().toString();
+        String dateValable = jourValable + "/" + moisValable + "/" + anneeValable;
+
+        if(!EasyDate.isValidDate(dateObtenu, null)){
+            String fragment = getFragment(jourObtenu, moisObtenu, anneeObtenu);
+            formation.setFragmentDateObtention(fragment);
+        }else{
+            try {
+                formation.setDateObtention(new SimpleDateFormat("dd/MM/yyyy").parse(dateObtenu));
+            } catch (ParseException ex) {
+                Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if(permanent){
+            formation.setDatePeremption(null);
+        }else if(!EasyDate.isValidDate(dateValable, null)){
+            String fragment = getFragment(jourValable, moisValable, anneeValable);
+            formation.setFragmentDateExpiration(fragment);
+        }else{
+            try {
+                formation.setDatePeremption(new SimpleDateFormat("dd/MM/yyyy").parse(dateValable));
+            } catch (ParseException ex) {
+                Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        formation.setPermanent(permanent);
+        formation.setNom(nom);
+        formation.setNumero(numero);
+        formations.addFormation(formation);
+    }
+
+    private void addFormationA3(Formations formations) {
+        Formation formation = new Formation();
+        String nom = GpreA3.getText();
+        String numero = GnumA3.getText();
+        boolean permanent = GpermanentA3.isSelected();
+
+        String jourObtenu = GjourObtenuA3.getSelectedItem().toString();
+        String moisObtenu = GmoisObtenuA3.getSelectedItem().toString();
+        String anneeObtenu = GanneeObtenuA3.getSelectedItem().toString();
+        String dateObtenu = jourObtenu + "/" + moisObtenu + "/" + anneeObtenu;
+
+        String jourValable = GjourValableA3.getSelectedItem().toString();
+        String moisValable = GmoisValableA3.getSelectedItem().toString();
+        String anneeValable = GanneeValableA3.getSelectedItem().toString();
+        String dateValable = jourValable + "/" + moisValable + "/" + anneeValable;
+
+        if(!EasyDate.isValidDate(dateObtenu, null)){
+            String fragment = getFragment(jourObtenu, moisObtenu, anneeObtenu);
+            formation.setFragmentDateObtention(fragment);
+        }else{
+            try {
+                formation.setDateObtention(new SimpleDateFormat("dd/MM/yyyy").parse(dateObtenu));
+            } catch (ParseException ex) {
+                Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if(permanent){
+            formation.setDatePeremption(null);
+        }else if(!EasyDate.isValidDate(dateValable, null)){
+            String fragment = getFragment(jourValable, moisValable, anneeValable);
+            formation.setFragmentDateExpiration(fragment);
+        }else{
+            try {
+                formation.setDatePeremption(new SimpleDateFormat("dd/MM/yyyy").parse(dateValable));
+            } catch (ParseException ex) {
+                Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        formation.setPermanent(permanent);
+        formation.setNom(nom);
+        formation.setNumero(numero);
         formations.addFormation(formation);
     }
 
@@ -3055,7 +3362,7 @@ public class M_Formations extends javax.swing.JPanel {
 
         GpermanentTMS.setSelected(permanent);
         GnumeroTMS.setText(numeroBrevet);
-        photocopieTMS = formation.getPhotocopie();
+        photocopieTMS = formation.getBlobPhotocopie();
         if(permanent){
             GjourValableTMS.setEnabled(false);
         }
@@ -3082,7 +3389,7 @@ public class M_Formations extends javax.swing.JPanel {
 
         GpermanentI.setSelected(permanent);
         GnumSantePubliqueI.setText(numeroSante);
-        photocopieI = formation.getPhotocopie();
+        photocopieI = formation.getBlobPhotocopie();
         if(permanent){
             GjourValableI.setEnabled(false);
         }
@@ -3111,7 +3418,7 @@ public class M_Formations extends javax.swing.JPanel {
         GpermanentAMU.setSelected(permanent);
         GbadgeNumAMU.setText(numero);
         GnumServiceAMU.setText(numero112);
-        photocopieAMU = formation.getPhotocopie();
+        photocopieAMU = formation.getBlobPhotocopie();
         if(permanent){
             GjourValableAMU.setEnabled(false);
         }
@@ -3138,7 +3445,7 @@ public class M_Formations extends javax.swing.JPanel {
 
         GpermanentSISU.setSelected(permanent);
         GnumBadgeSISU.setText(numero);
-        photocopieSISU = formation.getPhotocopie();
+        photocopieSISU = formation.getBlobPhotocopie();
         if(permanent){
             GjourValableSISU.setEnabled(false);
         }
@@ -3165,7 +3472,7 @@ public class M_Formations extends javax.swing.JPanel {
 
         GpermanentM.setSelected(permanent);
         GnumInamiM.setText(numero);
-        photocopieM = formation.getPhotocopie();
+        photocopieM = formation.getBlobPhotocopie();
         if(permanent){
             GjourValableM.setEnabled(false);
         }
@@ -3183,6 +3490,87 @@ public class M_Formations extends javax.swing.JPanel {
         }
     }
 
+    private void completerChampsA1(Formation formation) {
+        GA1.setSelected(true);
+        GpreA1.setText(formation.getNom());
+        String fragmentObtenu = formation.getFragmentDateObtention();
+        String fragmentExpiration = formation.getFragmentDateExpiration();
+        String numero = formation.getNumero();
+        boolean permanent = formation.isPermanent();
+
+        GpermanentA1.setSelected(permanent);
+        GnumA1.setText(numero);
+        if(permanent){
+            GjourValableA1.setEnabled(false);
+        }
+
+        try {
+            changerDate(fragmentObtenu, formation.getDateObtention(), GjourObtenuA1, GmoisObtenuA1, GanneeObtenuA1);
+        } catch (Exception ex) {
+            Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            changerDate(fragmentExpiration, formation.getDatePeremption(), GjourValableA1, GmoisValableA1, GanneeValableA1);
+        } catch (Exception ex) {
+            Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void completerChampsA2(Formation formation) {
+        GA2.setSelected(true);
+        GpreA2.setText(formation.getNom());
+        String fragmentObtenu = formation.getFragmentDateObtention();
+        String fragmentExpiration = formation.getFragmentDateExpiration();
+        String numero = formation.getNumero();
+        boolean permanent = formation.isPermanent();
+
+        GpermanentA2.setSelected(permanent);
+        GnumA2.setText(numero);
+        if(permanent){
+            GjourValableA2.setEnabled(false);
+        }
+
+        try {
+            changerDate(fragmentObtenu, formation.getDateObtention(), GjourObtenuA2, GmoisObtenuA2, GanneeObtenuA2);
+        } catch (Exception ex) {
+            Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            changerDate(fragmentExpiration, formation.getDatePeremption(), GjourValableA2, GmoisValableA2, GanneeValableA2);
+        } catch (Exception ex) {
+            Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void completerChampsA3(Formation formation) {
+        GA3.setSelected(true);
+        GpreA3.setText(formation.getNom());
+        String fragmentObtenu = formation.getFragmentDateObtention();
+        String fragmentExpiration = formation.getFragmentDateExpiration();
+        String numero = formation.getNumero();
+        boolean permanent = formation.isPermanent();
+
+        GpermanentA3.setSelected(permanent);
+        GnumA3.setText(numero);
+        if(permanent){
+            GjourValableA3.setEnabled(false);
+        }
+
+        try {
+            changerDate(fragmentObtenu, formation.getDateObtention(), GjourObtenuA3, GmoisObtenuA3, GanneeObtenuA3);
+        } catch (Exception ex) {
+            Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            changerDate(fragmentExpiration, formation.getDatePeremption(), GjourValableA3, GmoisValableA3, GanneeValableA3);
+        } catch (Exception ex) {
+            Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private boolean checkFormat(File photocopieI) {
         String extension = "";
         String name = photocopieI.getName();
@@ -3195,5 +3583,23 @@ public class M_Formations extends javax.swing.JPanel {
         }else{
             return false;
         }
+    }
+
+    public byte[] FileToByte(File fichier){
+        if(fichier == null){
+            return null;
+        }
+        int length = (int) fichier.length();
+        byte[] data = new byte[length];
+        try {
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fichier));
+            bis.read(data, 0, length);
+            return data;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Apercu_Photocopie.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Apercu_Photocopie.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

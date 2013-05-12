@@ -4,6 +4,10 @@
  */
 package NouveauVolontaire2;
 
+import Containers.Volontaire;
+import GUI.Panels.Main;
+import Network.NetworkClient;
+
 /**
  *
  * @author Greenlamp
@@ -13,8 +17,28 @@ public class M_Activite extends javax.swing.JPanel {
     /**
      * Creates new form M_Activite
      */
-    public M_Activite() {
+    Main parent = null;
+    NetworkClient socket = null;
+    Volontaire volontaire = null;
+    String matricule = null;
+    boolean edited = false;
+    public M_Activite(Main parent, NetworkClient socket) {
         initComponents();
+        this.socket = socket;
+        this.parent = parent;
+        matricule = parent.getMatricule();
+        if(matricule != null){
+            edited = true;
+            Gtitre.setText("Modifier un volontaire");
+        }else{
+            edited = false;
+        }
+        volontaire = parent.getVolontaire();
+        if(volontaire != null){
+            if(volontaire.getActivite() != null){
+                this.completerChampActivite();
+            }
+        }
     }
 
     /**
@@ -30,6 +54,7 @@ public class M_Activite extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         Gtitre = new javax.swing.JLabel();
+        Baccueil1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         Gannee = new javax.swing.JComboBox();
@@ -79,7 +104,6 @@ public class M_Activite extends javax.swing.JPanel {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
 
         jPanel2.setBackground(new java.awt.Color(255, 0, 0));
 
@@ -110,12 +134,23 @@ public class M_Activite extends javax.swing.JPanel {
         Gtitre.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Gtitre.setText("Nouveau volontaire");
 
+        Baccueil1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        Baccueil1.setForeground(new java.awt.Color(0, 0, 255));
+        Baccueil1.setText("ACCUEIL");
+        Baccueil1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Baccueil1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(Baccueil1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Gtitre)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -123,7 +158,9 @@ public class M_Activite extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Gtitre)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Gtitre)
+                    .addComponent(Baccueil1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -414,18 +451,16 @@ public class M_Activite extends javax.swing.JPanel {
         });
 
         jButton4.setText("Annuler");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Précédent");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
-            }
-        });
-
-        jButton6.setText("Suivant");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
             }
         });
 
@@ -448,9 +483,7 @@ public class M_Activite extends javax.swing.JPanel {
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(817, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -463,8 +496,7 @@ public class M_Activite extends javax.swing.JPanel {
                     .addComponent(jLabel28)
                     .addComponent(jButton4)
                     .addComponent(jButton3)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
+                    .addComponent(jButton5))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -492,25 +524,38 @@ public class M_Activite extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
+        if(checkChamps()){
+            creerClasse();
+            envoyerClasse();
+            parent.cleanBackup();
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-
+        if(checkChamps()){
+            creerClasse();
+            parent.changeState(Main.NOUVEAU_VOLONTAIRE_PAGE_8);
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void Baccueil1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Baccueil1ActionPerformed
+        parent.changeState(Main.LOGGED);
+    }//GEN-LAST:event_Baccueil1ActionPerformed
 
-    }//GEN-LAST:event_jButton6ActionPerformed
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        parent.changeState(Main.LOGGED);
+        parent.cleanBackup();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Baccueil1;
     private javax.swing.JComboBox Gannee;
     private javax.swing.JComboBox Gjour;
     private javax.swing.JComboBox Gmois;
@@ -519,7 +564,6 @@ public class M_Activite extends javax.swing.JPanel {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
@@ -566,4 +610,20 @@ public class M_Activite extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
+
+    private void completerChampActivite() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private boolean checkChamps() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void creerClasse() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void envoyerClasse() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }

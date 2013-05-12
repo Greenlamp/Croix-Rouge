@@ -1682,31 +1682,31 @@ public class M_NouveauVolontaireP5 extends javax.swing.JPanel {
                 setDate(GjourObtenuB3, GmoisObtenuB3, GanneeObtenuB3, formation.getDateObtention());
                 GbadgeNumB3.setText(""+formation.getNumero());
                 GnumServiceB3.setText(formation.getNumeroService112());
-                photocopieB3 = formation.getPhotocopie();
+                //photocopieB3 = formation.getPhotocopie();
                 listeTampon.add(formation);
             }else if(formation.getNom().equals(Gb4.getText())){
                 Gb4.setSelected(true);
                 setDate(GjourObtenuB4, GmoisObtenuB4, GanneeObtenuB4, formation.getDateObtention());
                 GbrevetNumB4.setText(""+formation.getNumero());
-                photocopieB4 = formation.getPhotocopie();
+                //photocopieB4 = formation.getPhotocopie();
                 listeTampon.add(formation);
             }else if(formation.getNom().equals(Gb5.getText())){
                 Gb5.setSelected(true);
                 setDate(GjourObtenuB5, GmoisObtenuB5, GanneeObtenuB5, formation.getDateObtention());
                 GnumSantePubliqueB5.setText(""+formation.getNumero());
-                photocopieB5 = formation.getPhotocopie();
+                //photocopieB5 = formation.getPhotocopie();
                 listeTampon.add(formation);
             }else if(formation.getNom().equals(Gb6.getText())){
                 Gb6.setSelected(true);
                 setDate(GjourObtenuB6, GmoisObtenuB6, GanneeObtenuB6, formation.getDateObtention());
                 GnumBadgeB6.setText(""+formation.getNumero());
-                photocopieB6 = formation.getPhotocopie();
+                //photocopieB6 = formation.getPhotocopie();
                 listeTampon.add(formation);
             }else if(formation.getNom().equals(Gb7.getText())){
                 Gb7.setSelected(true);
                 setDate(GjourObtenuB7, GmoisObtenuB7, GanneeObtenuB7, formation.getDateObtention());
                 GnumInamiB7.setText(""+formation.getNumero());
-                photocopieB7 = formation.getPhotocopie();
+                //photocopieB7 = formation.getPhotocopie();
                 listeTampon.add(formation);
             }
         }
@@ -1840,7 +1840,7 @@ public class M_NouveauVolontaireP5 extends javax.swing.JPanel {
             formation.setNumero(GbadgeNumB3.getText());
             formation.setNumeroService112(GnumServiceB3.getText());
 
-            formation.setPhotocopie(photocopieB3);
+            //formation.setPhotocopie(photocopieB3);
 
             //Ajouter a la liste des formations
             formations.addFormation(formation);
@@ -1868,7 +1868,7 @@ public class M_NouveauVolontaireP5 extends javax.swing.JPanel {
             //Numéro de brevet
             formation.setNumero(GbrevetNumB4.getText());
 
-            formation.setPhotocopie(photocopieB4);
+            //formation.setPhotocopie(photocopieB4);
 
             //Ajouter a la liste des formations
             formations.addFormation(formation);
@@ -1896,7 +1896,7 @@ public class M_NouveauVolontaireP5 extends javax.swing.JPanel {
             //Numéro de brevet
             formation.setNumero(GnumSantePubliqueB5.getText());
 
-            formation.setPhotocopie(photocopieB5);
+            //formation.setPhotocopie(photocopieB5);
 
             //Ajouter a la liste des formations
             formations.addFormation(formation);
@@ -1924,7 +1924,7 @@ public class M_NouveauVolontaireP5 extends javax.swing.JPanel {
             //Numéro de brevet
             formation.setNumero(GnumBadgeB6.getText());
 
-            formation.setPhotocopie(photocopieB6);
+            //formation.setPhotocopie(photocopieB6);
 
             //Ajouter a la liste des formations
             formations.addFormation(formation);
@@ -1952,7 +1952,7 @@ public class M_NouveauVolontaireP5 extends javax.swing.JPanel {
             //Numéro de brevet
             formation.setNumero(GnumInamiB7.getText());
 
-            formation.setPhotocopie(photocopieB7);
+            //formation.setPhotocopie(photocopieB7);
 
             //Ajouter a la liste des formations
             formations.addFormation(formation);
