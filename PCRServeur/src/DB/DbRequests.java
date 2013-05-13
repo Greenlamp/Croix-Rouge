@@ -5,12 +5,15 @@
 
 package DB;
 
+import Containers.Activite;
+import Containers.ActiviteFormation;
 import Containers.Adresse;
 import DBA.DbMySql;
 import Containers.CelluleGrille;
 import Containers.Complementaire;
 import Containers.Decouverte;
 import Containers.Formation;
+import Containers.Formations;
 import Containers.Grille;
 import Containers.Groupe;
 import Containers.Identite;
@@ -21,6 +24,7 @@ import Containers.Urgence;
 import Containers.Utilisateur;
 import Containers.Volontaire;
 import EasyDate.EasyDate;
+import FileAccess.FileAccess;
 import Recherche.Criteres.DBA;
 import Recherche.TupleRecherche;
 import Util.Parametres;
@@ -38,7 +42,12 @@ public class DbRequests implements DBA{
     DbMySql mysql = null;
 
     public DbRequests(){
-        mysql = new DbMySql("localhost", "3306", "root", "", "croixrouge");
+        String host = FileAccess.getConfig("configs", "HOST_MYSQL");
+        String port = FileAccess.getConfig("configs", "PORT_MYSQL");
+        String user = FileAccess.getConfig("configs", "USER_MYSQL");
+        String pass = FileAccess.getConfig("configs", "PASS_MYSQL");
+        String db = FileAccess.getConfig("configs", "DB_MYSQL");
+        mysql = new DbMySql(host, port, user, pass, db);
     }
 
     public DbMySql getMysql(){
@@ -321,7 +330,7 @@ public class DbRequests implements DBA{
             params.addDate(formation.getDatePeremption());
             params.addString(formation.getNumero());
             params.addString(formation.getLieu());
-            params.addFile(formation.getPhotocopie());
+            //params.addFile(formation.getPhotocopie());
             params.addString(formation.getNumeroService112());
 
             mysql.pUpdate(request, params);
@@ -520,6 +529,106 @@ public class DbRequests implements DBA{
         }
 
         return idPersonneUrgence;
+    }
+
+    public int insertActivite(Activite activite, String matricule) throws Exception {
+        if(activite == null || matricule == null){
+            return -1;
+        }
+        int idActivite = -1;
+        String request = "INSERT INTO Activite(dateDebut, fragmentDateDebut, centreSecours, sisu, copiePermis, numeroRegistreNational) VALUES(?, ?, ?, ?, ?, ?)";
+        Parametres params = new Parametres();
+        params.addDate(activite.getDateDebut());
+        params.addString(activite.getFragmentDateDebut());
+        params.addString(activite.getCentreSecour());
+        params.addString(activite.getSisu());
+        params.addBlob(activite.getPermis());
+        params.addString(activite.getNumeroRegistre());
+
+        mysql.pUpdate(request, params);
+
+        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Activite";
+        ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            idActivite = rs.getInt("id");
+        }
+
+        for(ActiviteFormation formation: activite.getListeFormation()){
+            int idFormation = insertActiviteFormation(formation);
+            if(idFormation != -1){
+                request = "INSERT INTO FormationSuivieActivite(idActivite, idFormationActivite) VALUES(?, ?)";
+                params = new Parametres();
+                params.addInt(idActivite);
+                params.addInt(idFormation);
+                mysql.pUpdate(request, params);
+            }
+        }
+        return idActivite;
+    }
+
+    private int insertActiviteFormation(ActiviteFormation formation) throws Exception{
+        if(formation == null){
+            return -1;
+        }
+        int idFormation = -1;
+        String request = "INSERT INTO FormationActivite(nomFormationActivite, status) VALUES(? ,?)";
+        Parametres params = new Parametres();
+        params.addString(formation.getNom());
+        params.addString(formation.getStatus());
+        mysql.pUpdate(request, params);
+
+        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM FormationActivite";
+        ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            idFormation = rs.getInt("id");
+        }
+        return idFormation;
+    }
+
+    public void insertFormations(Formations formations, String matricule) throws Exception{
+        if(formations == null || matricule == null || formations.getListeFormation().isEmpty()){
+            return;
+        }
+        for(Formation formation : formations.getListeFormation()){
+            int idFormation = insertFormation(formation);
+            if(idFormation != -1){
+                String request = "INSERT INTO FormationsSuivie(matricule, idFormation) VALUES(?, ?)";
+                Parametres params = new Parametres();
+                params.addString(matricule);
+                params.addInt(idFormation);
+                mysql.pUpdate(request, params);
+            }
+        }
+    }
+
+    private int insertFormation(Formation formation) throws Exception{
+        if(formation == null || formation.getNom() == null || formation.getNom().isEmpty()){
+            return -1;
+        }
+        int idFormation = -1;
+        String request = "INSERT INTO Formation(nomFormation, dateObtention, dateExpiration, dateExamen, numero, lieu, copie, numeroService112, permanent, fragmentDateObtention, fragmentDateExpiration, fragmentDateExamen) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Parametres params = new Parametres();
+        params.addString(formation.getNom());
+        params.addDate(formation.getDateObtention());
+        params.addDate(formation.getDatePeremption());
+        params.addDate(formation.getDateExamen());
+        params.addString(formation.getNumero());
+        params.addString(formation.getLieu());
+        params.addBlob(formation.getBlobPhotocopie());
+        params.addString(formation.getNumeroService112());
+        params.addInt((formation.isPermanent() ? 1 : 0));
+        params.addString(formation.getFragmentDateObtention());
+        params.addString(formation.getFragmentDateExpiration());
+        params.addString(formation.getFragmentDateExamen());
+        mysql.pUpdate(request, params);
+
+        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Formation";
+        ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            idFormation = rs.getInt("id");
+        }
+
+        return idFormation;
     }
 
     /*public int insertAdresse(String rue, int numéro, int codePostal, String boite, int idPaysLegal, int idVilleLegal, String matricule) throws Exception {
@@ -1144,6 +1253,8 @@ public class DbRequests implements DBA{
         Residence residence = getAdresseResidence(matricule);
         Telephone telephone = getTelephone(matricule);
         Urgence urgence = getPersonneUrgence(matricule);
+        Formations formations = getFormations(matricule);
+        Activite activite = getActivite(matricule);
         volontaire.setIdentite(identite);
         volontaire.setDecouverte(decouverte);
         volontaire.setComplementaire(complementaire);
@@ -1151,6 +1262,8 @@ public class DbRequests implements DBA{
         volontaire.setResidence(residence);
         volontaire.setTelephone(telephone);
         volontaire.setUrgence(urgence);
+        volontaire.setFormations(formations);
+        volontaire.setActivite(activite);
         return volontaire;
     }
 
@@ -1176,7 +1289,9 @@ public class DbRequests implements DBA{
             identite.setNomJeuneFille(nomEpouse);
             identite.setPrenom(prenom);
             identite.setSexe(sexe);
-            identite.setDateNaissance(new Date(date.getTime()));
+            if(date != null){
+                identite.setDateNaissance(new Date(date.getTime()));
+            }
             identite.setMatricule(matricule);
         }
         return identite;
@@ -1250,8 +1365,10 @@ public class DbRequests implements DBA{
             complementaire.setActivite(activite);
             complementaire.setQualification(diplome);
             complementaire.setCategorie(categorie);
-            java.util.Date dateUtil = new Date(dateObtention.getTime());
-            complementaire.setDateObtention(dateUtil);
+            if(dateObtention != null){
+                java.util.Date dateUtil = new Date(dateObtention.getTime());
+                complementaire.setDateObtention(dateUtil);
+            }
             complementaire.setPermanent((permanent == 1 ? true : false));
             complementaire.setAmu((amu == 1 ? true : false));
             complementaire.setTms((TMS == 1 ? true : false));
@@ -1450,6 +1567,135 @@ public class DbRequests implements DBA{
         return urgence;
     }
 
+    private Formations getFormations(String matricule) throws Exception{
+        if(matricule == null){
+            return null;
+        }
+        Formations formations = null;
+        String request = "SELECT idFormation FROM FormationsSuivie WHERE matricule = ?";
+        Parametres params = new Parametres();
+        params.addString(matricule);
+        ResultSet rs = mysql.pSelect(request, params);
+        LinkedList<Integer> listeId = new LinkedList<>();
+        while(rs.next()){
+            int idFormation = rs.getInt("idFormation");
+            listeId.add(idFormation);
+        }
+        if(!listeId.isEmpty()){
+            formations = new Formations();
+        }
+        for(int idFormation : listeId){
+            Formation formation = getFormation(idFormation);
+            formations.addFormation(formation);
+        }
+        return formations;
+    }
+
+    private Activite getActivite(String matricule) throws Exception{
+        if(matricule == null){
+            return null;
+        }
+        int idActivite = getIdActivite(matricule);
+        if(idActivite == -1){
+            return null;
+        }
+        Activite activite = new Activite();
+
+        String request = "SELECT dateDebut, fragmentDateDebut, centreSecours, sisu, copiePermis, numeroRegistreNational FROM Activite WHERE idActivite = ?";
+        Parametres params = new Parametres();
+        params.addInt(idActivite);
+        ResultSet rs = mysql.pSelect(request, params);
+        while(rs.next()){
+            Timestamp dateDebut = rs.getTimestamp("dateDebut");
+            String fragmentDateDebut = rs.getString("fragmentDateDebut");
+            String centreSecours = rs.getString("centreSecours");
+            String sisu = rs.getString("sisu");
+            java.sql.Blob copiePermis = rs.getBlob("copiePermis");
+            String numeroRegistreNational = rs.getString("numeroRegistreNational");
+
+            if(dateDebut != null){
+                activite.setDateDebut(new Date(dateDebut.getTime()));
+            }
+            activite.setFragmentDateDebut(fragmentDateDebut);
+            activite.setCentreSecour(centreSecours);
+            activite.setSisu(sisu);
+            activite.setPermisBlob(copiePermis);
+            activite.setNumeroRegistre(numeroRegistreNational);
+        }
+
+        LinkedList<Integer> listeId = getIdFormationActivite(matricule);
+        for(int idFormationActivite : listeId){
+            ActiviteFormation activiteFormation = getActiviteFormation(idFormationActivite);
+            activite.addFormation(activiteFormation);
+        }
+
+        return activite;
+    }
+
+    private ActiviteFormation getActiviteFormation(int idFormationActivite) throws Exception{
+        if(idFormationActivite == -1){
+            return null;
+        }
+        ActiviteFormation activiteFormation = new ActiviteFormation();
+        String request = "SELECT nomFormationActivite, status FROM FormationActivite WHERE idFormationActivite = ?";
+        Parametres params = new Parametres();
+        params.addInt(idFormationActivite);
+        ResultSet rs = mysql.pSelect(request, params);
+        while(rs.next()){
+            String nomFormationActivite = rs.getString("nomFormationActivite");
+            String status = rs.getString("status");
+            activiteFormation.setNom(nomFormationActivite);
+            activiteFormation.setStatus(status);
+        }
+        return activiteFormation;
+    }
+
+    private Formation getFormation(int idFormation) throws Exception{
+        if(idFormation == -1){
+            return null;
+        }
+        Formation formation = null;
+        String request = "SELECT nomFormation, dateObtention, dateExpiration, dateExamen, numero, lieu, copie, numeroService112, permanent, fragmentDateObtention, fragmentDateExpiration, fragmentDateExamen FROM Formation WHERE idFormation = ?";
+        Parametres params = new Parametres();
+        params.addInt(idFormation);
+        ResultSet rs = mysql.pSelect(request, params);
+        while(rs.next()){
+            String nomFormation = rs.getString("nomFormation");
+            Timestamp dateObtention = rs.getTimestamp("dateObtention");
+            Timestamp dateExpiration = rs.getTimestamp("dateExpiration");
+            Timestamp dateExamen = rs.getTimestamp("dateExamen");
+            String numero = rs.getString("numero");
+            String lieu = rs.getString("lieu");
+            java.sql.Blob photocopie= rs.getBlob("copie");
+            String numeroService112 = rs.getString("numeroService112");
+            boolean permanent = (rs.getInt("permanent") == 1 ? true : false);
+            String fragmentDateObtention = rs.getString("fragmentDateObtention");
+            String fragmentDateExpiration = rs.getString("fragmentDateExpiration");
+            String fragmentDateExamen = rs.getString("fragmentDateExamen");
+
+            formation = new Formation();
+            formation.setNom(nomFormation);
+            if(dateObtention != null){
+                formation.setDateObtention(new Date(dateObtention.getTime()));
+            }
+            if(dateExpiration != null){
+                formation.setDatePeremption(new Date(dateExpiration.getTime()));
+            }
+            if(dateExamen != null){
+                formation.setDateExamen(new Date(dateExamen.getTime()));
+            }
+            formation.setNumero(numero);
+            formation.setLieu(lieu);
+            formation.setBlobPhotocopieInBlob(photocopie);
+            formation.setNumeroService112(numeroService112);
+            formation.setPermanent(permanent);
+            formation.setFragmentDateObtention(fragmentDateObtention);
+            formation.setFragmentDateExpiration(fragmentDateExpiration);
+            formation.setFragmentDateExamen(fragmentDateExamen);
+        }
+        return formation;
+    }
+
     public void editIdentite(String matricule, Identite identite) throws Exception{
         if(identite == null || matricule == null){
             return;
@@ -1629,6 +1875,78 @@ public class DbRequests implements DBA{
         }
     }
 
+    public void editFormations(String matricule, Formations formations) throws Exception{
+        if(matricule == null || formations == null){
+            return;
+        }
+        String request = "SELECT idFormation FROM FormationsSuivie WHERE matricule = ?";
+        Parametres params = new Parametres();
+        params.addString(matricule);
+        ResultSet rs = mysql.pSelect(request, params);
+        LinkedList<Integer> listeId = new LinkedList<>();
+        while(rs.next()){
+            int idFormation = rs.getInt("idFormation");
+            listeId.add(idFormation);
+        }
+
+        request = "DELETE FROM FormationsSuivie WHERE matricule = ?";
+        mysql.pUpdate(request, params);
+
+        for(int idFormation : listeId){
+            request = "DELETE FROM Formation WHERE idFormation = ?";
+            params = new Parametres();
+            params.addInt(idFormation);
+            mysql.pUpdate(request, params);
+        }
+
+        insertFormations(formations, matricule);
+    }
+
+    public void editActivite(String matricule, Activite activite) throws Exception{
+        if(activite == null || matricule == null){
+            return;
+        }
+        int idActivite = getIdActivite(matricule);
+        if(idActivite == -1){
+            idActivite = insertActivite(activite, matricule);
+            return;
+        }
+
+        LinkedList<Integer> listeId = getIdFormationActivite(matricule);
+
+        String request = "DELETE FROM FormationSuivieActivite where idActivite = ?";
+        Parametres params = new Parametres();
+        params.addInt(idActivite);
+        mysql.pUpdate(request, params);
+
+        for(int idFormation : listeId){
+            request = "DELETE FROM FormationActivite WHERE idFormationActivite = ?";
+            params = new Parametres();
+            params.addInt(idFormation);
+            mysql.pUpdate(request, params);
+        }
+
+        for(ActiviteFormation formation: activite.getListeFormation()){
+            int idFormation = insertActiviteFormation(formation);
+            request = "INSERT INTO FormationSuivieActivite(idActivite, idFormationActivite) VALUES(?, ?)";
+            params = new Parametres();
+            params.addInt(idActivite);
+            params.addInt(idFormation);
+            mysql.pUpdate(request, params);
+        }
+
+        request = "UPDATE Activite SET dateDebut = ?, fragmentDateDebut = ?, centreSecours = ?, sisu = ?, copiePermis = ?, numeroRegistreNational = ? WHERE idActivite = ?";
+        params = new Parametres();
+        params.addDate(activite.getDateDebut());
+        params.addString(activite.getFragmentDateDebut());
+        params.addString(activite.getCentreSecour());
+        params.addString(activite.getSisu());
+        params.addBlob(activite.getPermis());
+        params.addString(activite.getNumeroRegistre());
+        params.addInt(idActivite);
+        mysql.pUpdate(request, params);
+    }
+
 
     public int getIdRenseignement(String matricule) throws Exception{
         int idRenseignement = -1;
@@ -1736,7 +2054,9 @@ public class DbRequests implements DBA{
             ResultSet rs = mysql.pSelect(request, params);
             while(rs.next()){
                 int idDroit = rs.getInt("idDroit");
-                listeId.add(idDroit);
+                if(!listeId.contains(idDroit)){
+                    listeId.add(idDroit);
+                }
             }
         }
 
@@ -1876,7 +2196,9 @@ public class DbRequests implements DBA{
             ResultSet rs = mysql.pSelect(request, params);
             while(rs.next()){
                 int idGroupe = rs.getInt("idGroupe");
-                listeId.add(idGroupe);
+                if(!listeId.contains(idGroupe)){
+                    listeId.add(idGroupe);
+                }
             }
         }
 
@@ -1896,10 +2218,10 @@ public class DbRequests implements DBA{
         int idPersonneUrgence = getIdPersonneUrgence(matricule);
         int idPrestation = getIdPrestation(matricule);
         int idRenseignement = getIdRenseignement(matricule);
-        int idFormation = getIdFormation(matricule);
+        LinkedList<Integer> listeIdFormation = getIdFormation(matricule);
         int idAdresseLegale = getIdAdresseLegale(matricule);
         int idAdresseResidence = getIdAdresseResidence(matricule);
-        int idFormationActivite = getIdFormationActivite(matricule);
+        LinkedList<Integer> listeIdFormationActivite = getIdFormationActivite(matricule);
         int idActivite = getIdActivite(matricule);
         int idTelephone = getIdTelephone(matricule);
 
@@ -1926,10 +2248,15 @@ public class DbRequests implements DBA{
         params.addInt(idRenseignement);
         mysql.pUpdate(request, params);
 
-        request = "DELETE FROM Formation WHERE idFormation =?;";
-        params = new Parametres();
-        params.addInt(idFormation);
+        request = "DELETE FROM FormationsSuivie WHERE matricule = ?";
         mysql.pUpdate(request, params);
+
+        for(int idFormation : listeIdFormation){
+            request = "DELETE FROM Formation WHERE idFormation =?;";
+            params = new Parametres();
+            params.addInt(idFormation);
+            mysql.pUpdate(request, params);
+        }
 
         request = "DELETE FROM FormationsSuivie WHERE matricule = ?;";
         params = new Parametres();
@@ -1951,10 +2278,12 @@ public class DbRequests implements DBA{
         params.addInt(idActivite);
         mysql.pUpdate(request, params);
 
-        request = "DELETE FROM FormationActivite WHERE idFormationActivite = ?;";
-        params = new Parametres();
-        params.addInt(idFormationActivite);
-        mysql.pUpdate(request, params);
+        for(int idFormationActivite : listeIdFormationActivite){
+            request = "DELETE FROM FormationActivite WHERE idFormationActivite = ?;";
+            params = new Parametres();
+            params.addInt(idFormationActivite);
+            mysql.pUpdate(request, params);
+        }
 
         request = "DELETE FROM Activite WHERE idActivite = ?;";
         params = new Parametres();
@@ -2008,19 +2337,20 @@ public class DbRequests implements DBA{
         return idPrestation;
     }
 
-    private int getIdFormation(String matricule) throws Exception{
-        int idFormation = -1;
+    private LinkedList<Integer> getIdFormation(String matricule) throws Exception{
+        LinkedList<Integer> listeId = new LinkedList<>();
         if(matricule == null){
-            return -1;
+            return listeId;
         }
         String request = "SELECT idFormation FROM FormationsSuivie WHERE matricule = ?";
         Parametres params = new Parametres();
         params.addString(matricule);
         ResultSet rs = mysql.pSelect(request, params);
         while(rs.next()){
-            idFormation = rs.getInt("idPrestation");
+            int idFormation = rs.getInt("idFormation");
+            listeId.add(idFormation);
         }
-        return idFormation;
+        return listeId;
     }
 
     private int getIdAdresseLegale(String matricule) throws Exception{
@@ -2053,19 +2383,20 @@ public class DbRequests implements DBA{
         return idAdresseResidence;
     }
 
-    private int getIdFormationActivite(String matricule) throws Exception{
-        int idFormationActivite = -1;
+    private LinkedList<Integer> getIdFormationActivite(String matricule) throws Exception{
+        LinkedList<Integer> listeId = new LinkedList<>();
         if(matricule == null){
-            return -1;
+            return listeId;
         }
         String request = "SELECT idFormationActivite FROM FormationSuivieActivite WHERE idActivite = (SELECT idActivite FROM Volontaires WHERE matricule = ?)";
         Parametres params = new Parametres();
         params.addString(matricule);
         ResultSet rs = mysql.pSelect(request, params);
         while(rs.next()){
-            idFormationActivite = rs.getInt("idFormationActivite");
+            int idFormationActivite = rs.getInt("idFormationActivite");
+            listeId.add(idFormationActivite);
         }
-        return idFormationActivite;
+        return listeId;
     }
 
     private int getIdActivite(String matricule) throws Exception{

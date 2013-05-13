@@ -172,7 +172,7 @@ public class ProtocoleServeur implements Protocolable{
 
     private PacketCom insererVolontaire(Volontaire volontaire){
         try{
-            dbRequests.getMysql().lockTable(new String[]{"volontaires", "PersonneUrgence", "Decouverte", "langue", "Renseignements", "LanguesConnue", "Formation", "Pays", "Ville", "Telephone", "Adresse"});
+            dbRequests.getMysql().lockTable(new String[]{"volontaires", "PersonneUrgence", "Decouverte", "langue", "Renseignements", "LanguesConnue", "Formation", "Pays", "Ville", "Telephone", "Adresse", "FormationsSuivie", "Activite", "FormationSuivieActivite", "FormationActivite"});
             boolean check = false;
             check = dbRequests.checkMatricule(volontaire.getIdentite().getMatricule());
             if(!check){
@@ -182,19 +182,10 @@ public class ProtocoleServeur implements Protocolable{
                 int idPersonneUrgence = -1;
                 int idDecouverte = -1;
                 int idRenseignement = -1;
-                int idPaysLegal = -1;
-                int idVilleLegal = -1;
+                int idActivite = -1;
                 int idAdresseLegale = -1;
-                int idPaysResidence = -1;
-                int idVilleResidence = -1;
                 int idAdresseResidence = -1;
                 int idTelephone = -1;
-
-
-
-                /*
-                if(volontaire.getFormations() != null) dbRequests.insertFormationsSuivie(volontaire.getIdentite().getMatricule(), volontaire.getFormations().getListeFormation());
-                */
 
                 /*OLD*/
                 //if(volontaire.getDecouverte() != null) idDecouverte = dbRequests.insertDecouvertes(volontaire.getDecouverte().getDescription());
@@ -209,7 +200,8 @@ public class ProtocoleServeur implements Protocolable{
                 //if(volontaire.getTelephone() != null) idTelephone = dbRequests.insertTelephone(volontaire.getTelephone().getGsm(), volontaire.getTelephone().getAutreGsm(), volontaire.getTelephone().getTelephoneFix(), volontaire.getTelephone().getTelephoneProfesionnelle(), volontaire.getTelephone().getFax());
                 //if(volontaire.getUrgence() != null) idPersonneUrgence = dbRequests.insertPersonneUrgence(volontaire.getUrgence().getNom(), volontaire.getUrgence().getPrenom(), volontaire.getUrgence().getTelephone());
                 //if(volontaire.getResidence() != null) idAdresseResidence = dbRequests.insertAdresse(volontaire.getResidence().getRue(), volontaire.getResidence().getNuméro(), volontaire.getResidence().getCodePostal(), volontaire.getResidence().getBoite(), idPaysResidence, idVilleResidence, volontaire.getIdentite().getMatricule());
-                                //if(volontaire.getIdentite() != null) dbRequests.insertVolontaire(volontaire.getIdentite().getMatricule(), volontaire.getIdentite().getNom(), volontaire.getIdentite().getPrenom(), volontaire.getIdentite().getNomJeuneFille(), volontaire.getIdentite().getDateNaissance(), volontaire.getIdentite().getSexe(), (volontaire.getAdresse() == null ? null : volontaire.getAdresse().getEmail()), "", idPersonneUrgence, idDecouverte, -1, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, -1);
+                //if(volontaire.getFormations() != null) dbRequests.insertFormationsSuivie(volontaire.getIdentite().getMatricule(), volontaire.getFormations().getListeFormation());
+                //if(volontaire.getIdentite() != null) dbRequests.insertVolontaire(volontaire.getIdentite().getMatricule(), volontaire.getIdentite().getNom(), volontaire.getIdentite().getPrenom(), volontaire.getIdentite().getNomJeuneFille(), volontaire.getIdentite().getDateNaissance(), volontaire.getIdentite().getSexe(), (volontaire.getAdresse() == null ? null : volontaire.getAdresse().getEmail()), "", idPersonneUrgence, idDecouverte, -1, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, -1);
 
                 /*NEW*/
                 idDecouverte = dbRequests.insertDecouvertes(volontaire.getDecouverte());
@@ -218,7 +210,9 @@ public class ProtocoleServeur implements Protocolable{
                 idAdresseResidence = dbRequests.insertAdresseResidence(volontaire.getResidence(), volontaire.getIdentite().getMatricule());
                 idTelephone = dbRequests.insertTelephone(volontaire.getTelephone(), volontaire.getIdentite().getMatricule());
                 idPersonneUrgence = dbRequests.insertPersonneUrgence(volontaire.getUrgence(), volontaire.getIdentite().getMatricule());
-                dbRequests.insertVolontaire(volontaire.getIdentite(), volontaire.getAdresse(), "", idPersonneUrgence, idDecouverte, -1, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, -1);
+                idActivite = dbRequests.insertActivite(volontaire.getActivite(), volontaire.getIdentite().getMatricule());
+                dbRequests.insertVolontaire(volontaire.getIdentite(), volontaire.getAdresse(), "", idPersonneUrgence, idDecouverte, -1, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, idActivite);
+                dbRequests.insertFormations(volontaire.getFormations(), volontaire.getIdentite().getMatricule());
 
 
 
@@ -239,7 +233,7 @@ public class ProtocoleServeur implements Protocolable{
         Volontaire volontaire = (Volontaire)contenu;
         String matricule = null;
         try {
-            dbRequests.getMysql().lockTable(new String[]{"volontaires", "PersonneUrgence", "Decouverte", "langue", "Renseignements", "LanguesConnue", "Formation", "Pays", "Ville", "Telephone", "Adresse"});
+            dbRequests.getMysql().lockTable(new String[]{"volontaires", "PersonneUrgence", "Decouverte", "langue", "Renseignements", "LanguesConnue", "Formation", "Pays", "Ville", "Telephone", "Adresse", "FormationsSuivie", "Activite", "FormationSuivieActivite", "FormationActivite"});
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
             dbRequests.getMysql().rollback();
@@ -268,6 +262,8 @@ public class ProtocoleServeur implements Protocolable{
             dbRequests.editAdresseResidence(matricule, volontaire.getResidence());
             dbRequests.editTelephone(matricule, volontaire.getTelephone());
             dbRequests.editPersonneUrgence(matricule, volontaire.getUrgence());
+            dbRequests.editFormations(matricule, volontaire.getFormations());
+            dbRequests.editActivite(matricule, volontaire.getActivite());
 
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
@@ -284,7 +280,7 @@ public class ProtocoleServeur implements Protocolable{
         String prenom = data[1];
 
         try {
-            dbRequests.getMysql().lockTable(new String[]{"volontaires", "PersonneUrgence", "Decouverte", "langue", "Renseignements", "LanguesConnue", "Formation", "Pays", "Ville", "Telephone", "Adresse"});
+            dbRequests.getMysql().lockTable(new String[]{"volontaires", "PersonneUrgence", "Decouverte", "langue", "Renseignements", "LanguesConnue", "Formation", "Pays", "Ville", "Telephone", "Adresse", "FormationsSuivie", "Activite", "FormationSuivieActivite", "FormationActivite"});
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
             dbRequests.getMysql().rollback();

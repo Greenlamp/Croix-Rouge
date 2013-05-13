@@ -87,7 +87,7 @@ INSERT INTO `appartenir` (`idUtilisateur`, `idGroupe`) VALUES
 -- Contenu de la table `possederdroit`
 --
 
-INSERT INTO `possederdroit` (`idGroupe`, `idDroit`) VALUES
+INSERT INTO `possederDroit` (`idGroupe`, `idDroit`) VALUES
 (1, 3),
 (1, 4),
 (1, 13),

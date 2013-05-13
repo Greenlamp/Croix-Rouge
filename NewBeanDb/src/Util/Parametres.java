@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 
 
 public class Parametres {
@@ -83,14 +85,22 @@ public class Parametres {
         params.add(keyPair);
     }
 
-    public void addFile(File file){
-        try {
-            FileInputStream fis = new FileInputStream(file);
-            Blob blob = (Blob)fis;
-            KeyPair keyPair = new KeyPair("Blob", blob);
-            params.add(keyPair);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Parametres.class.getName()).log(Level.SEVERE, null, ex);
+    public void addBlob(byte[] blobPhotocopie) {
+        if(blobPhotocopie == null){
+            addNull();
+        }else{
+            java.sql.Blob blob = null;
+            try {
+                blob = new SerialBlob(blobPhotocopie);
+                if(blob != null){
+                    KeyPair keyPair = new KeyPair("Blob", blob);
+                    params.add(keyPair);
+                }
+            } catch (SerialException ex) {
+                Logger.getLogger(Parametres.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(Parametres.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -109,7 +119,7 @@ public class Parametres {
             }else if(kp.getKey().equals("null")){
                 ps.setNull(i, java.sql.Types.OTHER);
             }else if(kp.getKey().equals("Blob")){
-                ps.setBlob(i, (Blob)kp.getValue());
+                ps.setBlob(i, (java.sql.Blob)kp.getValue());
             }
             i++;
         }

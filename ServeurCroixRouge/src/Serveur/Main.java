@@ -8,7 +8,7 @@ package Serveur;
 
 public class Main {
     public static void main(String args[]) {
-        int port = 12345;//A changer avec FileAccess.
+        int port = 8500;//A changer avec FileAccess.
         ServeurPool serveurPool = new ServeurPool(port, 5, "Protocole.ProtocoleServeur");
         Thread myThread = new Thread(serveurPool);
         myThread.start();

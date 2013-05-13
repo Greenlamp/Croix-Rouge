@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -263,6 +264,18 @@ public class Formation implements Serializable{
 
     public void setBlobPhotocopie(byte[] blobPhotocopie) {
         this.blobPhotocopie = blobPhotocopie;
+    }
+
+    public void setBlobPhotocopieInBlob(java.sql.Blob blob) {
+        if(blob != null){
+            try {
+                int blobLength = (int) blob.length();
+                this.blobPhotocopie = blob.getBytes(1, blobLength);
+                blob.free();
+            } catch (SQLException ex) {
+                Logger.getLogger(Formation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
 }

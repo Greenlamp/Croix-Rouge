@@ -5,22 +5,12 @@
 
 package Containers;
 
-import EasyDate.EasyDate;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Volontaire implements Serializable{
     private Identite identite;
@@ -31,16 +21,18 @@ public class Volontaire implements Serializable{
     private Telephone telephone;
     private Urgence urgence;
     private Formations formations;
+    private Activite activite;
 
     public Volontaire(){
         setIdentite(null);
+        setDecouverte(null);
+        setComplementaire(null);
         setAdresse(null);
         setResidence(null);
         setTelephone(null);
         setUrgence(null);
-        setDecouverte(null);
-        setComplementaire(null);
         setFormations(null);
+        setActivite(null);
     }
 
     public Identite getIdentite() {
@@ -185,6 +177,7 @@ public class Volontaire implements Serializable{
             setDecouverte(volontaire.getDecouverte());
             setComplementaire(volontaire.getComplementaire());
             setFormations(volontaire.getFormations());
+            setActivite(volontaire.getActivite());
             ois.close();
         } catch (Exception ex) {
             //Logger.getLogger(Volontaire.class.getName()).log(Level.SEVERE, null, ex);
@@ -234,5 +227,13 @@ public class Volontaire implements Serializable{
         } catch (Exception ex) {
             Logger.getLogger(Volontaire.class.getName()).log(Level.SEVERE, null, ex);
         }*/
+    }
+
+    public Activite getActivite() {
+        return activite;
+    }
+
+    public void setActivite(Activite activite) {
+        this.activite = activite;
     }
 }

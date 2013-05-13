@@ -382,7 +382,7 @@ public class M_Identite extends javax.swing.JPanel {
     private void BprecedentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BprecedentActionPerformed
         if(checkChamps()){
             creerClasse();
-            parent.changeState(Main.NOUVEAU_VOLONTAIRE_PAGE_8);
+            parent.changeState(Main.NOUVEAU_VOLONTAIRE_PAGE_9);
         }
     }//GEN-LAST:event_BprecedentActionPerformed
 
@@ -467,9 +467,12 @@ public class M_Identite extends javax.swing.JPanel {
         }else if(!EasyCheck.checkString(Gprenom.getText())){
             parent.afficherMessage("Prenom invalide");
             return false;
-        }else{
-            return true;
+        }else if(!EasyCheck.checkDate(Gjour, Gmois, Gannee)){
+            parent.afficherMessage("date incorrect");
+            Gjour.requestFocus();
+            return false;
         }
+        return true;
     }
 
     private void creerClasse() {

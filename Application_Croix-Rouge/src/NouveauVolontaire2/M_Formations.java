@@ -7,6 +7,7 @@ package NouveauVolontaire2;
 import Containers.Formation;
 import Containers.Formations;
 import Containers.Volontaire;
+import EasyCheck.EasyCheck;
 import EasyDate.EasyDate;
 import GUI.Panels.Main;
 import Network.NetworkClient;
@@ -595,6 +596,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel10.setText("Obtenu le");
 
         GjourObtenuBDS.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuBDS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourObtenuBDSActionPerformed(evt);
+            }
+        });
 
         jLabel13.setText("/");
 
@@ -610,6 +616,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel18.setText("Date de l'examen");
 
         GjourExamenBDS.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourExamenBDS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourExamenBDSActionPerformed(evt);
+            }
+        });
 
         jLabel17.setText("/");
 
@@ -636,6 +647,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel9.setText("/");
 
         GjourValableBDS.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableBDS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourValableBDSActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Valable jusqu'au ");
 
@@ -759,6 +775,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel31.setText("Obtenu le");
 
         GjourObtenuTMS.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuTMS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourObtenuTMSActionPerformed(evt);
+            }
+        });
 
         jLabel36.setText("/");
 
@@ -785,6 +806,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel42.setText("Valable jusqu'au ");
 
         GjourValableTMS.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableTMS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourValableTMSActionPerformed(evt);
+            }
+        });
 
         jLabel35.setText("/");
 
@@ -926,6 +952,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel37.setText("Obtenu le");
 
         GjourObtenuI.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourObtenuIActionPerformed(evt);
+            }
+        });
 
         jLabel38.setText("/");
 
@@ -952,6 +983,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel56.setText("Valable jusqu'au ");
 
         GjourValableI.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourValableIActionPerformed(evt);
+            }
+        });
 
         jLabel54.setText("/");
 
@@ -1047,12 +1083,13 @@ public class M_Formations extends javax.swing.JPanel {
                     .addComponent(jLabel40)
                     .addComponent(GnumSantePubliqueI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel41)
-                    .addComponent(BparcourirB5)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton3)
-                        .addComponent(jButton8)))
+                        .addComponent(jButton8))
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel41)
+                        .addComponent(BparcourirB5)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel56)
@@ -1091,6 +1128,11 @@ public class M_Formations extends javax.swing.JPanel {
         GAMU.setText("Ambulancier AMU ");
 
         GjourObtenuAMU.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuAMU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourObtenuAMUActionPerformed(evt);
+            }
+        });
 
         jLabel26.setText("/");
 
@@ -1121,6 +1163,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel62.setText("Valable jusqu'au");
 
         GjourValableAMU.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableAMU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourValableAMUActionPerformed(evt);
+            }
+        });
 
         jLabel61.setText("/");
 
@@ -1224,12 +1271,13 @@ public class M_Formations extends javax.swing.JPanel {
                     .addComponent(jLabel28)
                     .addComponent(GnumServiceAMU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel29)
-                    .addComponent(BparcourirB3)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton9)
-                        .addComponent(jButton10)))
+                        .addComponent(jButton10))
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel29)
+                        .addComponent(BparcourirB3)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel62)
@@ -1270,6 +1318,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel43.setText("Obtenu le");
 
         GjourObtenuSISU.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuSISU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourObtenuSISUActionPerformed(evt);
+            }
+        });
 
         jLabel44.setText("/");
 
@@ -1307,6 +1360,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel49.setText("/");
 
         GjourValableSISU.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableSISU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourValableSISUActionPerformed(evt);
+            }
+        });
 
         GpermanentSISU.setBackground(new java.awt.Color(153, 153, 153));
         GpermanentSISU.setText("Permanent");
@@ -1391,12 +1449,13 @@ public class M_Formations extends javax.swing.JPanel {
                     .addComponent(jLabel46)
                     .addComponent(GnumBadgeSISU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel47)
-                    .addComponent(BparcourirB6)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton11)
-                        .addComponent(jButton12)))
+                        .addComponent(jButton12))
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel47)
+                        .addComponent(BparcourirB6)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(GjourValableSISU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1437,6 +1496,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel51.setText("Obtenu le");
 
         GjourObtenuM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourObtenuMActionPerformed(evt);
+            }
+        });
 
         jLabel52.setText("/");
 
@@ -1463,6 +1527,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel67.setText("Valable jusqu'au ");
 
         GjourValableM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourValableMActionPerformed(evt);
+            }
+        });
 
         jLabel66.setText("/");
 
@@ -1538,7 +1607,7 @@ public class M_Formations extends javax.swing.JPanel {
                         .addComponent(GanneeValableM, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(GpermanentM)))
-                .addContainerGap(901, Short.MAX_VALUE))
+                .addContainerGap(881, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1558,12 +1627,13 @@ public class M_Formations extends javax.swing.JPanel {
                     .addComponent(jLabel57)
                     .addComponent(GnumInamiM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel55)
-                    .addComponent(BparcourirB7)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton13)
-                        .addComponent(jButton14)))
+                        .addComponent(jButton14))
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel55)
+                        .addComponent(BparcourirB7)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel67)
@@ -1580,7 +1650,10 @@ public class M_Formations extends javax.swing.JPanel {
         jPanel20.setLayout(jPanel20Layout);
         jPanel20Layout.setHorizontalGroup(
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel20Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel20Layout.setVerticalGroup(
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1601,6 +1674,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel93.setText("Obtenu le");
 
         GjourObtenuA1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuA1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourObtenuA1ActionPerformed(evt);
+            }
+        });
 
         jLabel94.setText("/");
 
@@ -1618,6 +1696,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel97.setText("Valable jusqu'au ");
 
         GjourValableA1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableA1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourValableA1ActionPerformed(evt);
+            }
+        });
 
         jLabel98.setText("/");
 
@@ -1718,6 +1801,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel118.setText("Obtenu le");
 
         GjourObtenuA3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuA3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourObtenuA3ActionPerformed(evt);
+            }
+        });
 
         jLabel119.setText("/");
 
@@ -1735,6 +1823,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel122.setText("Valable jusqu'au ");
 
         GjourValableA3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableA3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourValableA3ActionPerformed(evt);
+            }
+        });
 
         jLabel123.setText("/");
 
@@ -1835,6 +1928,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel125.setText("Obtenu le");
 
         GjourObtenuA2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourObtenuA2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourObtenuA2ActionPerformed(evt);
+            }
+        });
 
         jLabel126.setText("/");
 
@@ -1852,6 +1950,11 @@ public class M_Formations extends javax.swing.JPanel {
         jLabel129.setText("Valable jusqu'au ");
 
         GjourValableA2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        GjourValableA2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourValableA2ActionPerformed(evt);
+            }
+        });
 
         jLabel130.setText("/");
 
@@ -2357,17 +2460,150 @@ public class M_Formations extends javax.swing.JPanel {
 
     private void GjourObtenuBEPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourObtenuBEPSActionPerformed
         JComboBox source = (JComboBox)evt.getSource();
-        if(!source.getSelectedItem().toString().equals("-")){
+        if(!source.getSelectedItem().toString().equals("-") && GmoisObtenuBEPS.getSelectedItem().toString().equals("-")){
             GmoisObtenuBEPS.setSelectedIndex(1);
         }
     }//GEN-LAST:event_GjourObtenuBEPSActionPerformed
 
     private void GjourValableBEPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourValableBEPSActionPerformed
         JComboBox source = (JComboBox)evt.getSource();
-        if(!source.getSelectedItem().toString().equals("-")){
+        if(!source.getSelectedItem().toString().equals("-") && GmoisValableBEPS.getSelectedItem().toString().equals("-")){
             GmoisValableBEPS.setSelectedIndex(1);
         }
     }//GEN-LAST:event_GjourValableBEPSActionPerformed
+
+    private void GjourObtenuBDSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourObtenuBDSActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisObtenuBDS.getSelectedItem().toString().equals("-")){
+            GmoisObtenuBDS.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourObtenuBDSActionPerformed
+
+    private void GjourExamenBDSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourExamenBDSActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisExamenBDS.getSelectedItem().toString().equals("-")){
+            GmoisExamenBDS.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourExamenBDSActionPerformed
+
+    private void GjourValableBDSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourValableBDSActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisValableBDS.getSelectedItem().toString().equals("-")){
+            GmoisValableBDS.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourValableBDSActionPerformed
+
+    private void GjourObtenuTMSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourObtenuTMSActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisObtenuTMS.getSelectedItem().toString().equals("-")){
+            GmoisObtenuTMS.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourObtenuTMSActionPerformed
+
+    private void GjourValableTMSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourValableTMSActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisValableTMS.getSelectedItem().toString().equals("-")){
+            GmoisValableTMS.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourValableTMSActionPerformed
+
+    private void GjourObtenuIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourObtenuIActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisObtenuI.getSelectedItem().toString().equals("-")){
+            GmoisObtenuI.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourObtenuIActionPerformed
+
+    private void GjourValableIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourValableIActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisValableI.getSelectedItem().toString().equals("-")){
+            GmoisValableI.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourValableIActionPerformed
+
+    private void GjourObtenuAMUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourObtenuAMUActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisObtenuAMU.getSelectedItem().toString().equals("-")){
+            GmoisObtenuAMU.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourObtenuAMUActionPerformed
+
+    private void GjourValableAMUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourValableAMUActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisValableAMU.getSelectedItem().toString().equals("-")){
+            GmoisValableAMU.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourValableAMUActionPerformed
+
+    private void GjourObtenuSISUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourObtenuSISUActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisObtenuSISU.getSelectedItem().toString().equals("-")){
+            GmoisObtenuSISU.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourObtenuSISUActionPerformed
+
+    private void GjourValableSISUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourValableSISUActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisValableSISU.getSelectedItem().toString().equals("-")){
+            GmoisValableSISU.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourValableSISUActionPerformed
+
+    private void GjourObtenuMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourObtenuMActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisObtenuM.getSelectedItem().toString().equals("-")){
+            GmoisObtenuM.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourObtenuMActionPerformed
+
+    private void GjourValableMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourValableMActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisValableM.getSelectedItem().toString().equals("-")){
+            GmoisValableM.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourValableMActionPerformed
+
+    private void GjourObtenuA1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourObtenuA1ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisObtenuA1.getSelectedItem().toString().equals("-")){
+            GmoisObtenuA1.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourObtenuA1ActionPerformed
+
+    private void GjourValableA1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourValableA1ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisValableA1.getSelectedItem().toString().equals("-")){
+            GmoisValableA1.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourValableA1ActionPerformed
+
+    private void GjourObtenuA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourObtenuA2ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisObtenuA2.getSelectedItem().toString().equals("-")){
+            GmoisObtenuA2.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourObtenuA2ActionPerformed
+
+    private void GjourValableA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourValableA2ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisValableA2.getSelectedItem().toString().equals("-")){
+            GmoisValableA2.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourValableA2ActionPerformed
+
+    private void GjourObtenuA3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourObtenuA3ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisObtenuA3.getSelectedItem().toString().equals("-")){
+            GmoisObtenuA3.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourObtenuA3ActionPerformed
+
+    private void GjourValableA3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourValableA3ActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && GmoisValableA3.getSelectedItem().toString().equals("-")){
+            GmoisValableA3.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourValableA3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Baccueil1;
@@ -2678,6 +2914,91 @@ public class M_Formations extends javax.swing.JPanel {
     }
 
     private boolean checkChamps() {
+        if(!EasyCheck.checkDate(GjourObtenuBEPS, GmoisObtenuBEPS, GanneeObtenuBEPS)){
+            parent.afficherMessage("Date obtention incorrect BEPS");
+            GjourObtenuBEPS.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourValableBEPS, GmoisValableBEPS, GanneeValableBEPS)){
+            parent.afficherMessage("Date péremption incorrect BEPS");
+            GjourValableBEPS.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourObtenuBDS, GmoisObtenuBDS, GanneeObtenuBDS)){
+            parent.afficherMessage("Date obtention incorrect BDS");
+            GjourObtenuBDS.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourValableBDS, GmoisValableBDS, GanneeValableBDS)){
+            parent.afficherMessage("Date péremption incorrect BDS");
+            GjourValableBDS.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourExamenBDS, GmoisExamenBDS, GanneeExamenBDS)){
+            parent.afficherMessage("Date examen incorrect BDS");
+            GjourExamenBDS.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourObtenuTMS, GmoisObtenuTMS, GanneeObtenuTMS)){
+            parent.afficherMessage("Date obtention incorrect TMS");
+            GjourObtenuTMS.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourValableTMS, GmoisValableTMS, GanneeValableTMS)){
+            parent.afficherMessage("Date péremption incorrect TMS");
+            GjourValableTMS.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourObtenuI, GmoisObtenuI, GanneeObtenuI)){
+            parent.afficherMessage("Date obtention incorrect Infirmier");
+            GjourObtenuI.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourValableI, GmoisValableI, GanneeValableI)){
+            parent.afficherMessage("Date péremption incorrect Infirmier");
+            GjourValableI.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourObtenuAMU, GmoisObtenuAMU, GanneeObtenuAMU)){
+            parent.afficherMessage("Date obtention incorrect AMU");
+            GjourObtenuAMU.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourValableAMU, GmoisValableAMU, GanneeValableAMU)){
+            parent.afficherMessage("Date péremption incorrect AMU");
+            GjourValableAMU.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourObtenuSISU, GmoisObtenuSISU, GanneeObtenuSISU)){
+            parent.afficherMessage("Date obtention incorrect SISU");
+            GjourObtenuSISU.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourValableSISU, GmoisValableSISU, GanneeValableSISU)){
+            parent.afficherMessage("Date péremption incorrect SISU");
+            GjourValableSISU.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourObtenuM, GmoisObtenuM, GanneeObtenuM)){
+            parent.afficherMessage("Date obtention incorrect Médecin");
+            GjourObtenuM.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourValableM, GmoisValableM, GanneeValableM)){
+            parent.afficherMessage("Date péremption incorrect Médecin");
+            GjourValableM.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourObtenuA1, GmoisObtenuA1, GanneeObtenuA1)){
+            parent.afficherMessage("Date obtention incorrect Autre 1");
+            GjourObtenuA1.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourValableA1, GmoisValableA1, GanneeValableA1)){
+            parent.afficherMessage("Date péremption incorrect Autre 1");
+            GjourValableA1.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourObtenuA2, GmoisObtenuA2, GanneeObtenuA2)){
+            parent.afficherMessage("Date obtention incorrect Autre 2");
+            GjourObtenuA2.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourValableA2, GmoisValableA2, GanneeValableA2)){
+            parent.afficherMessage("Date péremption incorrect Autre 2");
+            GjourValableA2.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourObtenuA3, GmoisObtenuA3, GanneeObtenuA3)){
+            parent.afficherMessage("Date obtention incorrect Autre 3");
+            GjourObtenuA3.requestFocus();
+            return false;
+        }else if(!EasyCheck.checkDate(GjourValableA3, GmoisValableA3, GanneeValableA3)){
+            parent.afficherMessage("Date péremption incorrect Autre 3");
+            GjourValableA3.requestFocus();
+            return false;
+        }
         return true;
     }
 
@@ -3596,9 +3917,9 @@ public class M_Formations extends javax.swing.JPanel {
             bis.read(data, 0, length);
             return data;
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Apercu_Photocopie.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Apercu_Photocopie.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

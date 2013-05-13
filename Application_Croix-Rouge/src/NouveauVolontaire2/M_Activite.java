@@ -4,9 +4,29 @@
  */
 package NouveauVolontaire2;
 
+import Containers.Activite;
+import Containers.ActiviteFormation;
 import Containers.Volontaire;
+import EasyCheck.EasyCheck;
+import EasyDate.EasyDate;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import PacketCom.PacketCom;
+import States.States;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JRadioButton;
 
 /**
  *
@@ -22,10 +42,14 @@ public class M_Activite extends javax.swing.JPanel {
     Volontaire volontaire = null;
     String matricule = null;
     boolean edited = false;
+
+    byte[] photocopiePermis = null;
+
     public M_Activite(Main parent, NetworkClient socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;
+        ComboBoxAnnee();
         matricule = parent.getMatricule();
         if(matricule != null){
             edited = true;
@@ -50,6 +74,14 @@ public class M_Activite extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        buttonGroup3 = new javax.swing.ButtonGroup();
+        buttonGroup4 = new javax.swing.ButtonGroup();
+        buttonGroup5 = new javax.swing.ButtonGroup();
+        buttonGroup6 = new javax.swing.ButtonGroup();
+        buttonGroup7 = new javax.swing.ButtonGroup();
+        buttonGroup8 = new javax.swing.ButtonGroup();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -63,39 +95,41 @@ public class M_Activite extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         Gjour = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jTextField1 = new javax.swing.JTextField();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jCheckBox6 = new javax.swing.JCheckBox();
-        jCheckBox7 = new javax.swing.JCheckBox();
-        jCheckBox8 = new javax.swing.JCheckBox();
-        jTextField2 = new javax.swing.JTextField();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton5 = new javax.swing.JRadioButton();
-        jRadioButton6 = new javax.swing.JRadioButton();
-        jRadioButton7 = new javax.swing.JRadioButton();
-        jRadioButton8 = new javax.swing.JRadioButton();
-        jRadioButton9 = new javax.swing.JRadioButton();
-        jRadioButton10 = new javax.swing.JRadioButton();
-        jRadioButton11 = new javax.swing.JRadioButton();
-        jRadioButton12 = new javax.swing.JRadioButton();
-        jRadioButton13 = new javax.swing.JRadioButton();
-        jRadioButton14 = new javax.swing.JRadioButton();
-        jCheckBox9 = new javax.swing.JCheckBox();
-        jRadioButton15 = new javax.swing.JRadioButton();
-        jRadioButton16 = new javax.swing.JRadioButton();
+        Gcentre = new javax.swing.JCheckBox();
+        GnomCentre = new javax.swing.JTextField();
+        Gaps = new javax.swing.JCheckBox();
+        G112 = new javax.swing.JCheckBox();
+        G105 = new javax.swing.JCheckBox();
+        Gdc = new javax.swing.JCheckBox();
+        Gsa = new javax.swing.JCheckBox();
+        Gsl = new javax.swing.JCheckBox();
+        Gautre = new javax.swing.JCheckBox();
+        GpreAutre = new javax.swing.JTextField();
+        G105Ok = new javax.swing.JRadioButton();
+        G105Ec = new javax.swing.JRadioButton();
+        G112Ec = new javax.swing.JRadioButton();
+        G112Ok = new javax.swing.JRadioButton();
+        GapsEc = new javax.swing.JRadioButton();
+        GapsOk = new javax.swing.JRadioButton();
+        GdcEc = new javax.swing.JRadioButton();
+        GdcOk = new javax.swing.JRadioButton();
+        GsaEc = new javax.swing.JRadioButton();
+        GsaOk = new javax.swing.JRadioButton();
+        GslEc = new javax.swing.JRadioButton();
+        GslOk = new javax.swing.JRadioButton();
+        GautreEc = new javax.swing.JRadioButton();
+        GautreOk = new javax.swing.JRadioButton();
+        Gsisu = new javax.swing.JCheckBox();
+        GsisuOk = new javax.swing.JRadioButton();
+        GsisuEc = new javax.swing.JRadioButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        Gnum = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel25 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
@@ -104,6 +138,7 @@ public class M_Activite extends javax.swing.JPanel {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
 
         jPanel2.setBackground(new java.awt.Color(255, 0, 0));
 
@@ -119,7 +154,7 @@ public class M_Activite extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addContainerGap(1158, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,88 +205,184 @@ public class M_Activite extends javax.swing.JPanel {
 
         jLabel11.setText("/");
 
-        Gmois.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        Gmois.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        Gmois.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GmoisActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("/");
 
-        Gjour.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        Gjour.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        Gjour.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GjourActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("En tant que volontaire, vous allez intervenir");
 
-        jCheckBox1.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox1.setText("dans le centre de secours");
+        Gcentre.setBackground(new java.awt.Color(153, 153, 153));
+        Gcentre.setText("dans le centre de secours");
+        Gcentre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GcentreActionPerformed(evt);
+            }
+        });
 
-        jCheckBox2.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox2.setText("pour les actions préventives de secours (APS)");
+        GnomCentre.setEnabled(false);
 
-        jCheckBox3.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox3.setText("pour le transport urgent en ambulance (112)");
+        Gaps.setBackground(new java.awt.Color(153, 153, 153));
+        Gaps.setText("pour les actions préventives de secours (APS)");
+        Gaps.setEnabled(false);
+        Gaps.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GapsActionPerformed(evt);
+            }
+        });
 
-        jCheckBox4.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox4.setText("pour le transport non urgent en ambulance (105)");
+        G112.setBackground(new java.awt.Color(153, 153, 153));
+        G112.setText("pour le transport urgent en ambulance (112)");
+        G112.setEnabled(false);
+        G112.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                G112ActionPerformed(evt);
+            }
+        });
 
-        jCheckBox5.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox5.setText("pour le dispatching communautaire");
+        G105.setBackground(new java.awt.Color(153, 153, 153));
+        G105.setText("pour le transport non urgent en ambulance (105)");
+        G105.setEnabled(false);
+        G105.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                G105ActionPerformed(evt);
+            }
+        });
 
-        jCheckBox6.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox6.setText("pour le support administratif");
+        Gdc.setBackground(new java.awt.Color(153, 153, 153));
+        Gdc.setText("pour le dispatching communautaire");
+        Gdc.setEnabled(false);
+        Gdc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GdcActionPerformed(evt);
+            }
+        });
 
-        jCheckBox7.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox7.setText("pour le support logistique");
+        Gsa.setBackground(new java.awt.Color(153, 153, 153));
+        Gsa.setText("pour le support administratif");
+        Gsa.setEnabled(false);
+        Gsa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GsaActionPerformed(evt);
+            }
+        });
 
-        jCheckBox8.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox8.setText("pour une autre activité, précisez");
+        Gsl.setBackground(new java.awt.Color(153, 153, 153));
+        Gsl.setText("pour le support logistique");
+        Gsl.setEnabled(false);
+        Gsl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GslActionPerformed(evt);
+            }
+        });
 
-        jRadioButton1.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton1.setText("ok");
+        Gautre.setBackground(new java.awt.Color(153, 153, 153));
+        Gautre.setText("pour une autre activité, précisez");
+        Gautre.setEnabled(false);
+        Gautre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GautreActionPerformed(evt);
+            }
+        });
 
-        jRadioButton2.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton2.setText("en cours");
+        G105Ok.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup3.add(G105Ok);
+        G105Ok.setText("ok");
+        G105Ok.setEnabled(false);
 
-        jRadioButton3.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton3.setText("en cours");
+        G105Ec.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup3.add(G105Ec);
+        G105Ec.setText("en cours");
+        G105Ec.setEnabled(false);
 
-        jRadioButton4.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton4.setText("ok");
+        G112Ec.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup2.add(G112Ec);
+        G112Ec.setText("en cours");
+        G112Ec.setEnabled(false);
 
-        jRadioButton5.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton5.setText("en cours");
+        G112Ok.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup2.add(G112Ok);
+        G112Ok.setText("ok");
+        G112Ok.setEnabled(false);
 
-        jRadioButton6.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton6.setText("ok");
+        GapsEc.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(GapsEc);
+        GapsEc.setText("en cours");
+        GapsEc.setEnabled(false);
 
-        jRadioButton7.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton7.setText("en cours");
+        GapsOk.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(GapsOk);
+        GapsOk.setText("ok");
+        GapsOk.setEnabled(false);
 
-        jRadioButton8.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton8.setText("ok");
+        GdcEc.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup4.add(GdcEc);
+        GdcEc.setText("en cours");
+        GdcEc.setEnabled(false);
 
-        jRadioButton9.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton9.setText("en cours");
+        GdcOk.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup4.add(GdcOk);
+        GdcOk.setText("ok");
+        GdcOk.setEnabled(false);
 
-        jRadioButton10.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton10.setText("ok");
+        GsaEc.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup5.add(GsaEc);
+        GsaEc.setText("en cours");
+        GsaEc.setEnabled(false);
 
-        jRadioButton11.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton11.setText("en cours");
+        GsaOk.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup5.add(GsaOk);
+        GsaOk.setText("ok");
+        GsaOk.setEnabled(false);
 
-        jRadioButton12.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton12.setText("ok");
+        GslEc.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup6.add(GslEc);
+        GslEc.setText("en cours");
+        GslEc.setEnabled(false);
 
-        jRadioButton13.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton13.setText("en cours");
+        GslOk.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup6.add(GslOk);
+        GslOk.setText("ok");
+        GslOk.setEnabled(false);
 
-        jRadioButton14.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton14.setText("ok");
+        GautreEc.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup7.add(GautreEc);
+        GautreEc.setText("en cours");
+        GautreEc.setEnabled(false);
 
-        jCheckBox9.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox9.setText("au service d'intervention psychosociale urgente (SISU)");
+        GautreOk.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup7.add(GautreOk);
+        GautreOk.setText("ok");
+        GautreOk.setEnabled(false);
 
-        jRadioButton15.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton15.setText("ok");
+        Gsisu.setBackground(new java.awt.Color(153, 153, 153));
+        Gsisu.setText("au service d'intervention psychosociale urgente (SISU)");
+        Gsisu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GsisuActionPerformed(evt);
+            }
+        });
 
-        jRadioButton16.setBackground(new java.awt.Color(153, 153, 153));
-        jRadioButton16.setText("en cours");
+        GsisuOk.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup8.add(GsisuOk);
+        GsisuOk.setText("ok");
+        GsisuOk.setEnabled(false);
+
+        GsisuEc.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup8.add(GsisuEc);
+        GsisuEc.setText("en cours");
+        GsisuEc.setEnabled(false);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setText("Vous allez intervenir en tant que chauffeur ?");
@@ -261,8 +392,27 @@ public class M_Activite extends javax.swing.JPanel {
         jLabel9.setText("Photocopie de votre permis de conduire");
 
         jButton1.setText("parcourir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel10.setText("numéro de registre national qui vous permettra de vous inscrire pour la sélection médicale");
+
+        jButton2.setText("aperçu");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("retirer");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -272,88 +422,78 @@ public class M_Activite extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jCheckBox1)
+                        .addComponent(Gcentre)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1))
+                        .addComponent(GnomCentre))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel4)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(Gjour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel7)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(Gmois, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel11)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(Gannee, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel5)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(Gsisu)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(GsisuOk)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(GsisuEc))
+                        .addComponent(jLabel6)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Gnum))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(53, 53, 53)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(G105)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox4)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jCheckBox7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jRadioButton12)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jRadioButton11)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton1)
+                                    .addComponent(G112)
+                                    .addComponent(GpreAutre, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Gautre)
+                                    .addComponent(Gsa)
+                                    .addComponent(Gsl)
+                                    .addComponent(Gdc)
+                                    .addComponent(Gaps))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(G112Ok, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(G105Ok, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(GdcOk, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(GsaOk, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(GslOk, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(GautreOk, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton2))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jCheckBox2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton6)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(G112Ec)
+                                    .addComponent(G105Ec)
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(GdcEc)
+                                        .addComponent(GsaEc)
+                                        .addComponent(GslEc)
+                                        .addComponent(GautreEc))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(GapsOk)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton5))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jCheckBox5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton7))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jCheckBox6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton9))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox8, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton14)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton13))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jCheckBox3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton3))))
+                                .addComponent(GapsEc))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(Gjour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(Gmois, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(Gannee, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel5)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jCheckBox9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton15)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton16))
-                            .addComponent(jLabel6)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1))
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField3))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -371,61 +511,65 @@ public class M_Activite extends javax.swing.JPanel {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Gcentre)
+                    .addComponent(GnomCentre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox2)
-                    .addComponent(jRadioButton6)
-                    .addComponent(jRadioButton5))
+                    .addComponent(Gaps)
+                    .addComponent(GapsOk)
+                    .addComponent(GapsEc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox3)
-                    .addComponent(jRadioButton4)
-                    .addComponent(jRadioButton3))
+                    .addComponent(G112)
+                    .addComponent(G112Ok)
+                    .addComponent(G112Ec))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox4)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                    .addComponent(G105)
+                    .addComponent(G105Ok)
+                    .addComponent(G105Ec))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox5)
-                    .addComponent(jRadioButton8)
-                    .addComponent(jRadioButton7))
+                    .addComponent(Gdc)
+                    .addComponent(GdcOk)
+                    .addComponent(GdcEc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox6)
-                    .addComponent(jRadioButton10)
-                    .addComponent(jRadioButton9))
+                    .addComponent(Gsa)
+                    .addComponent(GsaOk)
+                    .addComponent(GsaEc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox7)
-                    .addComponent(jRadioButton12)
-                    .addComponent(jRadioButton11))
+                    .addComponent(Gsl)
+                    .addComponent(GslOk)
+                    .addComponent(GslEc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox8)
-                    .addComponent(jRadioButton14)
-                    .addComponent(jRadioButton13))
+                    .addComponent(Gautre)
+                    .addComponent(GautreOk)
+                    .addComponent(GautreEc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(GpreAutre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox9)
-                    .addComponent(jRadioButton15)
-                    .addComponent(jRadioButton16))
+                    .addComponent(Gsisu)
+                    .addComponent(GsisuOk)
+                    .addComponent(GsisuEc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9)
-                    .addComponent(jButton1))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton6)
+                        .addComponent(jButton2))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel8)
+                        .addComponent(jLabel9)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Gnum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -464,6 +608,13 @@ public class M_Activite extends javax.swing.JPanel {
             }
         });
 
+        jButton7.setText("Suivant");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -483,6 +634,8 @@ public class M_Activite extends javax.swing.JPanel {
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -496,7 +649,8 @@ public class M_Activite extends javax.swing.JPanel {
                     .addComponent(jLabel28)
                     .addComponent(jButton4)
                     .addComponent(jButton3)
-                    .addComponent(jButton5))
+                    .addComponent(jButton5)
+                    .addComponent(jButton7))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -511,7 +665,7 @@ public class M_Activite extends javax.swing.JPanel {
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 793, Short.MAX_VALUE))
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -554,25 +708,147 @@ public class M_Activite extends javax.swing.JPanel {
         parent.cleanBackup();
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void GmoisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GmoisActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(source.getSelectedItem().toString().equals("-")){
+            Gjour.setSelectedIndex(0);
+            Gjour.setEnabled(false);
+        }else{
+            Gjour.setEnabled(true);
+        }
+    }//GEN-LAST:event_GmoisActionPerformed
+
+    private void GjourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GjourActionPerformed
+        JComboBox source = (JComboBox)evt.getSource();
+        if(!source.getSelectedItem().toString().equals("-") && Gmois.getSelectedItem().toString().equals("-")){
+            Gmois.setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_GjourActionPerformed
+
+    private void GcentreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GcentreActionPerformed
+        enableChamps(Gcentre.isSelected());
+    }//GEN-LAST:event_GcentreActionPerformed
+
+    private void GsisuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GsisuActionPerformed
+        GsisuOk.setEnabled(Gsisu.isSelected());
+        GsisuEc.setEnabled(Gsisu.isSelected());
+    }//GEN-LAST:event_GsisuActionPerformed
+
+    private void GapsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GapsActionPerformed
+        GapsOk.setEnabled(Gaps.isSelected());
+        GapsEc.setEnabled(Gaps.isSelected());
+    }//GEN-LAST:event_GapsActionPerformed
+
+    private void G112ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_G112ActionPerformed
+        G112Ok.setEnabled(G112.isSelected());
+        G112Ec.setEnabled(G112.isSelected());
+    }//GEN-LAST:event_G112ActionPerformed
+
+    private void G105ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_G105ActionPerformed
+        G105Ok.setEnabled(G105.isSelected());
+        G105Ec.setEnabled(G105.isSelected());
+    }//GEN-LAST:event_G105ActionPerformed
+
+    private void GdcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GdcActionPerformed
+        GdcOk.setEnabled(Gdc.isSelected());
+        GdcEc.setEnabled(Gdc.isSelected());
+    }//GEN-LAST:event_GdcActionPerformed
+
+    private void GsaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GsaActionPerformed
+        GsaOk.setEnabled(Gsa.isSelected());
+        GsaEc.setEnabled(Gsa.isSelected());
+    }//GEN-LAST:event_GsaActionPerformed
+
+    private void GslActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GslActionPerformed
+        GslOk.setEnabled(Gsl.isSelected());
+        GslEc.setEnabled(Gsl.isSelected());
+    }//GEN-LAST:event_GslActionPerformed
+
+    private void GautreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GautreActionPerformed
+        GpreAutre.setEnabled(Gautre.isSelected());
+        GautreOk.setEnabled(Gautre.isSelected());
+        GautreEc.setEnabled(Gautre.isSelected());
+    }//GEN-LAST:event_GautreActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Apercu_Photocopie apercu_Photocopie = new Apercu_Photocopie(parent, true, photocopiePermis);
+        apercu_Photocopie.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        photocopiePermis = null;
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        int retour = fileChooser.showOpenDialog(this);
+        if(retour == JFileChooser.APPROVE_OPTION){
+            File fichier = fileChooser.getSelectedFile();
+            if(!checkFormat(fichier)){
+                parent.afficherMessage("Format autorisé: jpg, jpeg, png, bmp");
+                photocopiePermis = null;
+            }else{
+                photocopiePermis = FileToByte(fichier);
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        if(checkChamps()){
+            creerClasse();
+            parent.changeState(Main.NOUVEAU_VOLONTAIRE);
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Baccueil1;
+    private javax.swing.JCheckBox G105;
+    private javax.swing.JRadioButton G105Ec;
+    private javax.swing.JRadioButton G105Ok;
+    private javax.swing.JCheckBox G112;
+    private javax.swing.JRadioButton G112Ec;
+    private javax.swing.JRadioButton G112Ok;
     private javax.swing.JComboBox Gannee;
+    private javax.swing.JCheckBox Gaps;
+    private javax.swing.JRadioButton GapsEc;
+    private javax.swing.JRadioButton GapsOk;
+    private javax.swing.JCheckBox Gautre;
+    private javax.swing.JRadioButton GautreEc;
+    private javax.swing.JRadioButton GautreOk;
+    private javax.swing.JCheckBox Gcentre;
+    private javax.swing.JCheckBox Gdc;
+    private javax.swing.JRadioButton GdcEc;
+    private javax.swing.JRadioButton GdcOk;
     private javax.swing.JComboBox Gjour;
     private javax.swing.JComboBox Gmois;
+    private javax.swing.JTextField GnomCentre;
+    private javax.swing.JTextField Gnum;
+    private javax.swing.JTextField GpreAutre;
+    private javax.swing.JCheckBox Gsa;
+    private javax.swing.JRadioButton GsaEc;
+    private javax.swing.JRadioButton GsaOk;
+    private javax.swing.JCheckBox Gsisu;
+    private javax.swing.JRadioButton GsisuEc;
+    private javax.swing.JRadioButton GsisuOk;
+    private javax.swing.JCheckBox Gsl;
+    private javax.swing.JRadioButton GslEc;
+    private javax.swing.JRadioButton GslOk;
     private javax.swing.JLabel Gtitre;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.ButtonGroup buttonGroup3;
+    private javax.swing.ButtonGroup buttonGroup4;
+    private javax.swing.ButtonGroup buttonGroup5;
+    private javax.swing.ButtonGroup buttonGroup6;
+    private javax.swing.ButtonGroup buttonGroup7;
+    private javax.swing.ButtonGroup buttonGroup8;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
-    private javax.swing.JCheckBox jCheckBox7;
-    private javax.swing.JCheckBox jCheckBox8;
-    private javax.swing.JCheckBox jCheckBox9;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -590,40 +866,381 @@ public class M_Activite extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton10;
-    private javax.swing.JRadioButton jRadioButton11;
-    private javax.swing.JRadioButton jRadioButton12;
-    private javax.swing.JRadioButton jRadioButton13;
-    private javax.swing.JRadioButton jRadioButton14;
-    private javax.swing.JRadioButton jRadioButton15;
-    private javax.swing.JRadioButton jRadioButton16;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton5;
-    private javax.swing.JRadioButton jRadioButton6;
-    private javax.swing.JRadioButton jRadioButton7;
-    private javax.swing.JRadioButton jRadioButton8;
-    private javax.swing.JRadioButton jRadioButton9;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 
     private void completerChampActivite() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Activite activite = volontaire.getActivite();
+        String fragmentDate = activite.getFragmentDateDebut();
+        try {
+            changerDate(fragmentDate, activite.getDateDebut(), Gjour, Gmois, Gannee);
+        } catch (Exception ex) {
+            Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(activite.getCentreSecour() != null){
+            Gcentre.setSelected(true);
+            GnomCentre.setText(activite.getCentreSecour());
+            enableChamps(true);
+            for(ActiviteFormation formation : activite.getListeFormation()){
+                completerChamp(formation);
+            }
+        }
+        if(activite.getListeFormation().size() != 0){
+            ActiviteFormation formation = activite.getListeFormation().getLast();
+            if(formation.getNom().equals(Gsisu.getText())){
+                Gsisu.setEnabled(true);
+                Gsisu.setSelected(true);
+                GsisuOk.setEnabled(true);
+                GsisuEc.setEnabled(true);
+                if(formation.getStatus().equals(GsisuOk.getText())){
+                    GsisuOk.setSelected(true);
+                }else{
+                    GsisuEc.setSelected(true);
+                }
+            }
+        }
+        photocopiePermis = activite.getPermis();
+        Gnum.setText(activite.getNumeroRegistre());
     }
 
     private boolean checkChamps() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if(Gcentre.isSelected()){
+            if(GnomCentre.getText().isEmpty()){
+                parent.afficherMessage("Nom du centre incorrect");
+                GnomCentre.requestFocus();
+                return false;
+            }
+        }
+        if(!EasyCheck.checkDate(Gjour, Gmois, Gannee)){
+            parent.afficherMessage("Date incorrect");
+            Gjour.requestFocus();
+            return false;
+        }
+        return true;
     }
 
     private void creerClasse() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Activite activite = new Activite();
+
+        String jourDebut = Gjour.getSelectedItem().toString();
+        String moisDebut = Gmois.getSelectedItem().toString();
+        String anneeDebut = Gannee.getSelectedItem().toString();
+        String dateDebut = jourDebut + "/" + moisDebut + "/" + anneeDebut;
+
+        if(!EasyDate.isValidDate(dateDebut, null)){
+            String fragment = getFragment(jourDebut, moisDebut, anneeDebut);
+            activite.setFragmentDateDebut(fragment);
+        }else{
+            try {
+                activite.setDateDebut(new SimpleDateFormat("dd/MM/yyyy").parse(dateDebut));
+            } catch (ParseException ex) {
+                Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if(Gcentre.isSelected()){
+            activite.setCentreSecour(GnomCentre.getText());
+            activite.addFormation(getActiviteFormation(Gaps, GapsOk, null));
+            activite.addFormation(getActiviteFormation(G112, G112Ok, null));
+            activite.addFormation(getActiviteFormation(G105, G105Ok, null));
+            activite.addFormation(getActiviteFormation(Gdc, GdcOk, null));
+            activite.addFormation(getActiviteFormation(Gsa, GsaOk, null));
+            activite.addFormation(getActiviteFormation(Gsl, GslOk, null));
+            activite.addFormation(getActiviteFormation(Gautre, GautreOk, GpreAutre.getText()));
+        }
+
+        if(Gsisu.isSelected()){
+            activite.addFormation(getActiviteFormation(Gsisu, GsisuOk, null));
+        }
+        activite.setPermis(photocopiePermis);
+        activite.setNumeroRegistre(Gnum.getText());
+        if(volontaire == null){
+            volontaire = new Volontaire();
+        }
+        volontaire.setActivite(activite);
+        parent.setVolontaire(volontaire);
+    }
+
+    private String getFragment(String jour, String mois, String annee) {
+        String fragment = null;
+        if(mois.equals("-")){
+            fragment = "yyyy#"+annee;
+        }else{
+            fragment = "mm/yyyy#"+mois+"/"+annee;
+        }
+        return fragment;
     }
 
     private void envoyerClasse() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        PacketCom packet = null;
+        if(!edited){
+            packet = new PacketCom(States.NOUVEAU_VOLONTAIRE, (Object)volontaire);
+        }else{
+            packet = new PacketCom(States.EDIT_VOLONTAIRE, (Object)volontaire);
+        }
+        socket.send(packet);
+        boolean cont = false;
+        try {
+            PacketCom packetReponse = socket.receive();
+            String type = packetReponse.getType();
+            if(type.equals(States.EDIT_VOLONTAIRE_OUI)){
+                parent.afficherMessage("Modification du volontaire réussi.");
+                cont = true;
+            }else if(type.equals(States.NOUVEAU_VOLONTAIRE_OUI)){
+                parent.afficherMessage("Ajout du  nouveau volontaire réussi.");
+                cont = true;
+            }else{
+                String message = (String) packetReponse.getObjet();
+                volontaire = parent.getVolontaire();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(M_Activite.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(cont){
+            parent.cleanBackup();
+            parent.changeState(Main.LOGGED);
+        }
+    }
+
+    private void enableChamps(boolean value) {
+        GnomCentre.setEnabled(value);
+        if(value == false){
+            Gaps.setSelected(value);
+            G112.setSelected(value);
+            G105.setSelected(value);
+            Gdc.setSelected(value);
+            Gsa.setSelected(value);
+            Gsl.setSelected(value);
+            Gautre.setSelected(value);
+
+            GapsOk.setSelected(value);
+            G112Ok.setSelected(value);
+            G105Ok.setSelected(value);
+            GdcOk.setSelected(value);
+            GsaOk.setSelected(value);
+            GslOk.setSelected(value);
+            GautreOk.setSelected(value);
+
+            GapsEc.setSelected(value);
+            G112Ec.setSelected(value);
+            G105Ec.setSelected(value);
+            GdcEc.setSelected(value);
+            GsaEc.setSelected(value);
+            GslEc.setSelected(value);
+            GautreEc.setSelected(value);
+
+            GapsOk.setEnabled(value);
+            G112Ok.setEnabled(value);
+            G105Ok.setEnabled(value);
+            GdcOk.setEnabled(value);
+            GsaOk.setEnabled(value);
+            GslOk.setEnabled(value);
+            GautreOk.setEnabled(value);
+
+            GapsEc.setEnabled(value);
+            G112Ec.setEnabled(value);
+            G105Ec.setEnabled(value);
+            GdcEc.setEnabled(value);
+            GsaEc.setEnabled(value);
+            GslEc.setEnabled(value);
+            GautreEc.setEnabled(value);
+
+            GpreAutre.setEnabled(value);
+        }
+
+        Gaps.setEnabled(value);
+        G112.setEnabled(value);
+        G105.setEnabled(value);
+        Gdc.setEnabled(value);
+        Gsa.setEnabled(value);
+        Gsl.setEnabled(value);
+        Gautre.setEnabled(value);
+
+    }
+
+    private ActiviteFormation getActiviteFormation(JCheckBox activite, JRadioButton ok, String nom) {
+        if(!activite.isSelected()){
+            return null;
+        }
+        ActiviteFormation af = new ActiviteFormation();
+        if(nom == null){
+            af.setNom(activite.getText());
+        }else{
+            af.setNom(nom);
+        }
+        if(!ok.isEnabled()){
+            af.setStatus("en cours");
+        }else if(!ok.isSelected()){
+            af.setStatus("en cours");
+        }else{
+            af.setStatus("ok");
+        }
+        return af;
+    }
+
+    private boolean checkFormat(File photocopieI) {
+        String extension = "";
+        String name = photocopieI.getName();
+        int i = name.lastIndexOf('.');
+        if (i > 0) {
+            extension = name.substring(i+1);
+        }
+        if(extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png") || extension.equals("bmp")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public byte[] FileToByte(File fichier){
+        if(fichier == null){
+            return null;
+        }
+        int length = (int) fichier.length();
+        byte[] data = new byte[length];
+        try {
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fichier));
+            bis.read(data, 0, length);
+            return data;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(M_Activite.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(M_Activite.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    private void changerDate(String fragment, Date pdate, JComboBox Gjour, JComboBox Gmois, JComboBox Gannee) throws Exception{
+        if(fragment != null){
+            String[] split = fragment.split("#");
+            String format = split[0];
+            String date = split[1];
+            if(format.equals("yyyy")){
+                Gjour.setSelectedIndex(0);
+                Gjour.setEnabled(false);
+                Gmois.setSelectedIndex(0);
+
+                boolean found = false;
+                for(int i=0; i<Gannee.getItemCount() && !found; i++){
+                    if(Gannee.getItemAt(i).toString().equals(date)){
+                        Gannee.setSelectedIndex(i);
+                        found = true;
+                    }
+                }
+            }else{
+                Date dateComplete = null;
+                try {
+                    dateComplete = new SimpleDateFormat("mm/yyyy").parse(date);
+                } catch (ParseException ex) {
+                    Logger.getLogger(M_Formations.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                String mois = new SimpleDateFormat("mm").format(dateComplete);
+                String annee = new SimpleDateFormat("yyyy").format(dateComplete);
+                Gjour.setSelectedIndex(0);
+                Gjour.setEnabled(false);
+                Gmois.setSelectedIndex(Integer.parseInt(mois));
+
+                boolean found = false;
+                for(int i=0; i<Gannee.getItemCount() && !found; i++){
+                    if(Gannee.getItemAt(i).toString().equals(annee)){
+                        Gannee.setSelectedIndex(i);
+                        found = true;
+                    }
+                }
+            }
+        }else if(pdate != null){
+            String jour = new SimpleDateFormat("dd").format(pdate);
+            String mois = new SimpleDateFormat("MM").format(pdate);
+            String annee = new SimpleDateFormat("yyyy").format(pdate);
+            Gjour.setSelectedIndex(Integer.parseInt(jour));
+            Gmois.setSelectedIndex(Integer.parseInt(mois));
+
+            boolean found = false;
+            for(int i=0; i<Gannee.getItemCount() && !found; i++){
+                if(Gannee.getItemAt(i).toString().equals(annee)){
+                    Gannee.setSelectedIndex(i);
+                    found = true;
+                }
+            }
+        }
+    }
+
+    private void completerChamp(ActiviteFormation formation) {
+        String nom = formation.getNom();
+        String status = formation.getStatus();
+
+        if(nom.equals(Gaps.getText())){
+            Gaps.setSelected(true);
+            GapsOk.setEnabled(true);
+            GapsEc.setEnabled(true);
+            if(status.equals(GapsOk.getText())){
+                GapsOk.setSelected(true);
+            }else{
+                GapsEc.setSelected(true);
+            }
+        }else if(nom.equals(G112.getText())){
+            G112.setSelected(true);
+            G112Ok.setEnabled(true);
+            G112Ec.setEnabled(true);
+            if(status.equals(G112Ok.getText())){
+                G112Ok.setSelected(true);
+            }else{
+                G112Ec.setSelected(true);
+            }
+        }else if(nom.equals(G105.getText())){
+            G105.setSelected(true);
+            G105Ok.setEnabled(true);
+            G105Ec.setEnabled(true);
+            if(status.equals(G105Ok.getText())){
+                G105Ok.setSelected(true);
+            }else{
+                G105Ec.setSelected(true);
+            }
+        }else if(nom.equals(Gdc.getText())){
+            Gdc.setSelected(true);
+            GdcOk.setEnabled(true);
+            GdcEc.setEnabled(true);
+            if(status.equals(GdcOk.getText())){
+                GdcOk.setSelected(true);
+            }else{
+                GdcEc.setSelected(true);
+            }
+        }else if(nom.equals(Gsa.getText())){
+            Gsa.setSelected(true);
+            GsaOk.setEnabled(true);
+            GsaEc.setEnabled(true);
+            if(status.equals(GsaOk.getText())){
+                GsaOk.setSelected(true);
+            }else{
+                GsaEc.setSelected(true);
+            }
+        }else if(nom.equals(Gsl.getText())){
+            Gsl.setSelected(true);
+            GslOk.setEnabled(true);
+            GslEc.setEnabled(true);
+            if(status.equals(GslOk.getText())){
+                GslOk.setSelected(true);
+            }else{
+                GslEc.setSelected(true);
+            }
+        }else if(!nom.equals(Gsisu.getText())) {
+            Gautre.setSelected(true);
+            GautreOk.setEnabled(true);
+            GautreEc.setEnabled(true);
+            GpreAutre.setText(nom);
+            if(status.equals(GautreOk.getText())){
+                GautreOk.setSelected(true);
+            }else{
+                GautreEc.setSelected(true);
+            }
+        }
+    }
+
+    private void ComboBoxAnnee() {
+        String annéeToday = new SimpleDateFormat("yyyy").format(new Date());
+        int année = Integer.parseInt(annéeToday);
+        for(int i=année; i>=1920; i--){
+            Gannee.addItem(i);
+        }
     }
 }

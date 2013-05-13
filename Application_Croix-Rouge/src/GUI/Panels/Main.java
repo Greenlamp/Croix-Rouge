@@ -19,6 +19,7 @@ import Containers.Volontaire;
 import EquipeVolontaire.M_ConsulterEquipesVolontaire;
 import EquipeVolontaire.M_NewEditEquipeVolontaire;
 import EquipeVolontaire.M_SearchCrit;
+import FileAccess.FileAccess;
 import GUI.Panels.GestionDroits.M_GestionDroits;
 import GUI.Panels.GestionGroupes.M_GestionGroupes;
 import GUI.Panels.GestionGroupes.M_NewEditGroupes;
@@ -33,6 +34,7 @@ import NouveauVolontaire.M_NouveauVolontaireP3;
 import NouveauVolontaire.M_NouveauVolontaireP4;
 import NouveauVolontaire.M_NouveauVolontaireP5;
 import NouveauVolontaire.M_NouveauVolontaireP6;
+import NouveauVolontaire2.M_Activite;
 import NouveauVolontaire2.M_Adresse;
 import NouveauVolontaire2.M_Decouverte;
 import NouveauVolontaire2.M_Formations;
@@ -121,6 +123,7 @@ public class Main extends javax.swing.JFrame {
     private Groupe groupe = null;
 
     private Utilisateur utilisateur = null;
+    boolean opened = false;
 
 
     public Main() {
@@ -128,8 +131,16 @@ public class Main extends javax.swing.JFrame {
         ImageIcon icone = new ImageIcon(this.getClass().getResource("/Images/Croix-Rouge.jpg"));
         Image image = icone.getImage();
         setIconImage(image);
-        socket = new NetworkClient("127.0.0.1", 12345, false);
+
+        String host = FileAccess.getConfig("configs", "HOST");
+        String port = FileAccess.getConfig("configs", "PORT");
+        socket = new NetworkClient(host, Integer.parseInt(port), false);
         refreshPanel();
+        if(!opened){
+            ReportBugs reportBugs = new ReportBugs();
+            reportBugs.setVisible(true);
+            opened = true;
+        }
     }
 
     /**
@@ -327,6 +338,14 @@ public class Main extends javax.swing.JFrame {
 
             M_Formations mFormations = new M_Formations(this, socket);
             Gscene.add(mFormations);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIRE_PAGE_9)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_Activite mActivite = new M_Activite(this, socket);
+            Gscene.add(mActivite);
             Gscene.revalidate();
         }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP1)){
             Gscene.removeAll();
