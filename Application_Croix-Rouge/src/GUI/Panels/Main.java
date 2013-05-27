@@ -4,6 +4,7 @@
  */
 package GUI.Panels;
 
+import GUI.Panels.Consultation.M_Consultation;
 import Containers.Adresse;
 import Containers.Complementaire;
 import Containers.Decouverte;
@@ -15,6 +16,7 @@ import Containers.Residence;
 import Containers.Telephone;
 import Containers.Urgence;
 import Containers.Utilisateur;
+import Containers.Vehicule;
 import Containers.Volontaire;
 import EquipeVolontaire.M_ConsulterEquipesVolontaire;
 import EquipeVolontaire.M_NewEditEquipeVolontaire;
@@ -25,25 +27,23 @@ import GUI.Panels.GestionGroupes.M_GestionGroupes;
 import GUI.Panels.GestionGroupes.M_NewEditGroupes;
 import GUI.Panels.GestionUtilisateurs.M_GestionUtilisateurs;
 import GUI.Panels.GestionUtilisateurs.M_NewEditUtilisateurs;
-import GrillesHoraires.M_ConsulterGrillesHoraires;
-import GrillesHoraires.M_NewEditGrilleHoraire;
+import GUI.Panels.GrillesHoraires.M_ConsulterGrillesHoraires;
+import GUI.Panels.GrillesHoraires.M_NewEditGrilleHoraire;
+import GUI.Panels.Lieux.M_GestionLieux;
+import GUI.Panels.Lieux.M_NewEditLieux;
 import Network.NetworkClient;
-import NouveauVolontaire.M_NouveauVolontaireP1;
-import NouveauVolontaire.M_NouveauVolontaireP2;
-import NouveauVolontaire.M_NouveauVolontaireP3;
-import NouveauVolontaire.M_NouveauVolontaireP4;
-import NouveauVolontaire.M_NouveauVolontaireP5;
-import NouveauVolontaire.M_NouveauVolontaireP6;
-import NouveauVolontaire2.M_Activite;
-import NouveauVolontaire2.M_Adresse;
-import NouveauVolontaire2.M_Decouverte;
-import NouveauVolontaire2.M_Formations;
-import NouveauVolontaire2.M_Identite;
-import NouveauVolontaire2.M_RenseignementsComplementaires;
-import NouveauVolontaire2.M_Residence;
-import NouveauVolontaire2.M_Téléphone;
-import NouveauVolontaire2.M_Urgence;
-import PacketCom.PacketCom;
+import GUI.Panels.NouveauVolontaire.M_Activite;
+import GUI.Panels.NouveauVolontaire.M_Adresse;
+import GUI.Panels.NouveauVolontaire.M_Decouverte;
+import GUI.Panels.NouveauVolontaire.M_Formations;
+import GUI.Panels.NouveauVolontaire.M_Identite;
+import GUI.Panels.NouveauVolontaire.M_RenseignementsComplementaires;
+import GUI.Panels.NouveauVolontaire.M_Residence;
+import GUI.Panels.NouveauVolontaire.M_Téléphone;
+import GUI.Panels.NouveauVolontaire.M_Urgence;
+import GUI.Panels.Vehicules.M_GestionVehicules;
+import GUI.Panels.Vehicules.M_NewEditVehicule;
+import my.cr.PacketCom.PacketCom;
 import Recherche.TupleRecherche;
 import States.States;
 import java.awt.Image;
@@ -53,7 +53,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 
 /**
@@ -99,6 +98,15 @@ public class Main extends javax.swing.JFrame {
     public static String EDIT_GROUPE = "EDIT_GROUPE";
     public static String NOUVEAU_UTILISATEUR = "NOUVEAU_UTILISATEUR";
     public static String EDIT_UTILISATEUR = "EDIT_UTILISATEUR";
+    public static String GESTION_VEHICULES = "GESTION_VEHICULES";
+    public static String NOUVEAU_VEHICULE = "NOUVEAU_VEHICULE";
+    public static String EDIT_VEHICULE = "EDIT_VEHICULE";
+
+    public static String GESTION_LIEUX = "GESTION_LIEUX";
+    public static String NOUVEAU_LIEU = "NOUVEAU_LIEU";
+    public static String EDIT_LIEU = "EDIT_LIEU";
+
+
 
     private boolean connected = false;
     private LinkedList<String> droits = null;
@@ -123,7 +131,9 @@ public class Main extends javax.swing.JFrame {
     private Groupe groupe = null;
 
     private Utilisateur utilisateur = null;
-    boolean opened = false;
+
+    private Vehicule vehicule = null;
+    private String lieu = null;
 
 
     public Main() {
@@ -136,11 +146,6 @@ public class Main extends javax.swing.JFrame {
         String port = FileAccess.getConfig("configs", "PORT");
         socket = new NetworkClient(host, Integer.parseInt(port), false);
         refreshPanel();
-        if(!opened){
-            ReportBugs reportBugs = new ReportBugs();
-            reportBugs.setVisible(true);
-            opened = true;
-        }
     }
 
     /**
@@ -347,54 +352,6 @@ public class Main extends javax.swing.JFrame {
             M_Activite mActivite = new M_Activite(this, socket);
             Gscene.add(mActivite);
             Gscene.revalidate();
-        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP1)){
-            Gscene.removeAll();
-            Gscene.repaint();
-            Gscene.revalidate();
-
-            M_NouveauVolontaireP1 m_NouveauVolontaireP1 = new M_NouveauVolontaireP1(this, this.socket);
-            Gscene.add(m_NouveauVolontaireP1);
-            Gscene.revalidate();
-        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP2)){
-            Gscene.removeAll();
-            Gscene.repaint();
-            Gscene.revalidate();
-
-            M_NouveauVolontaireP2 m_NouveauVolontaireP2 = new M_NouveauVolontaireP2(this, this.socket);
-            Gscene.add(m_NouveauVolontaireP2);
-            Gscene.revalidate();
-        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP3)){
-            Gscene.removeAll();
-            Gscene.repaint();
-            Gscene.revalidate();
-
-            M_NouveauVolontaireP3 m_NouveauVolontaireP3 = new M_NouveauVolontaireP3(this, this.socket);
-            Gscene.add(m_NouveauVolontaireP3);
-            Gscene.revalidate();
-        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP4)){
-            Gscene.removeAll();
-            Gscene.repaint();
-            Gscene.revalidate();
-
-            M_NouveauVolontaireP4 m_NouveauVolontaireP4 = new M_NouveauVolontaireP4(this, this.socket);
-            Gscene.add(m_NouveauVolontaireP4);
-            Gscene.revalidate();
-        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP5)){
-            Gscene.removeAll();
-            Gscene.repaint();
-            Gscene.revalidate();
-
-            M_NouveauVolontaireP5 m_NouveauVolontaireP5 = new M_NouveauVolontaireP5(this, this.socket);
-            Gscene.add(m_NouveauVolontaireP5);
-            Gscene.revalidate();
-        }else if(this.getActualState().equals(Main.NOUVEAU_VOLONTAIREP6)){
-            Gscene.removeAll();
-            Gscene.repaint();
-            Gscene.revalidate();
-
-            M_NouveauVolontaireP6 m_NouveauVolontaireP6 = new M_NouveauVolontaireP6(this, this.socket);
-            Gscene.add(m_NouveauVolontaireP6);
-            Gscene.revalidate();
         }else if(this.getActualState().equals(Main.GESTION_DROITS)){
             Gscene.removeAll();
             Gscene.repaint();
@@ -499,6 +456,54 @@ public class Main extends javax.swing.JFrame {
             M_ConsulterGrillesHoraires m_ConsulterGrillesHoraires = new M_ConsulterGrillesHoraires(this, socket);
             Gscene.add(m_ConsulterGrillesHoraires);
             Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.GESTION_VEHICULES)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_GestionVehicules m_GestionVehicules = new M_GestionVehicules(this, socket);
+            Gscene.add(m_GestionVehicules);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_VEHICULE)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditVehicule m_NewEditVehicule = new M_NewEditVehicule(this, socket, "Nouveau véhicule");
+            Gscene.add(m_NewEditVehicule);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.EDIT_VEHICULE)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditVehicule m_NewEditVehicule = new M_NewEditVehicule(this, socket, "Modifier véhicule");
+            Gscene.add(m_NewEditVehicule);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.GESTION_LIEUX)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_GestionLieux m_GestionLieux = new M_GestionLieux(this, socket);
+            Gscene.add(m_GestionLieux);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_LIEU)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditLieux m_NewEditLieux = new M_NewEditLieux(this, socket, "Nouveau lieu");
+            Gscene.add(m_NewEditLieux);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.EDIT_LIEU)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditLieux m_NewEditLieux = new M_NewEditLieux(this, socket, "Modifier lieu");
+            Gscene.add(m_NewEditLieux);
+            Gscene.revalidate();
         }
     }
 
@@ -574,6 +579,14 @@ public class Main extends javax.swing.JFrame {
         }
         if(!actualState.equals(Main.NOUVEAU_UTILISATEUR) && ! actualState.equals(Main.EDIT_UTILISATEUR)){
             utilisateur = null;
+        }
+
+        if(!actualState.equals(Main.NOUVEAU_VEHICULE) && !actualState.equals(Main.EDIT_VEHICULE)){
+            vehicule = null;
+        }
+
+        if(!actualState.equals(Main.NOUVEAU_LIEU) && !actualState.equals(Main.EDIT_LIEU)){
+            lieu = null;
         }
     }
 
@@ -707,5 +720,21 @@ public class Main extends javax.swing.JFrame {
 
     public void setUtilisateur(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
+    }
+
+    public Vehicule getVehicule() {
+        return vehicule;
+    }
+
+    public void setVehicule(Vehicule vehicule) {
+        this.vehicule = vehicule;
+    }
+
+    public String getLieu() {
+        return lieu;
+    }
+
+    public void setLieu(String lieu) {
+        this.lieu = lieu;
     }
 }

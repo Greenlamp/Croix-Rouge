@@ -110,49 +110,7 @@ public class Volontaire implements Serializable{
         } catch (Exception ex) {
             //Logger.getLogger(Volontaire.class.getName()).log(Level.SEVERE, null, ex);
         }
-/*
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        if(getIdentite() != null) getIdentite().backupTexte(baos);
-        else new Identite().backupTexte(baos);
-
-        if(getDecouverte() != null) getDecouverte().backupTexte(baos);
-        else new Decouverte().backupTexte(baos);
-
-        if(getComplementaire() != null) getComplementaire().backupTexte(baos);
-        else new Complementaire().backupTexte(baos);
-
-        if(getAdresse() != null) getAdresse().backupTexte(baos);
-        else new Adresse().backupTexte(baos);
-
-        if(getResidence() != null) getResidence().backupTexte(baos);
-        else new Residence().backupTexte(baos);
-
-        if(getTelephone() != null) getTelephone().backupTexte(baos);
-        else new Telephone().backupTexte(baos);
-
-        if(getUrgence() != null) getUrgence().backupTexte(baos);
-        else new Urgence().backupTexte(baos);
-
-        if(getFormations() != null) getFormations().backupTexte(baos);
-        else new Formations().backupTexte(baos);
-
-
-
-        try {
-            FileWriter file = new FileWriter(nameFile);
-            FileOutputStream fos = new FileOutputStream(new File(nameFile));
-            fos.write(baos.toByteArray());
-            file.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Volontaire.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-
-    }
-
-    private void ajouterLigne(StringBuilder sb, String text) {
-        sb.append(text);
-        sb.append("\n");
     }
 
     public void clearBackupTexte(String loginUser) {
@@ -182,51 +140,6 @@ public class Volontaire implements Serializable{
         } catch (Exception ex) {
             //Logger.getLogger(Volontaire.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-/*
-        try {
-            BufferedReader buff = new BufferedReader(new FileReader(nameFile));
-
-            Identite identite = new Identite();
-            identite.loadBackupTexte(buff);
-
-            Decouverte decouverte = new Decouverte();
-            decouverte.loadBackupTexte(buff);
-
-            Complementaire complementaire = new Complementaire();
-            complementaire.loadBackupTexte(buff);
-
-            Adresse adresse = new Adresse();
-            adresse.loadBackupTexte(buff);
-
-            Residence residence = new Residence();
-            residence.loadBackupTexte(buff);
-
-            Telephone telephone = new Telephone();
-            telephone.loadBackupTexte(buff);
-
-            Urgence urgence = new Urgence();
-            urgence.loadBackupTexte(buff);
-
-            Formations formations = new Formations();
-            formations.loadBackupTexte(buff);
-
-            this.setIdentite(identite);
-            this.setDecouverte(decouverte);
-            this.setComplementaire(complementaire);
-            this.setAdresse(adresse);
-            this.setResidence(residence);
-            this.setTelephone(telephone);
-            this.setUrgence(urgence);
-            this.setFormations(formations);
-
-            buff.close();
-        } catch (FileNotFoundException ex) {
-        } catch (IOException ex) {
-            Logger.getLogger(Volontaire.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(Volontaire.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
     }
 
     public Activite getActivite() {

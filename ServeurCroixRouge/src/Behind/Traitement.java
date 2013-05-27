@@ -5,7 +5,8 @@
 
 package Behind;
 
-import PacketCom.PacketCom;
+import my.cr.PacketCom.PacketCom;
+import my.cr.PacketCom.Protocolable;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

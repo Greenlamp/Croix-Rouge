@@ -29,25 +29,4 @@ public class Decouverte implements Serializable{
         if(description != null && description.isEmpty()) description = null;
         this.description = description;
     }
-
-    void loadBackupTexte(BufferedReader buff) throws Exception{
-        setDescription(buff.readLine());
-    }
-
-    void backupTexte(ByteArrayOutputStream sb) {
-        if(this.getDescription() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getDescription());
-        }
-    }
-
-    private void ajouterLigne(ByteArrayOutputStream sb, String text) {
-        try {
-            sb.write(text.getBytes());
-            sb.write("\n".getBytes());
-        } catch (IOException ex) {
-            Logger.getLogger(Decouverte.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }

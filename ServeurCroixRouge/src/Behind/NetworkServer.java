@@ -5,8 +5,6 @@
 
 package Behind;
 
-import PacketCom.PacketCom;
-import PacketCom.Protocolable;
 import Protocole.ProtocoleServeur;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +15,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.cr.PacketCom.PacketCom;
+import my.cr.PacketCom.Protocolable;
 
 
 public class NetworkServer {

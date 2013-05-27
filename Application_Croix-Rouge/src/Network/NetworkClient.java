@@ -5,7 +5,6 @@
 
 package Network;
 
-import PacketCom.PacketCom;
 import Protocole.ProtocoleClient;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +16,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.cr.PacketCom.PacketCom;
 
 
 public class NetworkClient {

@@ -9,7 +9,7 @@ import EasyDate.EasyDate;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
-import PacketCom.PacketCom;
+import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.Date;
 import java.util.LinkedList;
@@ -684,10 +684,20 @@ public class M_NewEditUtilisateurs extends javax.swing.JPanel {
         Lconnecté.setText(String.valueOf(utilisateur.getConnected()));
         for(String groupe : utilisateur.getGroupes()){
             SwingUtils.addToList(Gpossede, groupe);
+            listeGroupe.add(groupe);
         }
     }
 
     private boolean checkChamp() {
+        if(!edited){
+            String pass = new String(Gpassword.getPassword());
+            String verif = new String(Gverif.getPassword());
+            if(!pass.equals(verif)){
+                parent.afficherMessage("La vérification de mot de passe ne correspond pas");
+                Gverif.requestFocus();
+                return false;
+            }
+        }
         return true;
     }
 

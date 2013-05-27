@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+	android:id="@+id/widget99"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+<Spinner
+	android:id="@+id/Gannee"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_x="203dp"
+	android:layout_y="141dp" />
+<Spinner
+	android:id="@+id/Gmois"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_x="105dp"
+	android:layout_y="141dp" />
+<Spinner
+	android:id="@+id/Gjour"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_x="7dp"
+	android:layout_y="141dp" />
+<CheckBox
+	android:id="@+id/CdateNaissance"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="Date de naissance"
+	android:layout_x="3dp"
+	android:layout_y="100dp" />
+<EditText
+	android:id="@+id/Gprenom"
+	android:layout_width="120dp"
+	android:layout_height="wrap_content"
+	android:textSize="18sp"
+	android:layout_x="149dp"
+	android:layout_y="48dp" />
+<CheckBox
+	android:id="@+id/Cprenom"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="Prenom"
+	android:layout_x="145dp"
+	android:layout_y="5dp" />
+<EditText
+	android:id="@+id/Gnom"
+	android:layout_width="120dp"
+	android:layout_height="wrap_content"
+	android:textSize="18sp"
+	android:layout_x="0dp"
+	android:layout_y="52dp" />
+<CheckBox
+	android:id="@+id/Cnom"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="Nom"
+	android:layout_x="0dp"
+	android:layout_y="0dp" />
+<Button
+	android:id="@+id/Grechercher"
+	android:layout_width="296dp"
+	android:layout_height="48dp"
+	android:text="Rechercher"
+	android:layout_x="6dp"
+	android:layout_y="379dp" />
+</AbsoluteLayout>

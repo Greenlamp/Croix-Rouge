@@ -4,11 +4,11 @@
  */
 package GUI.Panels.GestionDroits;
 
-import GUI.Panels.M_Consultation;
+import GUI.Panels.Consultation.M_Consultation;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
-import PacketCom.PacketCom;
+import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.LinkedList;
 import java.util.Vector;
@@ -103,7 +103,7 @@ public class M_GestionDroits extends javax.swing.JPanel {
                 java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -160,7 +160,6 @@ public class M_GestionDroits extends javax.swing.JPanel {
     }//GEN-LAST:event_Baccueil1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Baccueil;
     private javax.swing.JButton Baccueil1;
     private javax.swing.JTable JlisteDroits;
     private javax.swing.JLabel jLabel1;

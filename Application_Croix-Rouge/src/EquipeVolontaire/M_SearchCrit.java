@@ -9,15 +9,14 @@ import Containers.Key;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
-import PacketCom.PacketCom;
-import Recherche.Critere;
-import Recherche.TupleRecherche;
+import my.cr.PacketCom.PacketCom;
 import States.States;
-import Wizard.Wizard_Nouveau;
 import java.util.LinkedList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.LibCritereAndroid.Recherche.Critere;
+import my.LibCritereAndroid.Recherche.TupleRecherche;
 
 /**
  *
@@ -367,7 +366,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
                 parent.afficherMessage(message);
             }
         } catch (Exception ex) {
-            Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_BrechercherActionPerformed
 
@@ -480,7 +479,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
                 parent.afficherMessage(message);
             }
         } catch (Exception ex) {
-            Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

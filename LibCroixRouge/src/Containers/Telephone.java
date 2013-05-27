@@ -72,49 +72,4 @@ public class Telephone implements Serializable{
         if(fax != null && fax.isEmpty()) fax = null;
         this.fax = fax;
     }
-
-    void backupTexte(ByteArrayOutputStream sb) {
-        if(this.getGsm() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getGsm());
-        }
-        if(this.getAutreGsm() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getAutreGsm());
-        }
-        if(this.getTelephoneFix() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getTelephoneFix());
-        }
-        if(this.getTelephoneProfesionnelle() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getTelephoneProfesionnelle());
-        }
-        if(this.getFax() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getFax());
-        }
-    }
-
-    void loadBackupTexte(BufferedReader buff) throws IOException {
-        setGsm(buff.readLine());
-        setAutreGsm(buff.readLine());
-        setTelephoneFix(buff.readLine());
-        setTelephoneProfesionnelle(buff.readLine());
-        setFax(buff.readLine());
-    }
-
-    private void ajouterLigne(ByteArrayOutputStream sb, String text) {
-        try {
-            sb.write(text.getBytes());
-            sb.write("\n".getBytes());
-        } catch (IOException ex) {
-            Logger.getLogger(Telephone.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }

@@ -5,9 +5,9 @@
 
 package Protocole;
 
-import PacketCom.PacketCom;
-import PacketCom.Protocolable;
 import States.States;
+import my.cr.PacketCom.PacketCom;
+import my.cr.PacketCom.Protocolable;
 
 
 public class ProtocoleClient implements Protocolable{
@@ -138,6 +138,46 @@ public class ProtocoleClient implements Protocolable{
         }else if (type.equals(States.DELETE_VOLONTAIRE_OUI)) {
             return packet;
         }else if (type.equals(States.DELETE_VOLONTAIRE_NON)) {
+            return packet;
+        }else if (type.equals(States.GET_VEHICULES_ALL_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_VEHICULES_ALL_NON)) {
+            return packet;
+        }else if (type.equals(States.EDIT_VEHICULE_NON)) {
+            return packet;
+        }else if (type.equals(States.EDIT_VEHICULE_OUI)) {
+            return packet;
+        }else if (type.equals(States.NEW_VEHICULE_NON)) {
+            return packet;
+        }else if (type.equals(States.NEW_VEHICULE_OUI)) {
+            return packet;
+        }else if (type.equals(States.DELETE_VEHICULE_NON)) {
+            return packet;
+        }else if (type.equals(States.DELETE_VEHICULE_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_VEHICULE_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_VEHICULE_NON)) {
+            return packet;
+        }else if (type.equals(States.GET_LIEUX_ALL_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_LIEUX_ALL_NON)) {
+            return packet;
+        }else if (type.equals(States.GET_LIEU_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_LIEU_NON)) {
+            return packet;
+        }else if (type.equals(States.NEW_LIEU_OUI)) {
+            return packet;
+        }else if (type.equals(States.NEW_LIEU_NON)) {
+            return packet;
+        }else if (type.equals(States.EDIT_LIEU_OUI)) {
+            return packet;
+        }else if (type.equals(States.EDIT_LIEU_NON)) {
+            return packet;
+        }else if (type.equals(States.DELETE_LIEU_OUI)) {
+            return packet;
+        }else if (type.equals(States.DELETE_LIEU_NON)) {
             return packet;
         }else{
             return new PacketCom(States.ERROR, "ERROR");

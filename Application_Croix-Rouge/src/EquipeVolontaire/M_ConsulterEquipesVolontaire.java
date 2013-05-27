@@ -4,11 +4,11 @@
  */
 package EquipeVolontaire;
 
-import GUI.Panels.M_Consultation;
+import GUI.Panels.Consultation.M_Consultation;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
-import PacketCom.PacketCom;
+import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.LinkedList;
 import java.util.Vector;

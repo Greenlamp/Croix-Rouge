@@ -22,11 +22,10 @@ import Containers.Residence;
 import Containers.Telephone;
 import Containers.Urgence;
 import Containers.Utilisateur;
+import Containers.Vehicule;
 import Containers.Volontaire;
 import EasyDate.EasyDate;
 import FileAccess.FileAccess;
-import Recherche.Criteres.DBA;
-import Recherche.TupleRecherche;
 import Util.Parametres;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
@@ -36,6 +35,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.LibCritereAndroid.Criteres.DBA;
+import my.LibCritereAndroid.Recherche.TupleRecherche;
 
 
 public class DbRequests implements DBA{
@@ -58,7 +59,7 @@ public class DbRequests implements DBA{
         if(identite == null){
             return;
         }
-        String request = "INSERT INTO Volontaires(matricule, nom, nomEpouse, prenom, dateNaissance, sexe, email, remarques, idPersonneUrgence, idDecouverte, idPrestation, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, idActivite) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String request = "INSERT INTO Volontaires(matricule, nom, nomEpouse, prenom, dateNaissance, sexe, email, remarques, photo, completed, idPersonneUrgence, idDecouverte, idPrestation, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, idActivite) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Parametres params = new Parametres();
         params.addString(identite.getMatricule());
         params.addString(identite.getNom());
@@ -72,6 +73,8 @@ public class DbRequests implements DBA{
             params.addNull();
         }
         params.addString(remarque);
+        params.addBlob(identite.getPhoto());
+        params.addInt((identite.isCompleted() ? 1 : 0));
         params.addInt(idPersonneUrgence);
         params.addInt(idDecouverte);
         params.addInt(idPrestation);
@@ -239,9 +242,9 @@ public class DbRequests implements DBA{
         int idLangueMaternelle = insertLangue(complementaire.getLangueMaternelle());
         int idRenseignement = -1;
         String request = "INSERT INTO Renseignements"
-                + "(activitePro, SituationActuelle, Diplome, Categorie, DateObtention, permanent, amu, TMS, VSL, TPMR, selectionMedicale, dateValidite, numCompteBancaire, idLangueMaternelle)"
+                + "(activitePro, SituationActuelle, Diplome, Categorie, DateObtention, permanent, selectionMedicale, dateValidite, numCompteBancaire, idLangueMaternelle)"
                 + " VALUES"
-                + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Parametres params = new Parametres();
         params.addString(complementaire.getActivitePro());
         params.addString(complementaire.getActivite());
@@ -249,10 +252,6 @@ public class DbRequests implements DBA{
         params.addString(complementaire.getCategorie());
         params.addDate(complementaire.getDateObtention());
         params.addInt((complementaire.isPermanent() ? 1 : 0));
-        params.addInt((complementaire.isAmu() ? 1 : 0));
-        params.addInt((complementaire.isTms() ? 1 : 0));
-        params.addInt((complementaire.isVsl() ? 1 : 0));
-        params.addInt((complementaire.isTpmr() ? 1 : 0));
         params.addInt((complementaire.isSelectionMedicale() ? 1 : 0));
         params.addString(complementaire.getDateValidité());
         params.addString(complementaire.getNumCompteBancaire());
@@ -713,7 +712,7 @@ public class DbRequests implements DBA{
 
     public LinkedList<String[]> getVolontairesAll() throws Exception {
         LinkedList<String[]> listeVolontaires = new LinkedList<>();
-        String request = "SELECT Volontaires.nom, Volontaires.prenom, Volontaires.dateNaissance, Ville.nomVille FROM (Volontaires LEFT JOIN Adresse ON(Volontaires.idAdresseLegale = Adresse.idAdresse)) LEFT JOIN Ville ON(Ville.idVille = Adresse.idVille)";
+        String request = "SELECT Volontaires.nom, Volontaires.prenom, Volontaires.dateNaissance, Ville.nomVille, Volontaires.completed FROM (Volontaires LEFT JOIN Adresse ON(Volontaires.idAdresseLegale = Adresse.idAdresse)) LEFT JOIN Ville ON(Ville.idVille = Adresse.idVille)";
         ResultSet rs = mysql.pSelect(request, null);
         while(rs.next()){
             String nom = rs.getString("nom");
@@ -721,7 +720,8 @@ public class DbRequests implements DBA{
             Timestamp date = rs.getTimestamp("dateNaissance");
             String nomVille = rs.getString("nomVille");
             String dateNaissance = EasyDate.getDateOnly(date);
-            String[] data = {nom, prenom, dateNaissance, nomVille};
+            String completed = (rs.getInt("completed") == 1 ? "Complet" : "Incomplet");
+            String[] data = {nom, prenom, dateNaissance, nomVille, completed};
             listeVolontaires.add(data);
         }
         return listeVolontaires;
@@ -1272,7 +1272,7 @@ public class DbRequests implements DBA{
             return null;
         }
         Identite identite = null;
-        String request = "SELECT nom, nomEpouse, prenom, dateNaissance, sexe FROM Volontaires WHERE matricule = ?";
+        String request = "SELECT nom, nomEpouse, prenom, dateNaissance, sexe, photo, completed FROM Volontaires WHERE matricule = ?";
         Parametres params = new Parametres();
         params.addString(matricule);
 
@@ -1283,6 +1283,8 @@ public class DbRequests implements DBA{
             String prenom = rs.getString("prenom");
             Timestamp date = rs.getTimestamp("dateNaissance");
             String sexe = rs.getString("sexe");
+            java.sql.Blob photo= rs.getBlob("photo");
+            int completed = rs.getInt("completed");
 
             identite = new Identite();
             identite.setNom(nom);
@@ -1292,6 +1294,8 @@ public class DbRequests implements DBA{
             if(date != null){
                 identite.setDateNaissance(new Date(date.getTime()));
             }
+            identite.setBlobPhoto(photo);
+            identite.setCompleted((completed == 1 ? true : false));
             identite.setMatricule(matricule);
         }
         return identite;
@@ -1342,7 +1346,7 @@ public class DbRequests implements DBA{
             complementaire.addLangue(rs.getString("nom"));
         }
 
-        request = "SELECT activitePro, SituationActuelle, Diplome, Categorie, DateObtention, permanent, amu, TMS, VSL, TPMR, selectionMedicale, dateValidite, numCompteBancaire FROM Renseignements WHERE idRenseignement = ?";
+        request = "SELECT activitePro, SituationActuelle, Diplome, Categorie, DateObtention, permanent, selectionMedicale, dateValidite, numCompteBancaire FROM Renseignements WHERE idRenseignement = ?";
         params = new Parametres();
         params.addInt(idRenseignement);
         rs = mysql.pSelect(request, params);
@@ -1353,10 +1357,6 @@ public class DbRequests implements DBA{
             String categorie = rs.getString("Categorie");
             Timestamp dateObtention = rs.getTimestamp("DateObtention");
             int permanent = rs.getInt("permanent");
-            int amu = rs.getInt("amu");
-            int TMS = rs.getInt("TMS");
-            int VSL = rs.getInt("VSL");
-            int TPMR = rs.getInt("TPMR");
             int selectionMedicale = rs.getInt("selectionMedicale");
             String dateValidite = rs.getString("dateValidite");
             String numCompteBancaire = rs.getString("numCompteBancaire");
@@ -1370,10 +1370,6 @@ public class DbRequests implements DBA{
                 complementaire.setDateObtention(dateUtil);
             }
             complementaire.setPermanent((permanent == 1 ? true : false));
-            complementaire.setAmu((amu == 1 ? true : false));
-            complementaire.setTms((TMS == 1 ? true : false));
-            complementaire.setVsl((VSL == 1 ? true : false));
-            complementaire.setTpmr((TPMR == 1 ? true : false));
             complementaire.setSelectionMedicale((selectionMedicale == 1 ? true : false));
             complementaire.setDateValidité(dateValidite);
             complementaire.setNumCompteBancaire(numCompteBancaire);
@@ -1700,13 +1696,15 @@ public class DbRequests implements DBA{
         if(identite == null || matricule == null){
             return;
         }
-        String request = "UPDATE volontaires SET nom = ?, prenom = ?, nomEpouse = ?, dateNaissance = ?, sexe = ? WHERE matricule = ?";
+        String request = "UPDATE volontaires SET nom = ?, prenom = ?, nomEpouse = ?, dateNaissance = ?, sexe = ?, photo = ?, completed = ? WHERE matricule = ?";
         Parametres params = new Parametres();
         params.addString(identite.getNom());
         params.addString(identite.getPrenom());
         params.addString(identite.getNomJeuneFille());
         params.addDate(identite.getDateNaissance());
         params.addString(identite.getSexe());
+        params.addBlob(identite.getPhoto());
+        params.addInt((identite.isCompleted() ? 1 : 0));
         params.addString(matricule);
         mysql.pUpdate(request, params);
     }
@@ -1740,7 +1738,7 @@ public class DbRequests implements DBA{
 
             int idLangueMaternelle = insertLangue(complementaire.getLangueMaternelle());
 
-            request = "UPDATE Renseignements SET activitePro = ?, SituationActuelle = ?, Diplome = ?, Categorie = ?, DateObtention = ?, permanent = ?, amu = ?, TMS = ?, VSL = ?, TPMR = ?, selectionMedicale = ?, dateValidite = ?, numCompteBancaire = ?, idLangueMaternelle = ? WHERE idRenseignement = ?";
+            request = "UPDATE Renseignements SET activitePro = ?, SituationActuelle = ?, Diplome = ?, Categorie = ?, DateObtention = ?, permanent = ?, selectionMedicale = ?, dateValidite = ?, numCompteBancaire = ?, idLangueMaternelle = ? WHERE idRenseignement = ?";
             params = new Parametres();
             params.addString(complementaire.getActivitePro());
             params.addString(complementaire.getActivite());
@@ -1748,10 +1746,6 @@ public class DbRequests implements DBA{
             params.addString(complementaire.getCategorie());
             params.addDate(complementaire.getDateObtention());
             params.addInt((complementaire.isPermanent() ? 1 : 0));
-            params.addInt((complementaire.isAmu() ? 1 : 0));
-            params.addInt((complementaire.isTms() ? 1 : 0));
-            params.addInt((complementaire.isVsl() ? 1 : 0));
-            params.addInt((complementaire.isTpmr() ? 1 : 0));
             params.addInt((complementaire.isSelectionMedicale() ? 1 : 0));
             params.addString(complementaire.getDateValidité());
             params.addString(complementaire.getNumCompteBancaire());
@@ -2123,7 +2117,8 @@ public class DbRequests implements DBA{
     }
 
     public void nouveauUtilisateur(Utilisateur utilisateur) throws Exception {
-        String request = "INSERT INTO Utilisateurs(login, password, dateDerniereConnexion, connected, prioritaire) VALUES(?, ?, ?, ?, ?)";
+        String request = "INSERT INTO Utilisateurs(login, password, dateDerniereConnexion, "
+                + "connected, prioritaire) VALUES(?, ?, ?, ?, ?)";
         Parametres params = new Parametres();
         params.addString(utilisateur.getLogin());
         params.addString(utilisateur.getPassword());
@@ -2427,5 +2422,133 @@ public class DbRequests implements DBA{
             idTelephone = rs.getInt("idTelephone");
         }
         return idTelephone;
+    }
+
+    public LinkedList<Object[]> getVehicules() throws Exception{
+        LinkedList<Object[]> listeVehicule = new LinkedList<>();
+        String request = "SELECT nom, numeroPlaque FROM Vehicules";
+        ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            String nom = rs.getString("nom");
+            String numeroPlaque = rs.getString("numeroPlaque");
+            listeVehicule.add(new Object[] {nom, numeroPlaque});
+        }
+        return listeVehicule;
+    }
+
+    public Vehicule getVehicule(String nom) throws Exception{
+        if(nom == null || nom.isEmpty()){
+            return null;
+        }
+        Vehicule vehicule = null;
+        String request = "SELECT nom, numeroPlaque FROM Vehicules WHERE nom = ?";
+        Parametres params = new Parametres();
+        params.addString(nom);
+
+        ResultSet rs = mysql.pSelect(request, params);
+        while(rs.next()){
+            String numeroPlaque = rs.getString("numeroPlaque");
+            vehicule = new Vehicule();
+            vehicule.setNom(nom);
+            vehicule.setNumeroPlaque(numeroPlaque);
+        }
+        return vehicule;
+    }
+
+    public void nouveauVehicule(Vehicule vehicule) throws Exception{
+        if(vehicule == null){
+            return;
+        }
+
+        String request = "INSERT INTO Vehicules(nom, numeroPlaque) VALUES(?, ?)";
+        Parametres params = new Parametres();
+        params.addString(vehicule.getNom());
+        params.addString(vehicule.getNumeroPlaque());
+
+        mysql.pUpdate(request, params);
+    }
+
+    public void supprimerVehicule(String nom) throws Exception{
+        if(nom == null || nom.isEmpty()){
+            return;
+        }
+        String request = "DELETE FROM Vehicules WHERE nom = ?";
+        Parametres params = new Parametres();
+        params.addString(nom);
+        mysql.pUpdate(request, params);
+    }
+
+    public void modifierVehicule(Vehicule oldVehicule, Vehicule newVehicule) throws Exception{
+        if(oldVehicule == null || newVehicule == null){
+            return;
+        }
+        String request = "UPDATE Vehicules SET nom = ?, numeroPlaque = ? WHERE nom = ?";
+        Parametres params = new Parametres();
+        params.addString(newVehicule.getNom());
+        params.addString(newVehicule.getNumeroPlaque());
+        params.addString(oldVehicule.getNom());
+
+        mysql.pUpdate(request, params);
+    }
+
+    public LinkedList<Object[]> getLieux() throws Exception{
+        LinkedList<Object[]> listeLieux = new LinkedList<>();
+        String request = "SELECT nom FROM Lieux";
+        ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            String nom = rs.getString("nom");
+            listeLieux.add(new Object[] {nom});
+        }
+        return listeLieux;
+    }
+
+    public String getLieu(String nom) throws Exception{
+        if(nom == null || nom.isEmpty()){
+            return null;
+        }
+        String lieu = null;
+        String request = "SELECT nom FROM Lieux WHERE nom = ?";
+        Parametres params = new Parametres();
+        params.addString(nom);
+
+        ResultSet rs = mysql.pSelect(request, params);
+        while(rs.next()){
+            lieu = nom;
+        }
+        return lieu;
+    }
+
+    public void nouveauLieu(String lieu) throws Exception{
+        if(lieu == null || lieu.isEmpty()){
+            return;
+        }
+
+        String request = "INSERT INTO Lieux(nom) VALUES(?)";
+        Parametres params = new Parametres();
+        params.addString(lieu);
+
+        mysql.pUpdate(request, params);
+    }
+
+    public void modifierLieu(String oldLieu, String newLieu) throws Exception{
+        if(oldLieu == null || newLieu == null || oldLieu.isEmpty() || newLieu.isEmpty()){
+            return;
+        }
+        String request = "UPDATE Lieux SET nom = ? WHERE nom = ?";
+        Parametres params = new Parametres();
+        params.addString(newLieu);
+        params.addString(oldLieu);
+
+        mysql.pUpdate(request, params);
+    }
+
+    public void supprimerLieu(String nom) throws Exception{
+        if(nom == null || nom.isEmpty()){
+            return;
+        }
+        String request = "DELETE FROM Lieux WHERE nom = ?";
+        Parametres params = new Parametres();
+        params.addString(nom);
+        mysql.pUpdate(request, params);
     }
 }

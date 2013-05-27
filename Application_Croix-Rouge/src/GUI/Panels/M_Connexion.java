@@ -5,8 +5,7 @@
 package GUI.Panels;
 
 import Network.NetworkClient;
-import PacketCom.PacketCom;
-import Protocole.ProtocoleClient;
+import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.LinkedList;
 import java.util.logging.Level;

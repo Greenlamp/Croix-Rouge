@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -23,6 +25,8 @@ public class Identite implements Serializable{
     private String sexe;
     private String nomJeuneFille;
     private Date dateNaissance;
+    private byte[] photo;
+    private boolean completed;
 
     public Identite(){
         setMatricule(null);
@@ -31,6 +35,8 @@ public class Identite implements Serializable{
         setSexe("H");
         setNomJeuneFille(null);
         setDateNaissance(null);
+        setPhoto(null);
+        setCompleted(false);
     }
 
     public String getNom() {
@@ -76,6 +82,17 @@ public class Identite implements Serializable{
         this.dateNaissance = dateNaissance;
     }
 
+    public void setDateNaissanceString(String dateNaissance) {
+        if(EasyDate.isValidDate(dateNaissance, null)){
+            try {
+                this.dateNaissance = new SimpleDateFormat("dd/MM/yyyy").parse(dateNaissance);
+            } catch (ParseException ex) {
+            }
+        }else{
+            this.dateNaissance = null;
+        }
+    }
+
     public String getMatricule() {
         return matricule;
     }
@@ -84,57 +101,31 @@ public class Identite implements Serializable{
         this.matricule = matricule;
     }
 
-    void backupTexte(ByteArrayOutputStream sb) {
-        if(this.getMatricule() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getMatricule());
-        }
-        if(this.getNom() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getNom());
-        }
-        if(this.getPrenom() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getPrenom());
-        }
-        if(this.getSexe() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getSexe());
-        }
-        if(this.getNomJeuneFille() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getNomJeuneFille());
-        }
-        if(this.getDateNaissance() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, EasyDate.getDateOnly(this.getDateNaissance()));
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    public void setBlobPhoto(java.sql.Blob blob) {
+        if(blob != null){
+            try {
+                int blobLength = (int) blob.length();
+                this.photo = blob.getBytes(1, blobLength);
+                blob.free();
+            } catch (SQLException ex) {
+                Logger.getLogger(Identite.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
-    private void ajouterLigne(ByteArrayOutputStream sb, String text) {
-        try {
-            sb.write(text.getBytes());
-            sb.write("\n".getBytes());
-        } catch (IOException ex) {
-            Logger.getLogger(Identite.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public boolean isCompleted() {
+        return completed;
     }
 
-    void loadBackupTexte(BufferedReader buff) throws Exception {
-        setMatricule(buff.readLine());
-        setNom(buff.readLine());
-        setPrenom(buff.readLine());
-        setSexe(buff.readLine());
-        setNomJeuneFille(buff.readLine());
-        String date = buff.readLine();
-        if(EasyDate.isValidDate(date, null)){
-            setDateNaissance(new SimpleDateFormat("dd/MM/yyyy").parse(date));
-        }
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

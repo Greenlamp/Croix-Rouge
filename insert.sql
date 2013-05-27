@@ -40,7 +40,12 @@ INSERT INTO `groupes` (`idGroupe`, `nomGroupe`, `niveau`) VALUES
 (3, 'GestionDroits', 20),
 (4, 'GestionGroupes', 21),
 (5, 'GestionUtilisateurs', 22),
-(6, 'GestionEquipes', 23);
+(6, 'GestionEquipes', 23),
+(7, 'GestionVehicule', 24),
+(8, 'GestionLieux', 25),
+(9, 'GestionHoraires', 26),
+(10, 'GestionBirthday', 27),
+(11, 'GestionBrevet', 28);
 
 
 --
@@ -67,7 +72,19 @@ INSERT INTO `droits` (`idDroit`, `nom`, `description`) VALUES
 (17, 'SEE_MANAGE_USER', 'Autorise l''acces au menu des utilisateurs'),
 (18, 'SEE_MANAGER_TEAM', 'Autorise l''acces au menu des équipes'),
 (19, 'CREATE_TEAM', 'Autorise la création d''équipes'),
-(20, 'EDIT_TEAM', 'Autorise la modification des équipes');
+(20, 'EDIT_TEAM', 'Autorise la modification des équipes'),
+(21, 'SEE_VEHICULE', NULL),
+(22, 'CREATE_VEHICULE', NULL),
+(23, 'EDIT_VEHICULE', NULL),
+(24, 'SEE_HORAIRE', NULL),
+(25, 'CREATE_HORAIRE', NULL),
+(26, 'EDIT_HORAIRE', NULL),
+(27, 'EDIT_HORAIRE_STAG', NULL),
+(28, 'SEE_LIEU', NULL),
+(29, 'CREATE_LIEU', NULL),
+(30, 'EDIT_LIEU', NULL),
+(31, 'SEE_BIRTHDAY', NULL),
+(32, 'SEE_EXP_BREVET', NULL);
 
 --
 -- Contenu de la table `appartenir`
@@ -80,6 +97,11 @@ INSERT INTO `appartenir` (`idUtilisateur`, `idGroupe`) VALUES
 (1, 4),
 (1, 5),
 (1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
 (2, 2),
 (3, 2),
 (3, 3);
@@ -102,7 +124,18 @@ INSERT INTO `possederDroit` (`idGroupe`, `idDroit`) VALUES
 (5, 17),
 (6, 18),
 (6, 19),
-(6, 20);
+(6, 20),
+(7, 21),
+(7, 22),
+(7, 23),
+(8, 28),
+(8, 29),
+(8, 30),
+(9, 24),
+(9, 25),
+(9, 26),
+(10, 31),
+(11, 32);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

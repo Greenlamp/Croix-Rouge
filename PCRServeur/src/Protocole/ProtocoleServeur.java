@@ -9,24 +9,23 @@ import Containers.Grille;
 import Containers.Groupe;
 import Containers.Key;
 import Containers.Utilisateur;
+import Containers.Vehicule;
 import Containers.Volontaire;
 import DB.DbRequests;
-import PacketCom.PacketCom;
-import PacketCom.Protocolable;
-import Recherche.Critere;
-import Recherche.Criteres.ByDateNaissance;
-import Recherche.Criteres.ByFormation;
-import Recherche.Criteres.ByNom;
-import Recherche.Criteres.ByPrenom;
-import Recherche.Criteres.CritereCustom;
-import Recherche.Criteres.TraitementRecherche;
-import Recherche.Equipe;
-import Recherche.TupleRecherche;
 import States.States;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.LibCritereAndroid.Criteres.ByDateNaissance;
+import my.LibCritereAndroid.Criteres.ByFormation;
+import my.LibCritereAndroid.Criteres.ByNom;
+import my.LibCritereAndroid.Criteres.ByPrenom;
+import my.LibCritereAndroid.Criteres.CritereCustom;
+import my.LibCritereAndroid.Criteres.TraitementRecherche;
+import my.LibCritereAndroid.Recherche.Critere;
+import my.cr.PacketCom.PacketCom;
+import my.cr.PacketCom.Protocolable;
 
 
 public class ProtocoleServeur implements Protocolable{
@@ -42,6 +41,7 @@ public class ProtocoleServeur implements Protocolable{
     public PacketCom messageFromClient(Object objet){
         PacketCom packet = (PacketCom) objet;
         PacketCom messageToClient = traiterPacketServerSide(packet);
+        System.out.println("retour: " + messageToClient.getType());
         return messageToClient;
     }
 
@@ -76,8 +76,6 @@ public class ProtocoleServeur implements Protocolable{
             return actionGetEquipes(type, contenu);
         }else if(type.equals(States.RECHERCHE)){
             return actionRecherche(type, contenu);
-        }else if(type.equals(States.NOUVELLE_EQUIPE)){
-            return actionNouvelleEquipe(type, contenu);
         }else if(type.equals(States.GET_LISTE_FORMATIONS)){
             return actionGetFormation(type, contenu);
         }else if(type.equals(States.GET_GRILLES_HORAIRES)){
@@ -114,6 +112,26 @@ public class ProtocoleServeur implements Protocolable{
             return actionNouveauUtilisateur(type, contenu);
         }else if(type.equals(States.DELETE_VOLONTAIRE)){
             return actionDeleteVolontaire(type, contenu);
+        }else if(type.equals(States.GET_VEHICULES_ALL)){
+            return actionGetVehiculeAll(type, contenu);
+        }else if(type.equals(States.NEW_VEHICULE)){
+            return actionNewVehicule(type, contenu);
+        }else if(type.equals(States.EDIT_VEHICULE)){
+            return actionEditVehicule(type, contenu);
+        }else if(type.equals(States.DELETE_VEHICULE)){
+            return actionDeleteVehicule(type, contenu);
+        }else if(type.equals(States.GET_VEHICULE)){
+            return actionGetVehicule(type, contenu);
+        }else if(type.equals(States.GET_LIEUX_ALL)){
+            return actionGetLieuxAll(type, contenu);
+        }else if(type.equals(States.GET_LIEU)){
+            return actionGetLieu(type, contenu);
+        }else if(type.equals(States.NEW_LIEU)){
+            return actionNewLieu(type, contenu);
+        }else if(type.equals(States.EDIT_LIEU)){
+            return actionEditLieu(type, contenu);
+        }else if(type.equals(States.DELETE_LIEU)){
+            return actionDeleteLieu(type, contenu);
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }
@@ -163,7 +181,8 @@ public class ProtocoleServeur implements Protocolable{
 
     private PacketCom actionNouveauVolontaire(String type, Object contenu) {
         if(!droitsOffi.contains("CREATE_VOLUNTEER")){
-            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit de créer de nouveau volontaires");
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES,
+                    "Vous ne possédez pas le droit de créer de nouveau volontaires");
             return packetRetour;
         }
         Volontaire volontaire = (Volontaire)contenu;
@@ -187,23 +206,6 @@ public class ProtocoleServeur implements Protocolable{
                 int idAdresseResidence = -1;
                 int idTelephone = -1;
 
-                /*OLD*/
-                //if(volontaire.getDecouverte() != null) idDecouverte = dbRequests.insertDecouvertes(volontaire.getDecouverte().getDescription());
-                //if(volontaire.getComplementaire() != null) idLangueMaternelle = dbRequests.insertLangue(volontaire.getComplementaire().getLangueMaternelle());
-                //if(volontaire.getComplementaire() != null) dbRequests.insertLanguesConnue(idRenseignement, volontaire.getComplementaire().getListeLangue());
-                //if(volontaire.getComplementaire() != null) idRenseignement = dbRequests.insertRenseignement(volontaire.getComplementaire().getActivitePro(), volontaire.getComplementaire().getActivite(), volontaire.getComplementaire().getQualification(), (volontaire.getComplementaire().isPermis() ? "Oui" : "Non"), volontaire.getComplementaire().getCategorie(), volontaire.getComplementaire().getDateObtention(), (volontaire.getComplementaire().isSelectionMedicale() ? "Oui" : "Non"), volontaire.getComplementaire().getDateValidité(), idLangueMaternelle);
-                //if(volontaire.getAdresse() != null) idPaysLegal = dbRequests.insertPays(volontaire.getAdresse().getPays());
-                //if(volontaire.getAdresse() != null) idVilleLegal = dbRequests.insertVille(volontaire.getAdresse().getVille());
-                //if(volontaire.getAdresse() != null) idAdresseLegale = dbRequests.insertAdresse(volontaire.getAdresse().getRue(), volontaire.getAdresse().getNuméro(), volontaire.getAdresse().getCodePostal(), volontaire.getAdresse().getBoite(), idPaysLegal, idVilleLegal, volontaire.getIdentite().getMatricule());
-                //if(volontaire.getResidence() != null) idPaysResidence = dbRequests.insertPays(volontaire.getResidence().getPays());
-                //if(volontaire.getResidence() != null) idVilleResidence = dbRequests.insertVille(volontaire.getResidence().getVille());
-                //if(volontaire.getTelephone() != null) idTelephone = dbRequests.insertTelephone(volontaire.getTelephone().getGsm(), volontaire.getTelephone().getAutreGsm(), volontaire.getTelephone().getTelephoneFix(), volontaire.getTelephone().getTelephoneProfesionnelle(), volontaire.getTelephone().getFax());
-                //if(volontaire.getUrgence() != null) idPersonneUrgence = dbRequests.insertPersonneUrgence(volontaire.getUrgence().getNom(), volontaire.getUrgence().getPrenom(), volontaire.getUrgence().getTelephone());
-                //if(volontaire.getResidence() != null) idAdresseResidence = dbRequests.insertAdresse(volontaire.getResidence().getRue(), volontaire.getResidence().getNuméro(), volontaire.getResidence().getCodePostal(), volontaire.getResidence().getBoite(), idPaysResidence, idVilleResidence, volontaire.getIdentite().getMatricule());
-                //if(volontaire.getFormations() != null) dbRequests.insertFormationsSuivie(volontaire.getIdentite().getMatricule(), volontaire.getFormations().getListeFormation());
-                //if(volontaire.getIdentite() != null) dbRequests.insertVolontaire(volontaire.getIdentite().getMatricule(), volontaire.getIdentite().getNom(), volontaire.getIdentite().getPrenom(), volontaire.getIdentite().getNomJeuneFille(), volontaire.getIdentite().getDateNaissance(), volontaire.getIdentite().getSexe(), (volontaire.getAdresse() == null ? null : volontaire.getAdresse().getEmail()), "", idPersonneUrgence, idDecouverte, -1, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, -1);
-
-                /*NEW*/
                 idDecouverte = dbRequests.insertDecouvertes(volontaire.getDecouverte());
                 idRenseignement = dbRequests.insertRenseignement(volontaire.getComplementaire());
                 idAdresseLegale = dbRequests.insertAdresseLegale(volontaire.getAdresse(), volontaire.getIdentite().getMatricule());
@@ -588,7 +590,7 @@ public class ProtocoleServeur implements Protocolable{
         return new PacketCom(States.RECHERCHE_OUI, (Object)traitementRecherche.getResultats());
     }
 
-    private PacketCom actionNouvelleEquipe(String type, Object contenu) {
+    /*private PacketCom actionNouvelleEquipe(String type, Object contenu) {
         Equipe equipe = (Equipe) contenu;
         PacketCom packetReponse = null;
         int idEquipe = -1;
@@ -622,7 +624,7 @@ public class ProtocoleServeur implements Protocolable{
         }
         dbRequests.getMysql().commit();
         return new PacketCom(States.NOUVELLE_EQUIPE_OUI, null);
-    }
+    }*/
 
     private PacketCom actionGetFormation(String type, Object contenu) {
         //TODO - Créer un droit pour récup les formations
@@ -1198,5 +1200,321 @@ public class ProtocoleServeur implements Protocolable{
 
         dbRequests.getMysql().commit();
         return new PacketCom(States.EDIT_UTILISATEUR_OUI, null);
+    }
+
+    private PacketCom actionGetVehiculeAll(String type, Object contenu) {
+        PacketCom packetReponse = null;
+        if(!droitsOffi.contains("SEE_VEHICULE")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
+            return packetRetour;
+        }
+        LinkedList<Object[]> listeVehicule = null;
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Vehicules"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_VEHICULES_ALL_NON, "Impossible de récupérer la liste des véhicules");
+        }
+        try {
+            listeVehicule = dbRequests.getVehicules();
+            packetReponse = new PacketCom(States.GET_VEHICULES_ALL_OUI, (Object)listeVehicule);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_VEHICULES_ALL_NON, "Impossible de récupérer la liste des véhicules");
+        }
+        dbRequests.getMysql().commit();
+        return packetReponse;
+    }
+
+    private PacketCom actionNewVehicule(String type, Object contenu) {
+        Vehicule vehicule = (Vehicule)contenu;
+        if(!droitsOffi.contains("CREATE_VEHICULE")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Vehicules"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_VEHICULE_NON, "Impossible d'ajouter le véhicule");
+        }
+
+        Vehicule exist;
+        try {
+            exist = dbRequests.getVehicule(vehicule.getNom());
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_VEHICULE_NON, "Impossible d'ajouter le véhicule");
+        }
+        if(exist != null){
+            return new PacketCom(States.NEW_VEHICULE_NON, "Véhicule déja existant");
+        }
+
+        try {
+            dbRequests.nouveauVehicule(vehicule);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_VEHICULE_NON, "Impossible d'ajouter le véhicule");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.NEW_VEHICULE_OUI, null);
+    }
+
+    private PacketCom actionEditVehicule(String type, Object contenu) {
+        Vehicule[] vehicules = (Vehicule[])contenu;
+        Vehicule oldVehicule = vehicules[0];
+        Vehicule newVehicule = vehicules[1];
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Vehicules"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_VEHICULE_NON, "Impossible de modifier le véhicule");
+        }
+
+        Vehicule exist = null;
+        if(!oldVehicule.getNom().equals(newVehicule.getNom())){
+            try {
+                exist = dbRequests.getVehicule(newVehicule.getNom());
+            } catch (Exception ex) {
+                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_VEHICULE_NON, "Impossible de modifier le véhicule");
+            }
+        }
+        if(exist != null){
+            return new PacketCom(States.EDIT_VEHICULE_NON, "Véhicule déja existant");
+        }
+
+        try {
+            dbRequests.modifierVehicule(oldVehicule, newVehicule);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_VEHICULE_NON, "Impossible de modifier le véhicule");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.EDIT_VEHICULE_OUI, null);
+    }
+
+    private PacketCom actionDeleteVehicule(String type, Object contenu) {
+        String nom = (String)contenu;
+        if(!droitsOffi.contains("EDIT_VEHICULE")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Vehicules"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_VEHICULE_NON, "Impossible de supprimer le véhicule");
+        }
+
+        try {
+            dbRequests.supprimerVehicule(nom);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_VEHICULE_NON, "Impossible de supprimer le véhicule");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.DELETE_VEHICULE_OUI, null);
+    }
+
+    private PacketCom actionGetVehicule(String type, Object contenu) {
+        String nom = (String)contenu;
+        if(!droitsOffi.contains("SEE_VEHICULE")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Vehicules"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_VEHICULE_NON, "Impossible de récupérer le véhicule");
+        }
+
+        Vehicule vehicule = null;
+        try {
+            vehicule = dbRequests.getVehicule(nom);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_VEHICULE_NON, "Impossible de récupérer le véhicule");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.GET_VEHICULE_OUI, (Object)vehicule);
+    }
+
+    private PacketCom actionGetLieuxAll(String type, Object contenu) {
+        PacketCom packetReponse = null;
+        if(!droitsOffi.contains("SEE_LIEU")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
+            return packetRetour;
+        }
+        LinkedList<Object[]> listeLieux = null;
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Lieux"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_LIEUX_ALL_NON, "Impossible de récupérer la liste des lieux");
+        }
+        try {
+            listeLieux = dbRequests.getLieux();
+            packetReponse = new PacketCom(States.GET_LIEUX_ALL_OUI, (Object)listeLieux);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_LIEUX_ALL_NON, "Impossible de récupérer la liste des lieux");
+        }
+        dbRequests.getMysql().commit();
+        return packetReponse;
+    }
+
+    private PacketCom actionGetLieu(String type, Object contenu) {
+        String nom = (String)contenu;
+        if(!droitsOffi.contains("SEE_LIEU")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Lieux"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_LIEU_NON, "Impossible de récupérer le lieu");
+        }
+
+        String lieu = null;
+        try {
+            lieu = dbRequests.getLieu(nom);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_LIEU_NON, "Impossible de récupérer le lieu");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.GET_LIEU_OUI, (Object)lieu);
+    }
+
+    private PacketCom actionNewLieu(String type, Object contenu) {
+        String lieu = (String)contenu;
+        if(!droitsOffi.contains("CREATE_LIEU")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Lieux"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_LIEU_NON, "Impossible d'ajouter le lieu");
+        }
+
+        String exist;
+        try {
+            exist = dbRequests.getLieu(lieu);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_LIEU_NON, "Impossible d'ajouter le lieu");
+        }
+        if(exist != null){
+            return new PacketCom(States.NEW_LIEU_NON, "Lieu déja existant");
+        }
+
+        try {
+            dbRequests.nouveauLieu(lieu);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_LIEU_NON, "Impossible d'ajouter le lieu");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.NEW_LIEU_OUI, null);
+    }
+
+    private PacketCom actionEditLieu(String type, Object contenu) {
+        String[] lieux = (String[])contenu;
+        String oldLieu = lieux[0];
+        String newLieu = lieux[1];
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Lieux"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_LIEU_NON, "Impossible de modifier le lieu");
+        }
+
+        String exist = null;
+        if(!oldLieu.equals(newLieu)){
+            try {
+                exist = dbRequests.getLieu(newLieu);
+            } catch (Exception ex) {
+                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_LIEU_NON, "Impossible de modifier le lieu");
+            }
+        }
+        if(exist != null){
+            return new PacketCom(States.EDIT_LIEU_NON, "Lieu déja existant");
+        }
+
+        try {
+            dbRequests.modifierLieu(oldLieu, newLieu);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_LIEU_NON, "Impossible de modifier le lieu");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.EDIT_LIEU_OUI, null);
+    }
+
+    private PacketCom actionDeleteLieu(String type, Object contenu) {
+        String nom = (String)contenu;
+        if(!droitsOffi.contains("EDIT_LIEU")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Lieux"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_LIEU_NON, "Impossible de supprimer le lieu");
+        }
+
+        try {
+            dbRequests.supprimerLieu(nom);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_LIEU_NON, "Impossible de supprimer le lieu");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.DELETE_LIEU_OUI, null);
     }
 }

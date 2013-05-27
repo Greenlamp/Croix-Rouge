@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="my.cr.activite"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <application android:label="@string/app_name" >
+
+        <activity android:name="Start"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="MainActivity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAINACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="Menu"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MENU" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="Connexion"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.CONNEXION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="Consulter"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.CONSULTER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="Recherche"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.RECHERCHE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="Affichage"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.AFFICHAGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service android:name="my.cr.service.MyService"/>
+    </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+</manifest>

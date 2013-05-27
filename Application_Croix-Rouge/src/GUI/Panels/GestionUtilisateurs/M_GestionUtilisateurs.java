@@ -9,7 +9,7 @@ import Containers.Utilisateur;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
-import PacketCom.PacketCom;
+import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;

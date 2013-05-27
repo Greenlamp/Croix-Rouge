@@ -26,10 +26,6 @@ public class Complementaire implements Serializable{
     private String categorie;
     private boolean permanent;
     private Date dateObtention;
-    private boolean amu;
-    private boolean tms;
-    private boolean vsl;
-    private boolean tpmr;
     private boolean selectionMedicale;
     private String dateValidité;
     private String numCompteBancaire;
@@ -43,10 +39,6 @@ public class Complementaire implements Serializable{
         setCategorie(null);
         setPermanent(false);
         setDateObtention(null);
-        setAmu(false);
-        setTms(false);
-        setVsl(false);
-        setTpmr(false);
         setSelectionMedicale(false);
         setDateValidité(null);
         setNumCompteBancaire(null);
@@ -137,38 +129,6 @@ public class Complementaire implements Serializable{
         this.Activite = Activite;
     }
 
-    public boolean isAmu() {
-        return amu;
-    }
-
-    public void setAmu(boolean amu) {
-        this.amu = amu;
-    }
-
-    public boolean isTms() {
-        return tms;
-    }
-
-    public void setTms(boolean tms) {
-        this.tms = tms;
-    }
-
-    public boolean isVsl() {
-        return vsl;
-    }
-
-    public void setVsl(boolean vsl) {
-        this.vsl = vsl;
-    }
-
-    public boolean isTpmr() {
-        return tpmr;
-    }
-
-    public void setTpmr(boolean tpmr) {
-        this.tpmr = tpmr;
-    }
-
     public String getNumCompteBancaire() {
         return numCompteBancaire;
     }
@@ -176,126 +136,6 @@ public class Complementaire implements Serializable{
     public void setNumCompteBancaire(String numCompteBancaire) {
         if(numCompteBancaire != null && numCompteBancaire.isEmpty()) numCompteBancaire = null;
         this.numCompteBancaire = numCompteBancaire;
-    }
-
-    void backupTexte(ByteArrayOutputStream sb) {
-        if(this.getActivitePro() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getActivitePro());
-        }
-
-        if(this.getActivite() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getActivite());
-        }
-
-        if(this.getLangueMaternelle() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getLangueMaternelle());
-        }
-
-        if(listeLangue.size() >= 1){
-            if(this.getListeLangue().get(0) == null){
-                ajouterLigne(sb, "");
-            }else{
-                ajouterLigne(sb, this.getListeLangue().get(0));
-            }
-        }else{
-            ajouterLigne(sb, "");
-        }
-
-        if(listeLangue.size() >= 2){
-            if(this.getListeLangue().get(1) == null){
-                ajouterLigne(sb, "");
-            }else{
-                ajouterLigne(sb, this.getListeLangue().get(1));
-            }
-        }else{
-            ajouterLigne(sb, "");
-        }
-        if(listeLangue.size() >= 3){
-            if(this.getListeLangue().get(2) == null){
-                ajouterLigne(sb, "");
-            }else{
-                ajouterLigne(sb, this.getListeLangue().get(2));
-            }
-        }else{
-            ajouterLigne(sb, "");
-        }
-
-        if(this.getQualification() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getQualification());
-        }
-
-        if(this.getCategorie() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getCategorie());
-        }
-
-        ajouterLigne(sb, (this.isPermanent() ? "true" : "false"));
-
-        if(this.getDateObtention() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, EasyDate.getDateOnly(this.getDateObtention()));
-        }
-
-        ajouterLigne(sb, (this.isAmu() ? "true" : "false"));
-        ajouterLigne(sb, (this.isTms() ? "true" : "false"));
-        ajouterLigne(sb, (this.isVsl() ? "true" : "false"));
-        ajouterLigne(sb, (this.isTpmr() ? "true" : "false"));
-
-        ajouterLigne(sb, (this.isSelectionMedicale() ? "true" : "false"));
-
-        if(this.getDateValidité() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getDateValidité());
-        }
-
-        if(this.getNumCompteBancaire() == null){
-            ajouterLigne(sb, "");
-        }else{
-            ajouterLigne(sb, this.getNumCompteBancaire());
-        }
-    }
-
-    void loadBackupTexte(BufferedReader buff) throws Exception{
-        setActivitePro(buff.readLine());
-        setActivite(buff.readLine());
-        setLangueMaternelle(buff.readLine());
-        for(int i=0; i<3; i++){
-            addLangue(buff.readLine());
-        }
-        setQualification(buff.readLine());
-        setCategorie(buff.readLine());
-        setPermanent((buff.readLine().equals("true") ? true : false));
-        String date = buff.readLine();
-        if(EasyDate.isValidDate(date, null)){
-            setDateObtention(new SimpleDateFormat("dd/MM/yyyy").parse(date));
-        }
-        setAmu((buff.readLine().equals("true") ? true : false));
-        setTms((buff.readLine().equals("true") ? true : false));
-        setVsl((buff.readLine().equals("true") ? true : false));
-        setTpmr((buff.readLine().equals("true") ? true : false));
-        setSelectionMedicale((buff.readLine().equals("true") ? true : false));
-        setDateValidité(buff.readLine());
-        setNumCompteBancaire(buff.readLine());
-    }
-
-    private void ajouterLigne(ByteArrayOutputStream sb, String text) {
-        try {
-            sb.write(text.getBytes());
-            sb.write("\n".getBytes());
-        } catch (IOException ex) {
-            Logger.getLogger(Complementaire.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public boolean isPermanent() {

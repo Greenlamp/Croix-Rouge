@@ -50,7 +50,6 @@ public interface States {
 
     public static String UNLOCK_GRILLE = "UNLOCK_GRILLE";
 
-
     public static String NEW_GROUPE = "NEW_GROUPE";
     public static String GET_GROUPE = "GET_GROUPE";
     public static String EDIT_GROUPE = "EDIT_GROUPE";
@@ -60,6 +59,20 @@ public interface States {
     public static String GET_UTILISATEUR = "GET_UTILISATEUR";
     public static String EDIT_UTILISATEUR = "EDIT_UTILISATEUR";
     public static String DELETE_UTILISATEUR = "DELETE_UTILISATEUR";
+
+    public static String GET_VEHICULES_ALL = "GET_VEHICULES_ALL";
+    public static String GET_VEHICULE = "GET_VEHICULE";
+    public static String NEW_VEHICULE = "NEW_VEHICULE";
+    public static String EDIT_VEHICULE = "EDIT_VEHICULE";
+    public static String DELETE_VEHICULE = "DELETE_VEHICULE";
+
+    public static String GET_LIEUX_ALL = "GET_LIEUX_ALL";
+    public static String GET_LIEU = "GET_LIEU";
+    public static String NEW_LIEU = "NEW_LIEU";
+    public static String EDIT_LIEU = "EDIT_LIEU";
+    public static String DELETE_LIEU = "DELETE_LIEU";
+
+
 
     //Client
     public static String LOGIN_OUI = "LOGIN_OUI";
@@ -148,4 +161,35 @@ public interface States {
 
     public static String DELETE_VOLONTAIRE_OUI = "DELETE_VOLONTAIRE_OUI";
     public static String DELETE_VOLONTAIRE_NON = "DELETE_VOLONTAIRE_NON";
+
+    public static String GET_VEHICULES_ALL_OUI = "GET_VEHICULES_ALL_OUI";
+    public static String GET_VEHICULES_ALL_NON = "GET_VEHICULES_ALL_NON";
+
+    public static String NEW_VEHICULE_OUI = "NEW_VEHICULE_OUI";
+    public static String NEW_VEHICULE_NON = "NEW_VEHICULE_NON";
+
+    public static String EDIT_VEHICULE_OUI = "EDIT_VEHICULE_OUI";
+    public static String EDIT_VEHICULE_NON = "EDIT_VEHICULE_NON";
+
+    public static String DELETE_VEHICULE_OUI = "DELETE_VEHICULE_OUI";
+    public static String DELETE_VEHICULE_NON = "DELETE_VEHICULE_NON";
+
+    public static String GET_VEHICULE_OUI = "GET_VEHICULE_OUI";
+    public static String GET_VEHICULE_NON = "GET_VEHICULE_NON";
+
+
+    public static String GET_LIEUX_ALL_OUI = "GET_LIEUX_ALL_OUI";
+    public static String GET_LIEUX_ALL_NON = "GET_LIEUX_ALL_NON";
+
+    public static String GET_LIEU_OUI = "GET_LIEU_OUI";
+    public static String GET_LIEU_NON = "GET_LIEU_NON";
+
+    public static String NEW_LIEU_OUI = "NEW_LIEU_OUI";
+    public static String NEW_LIEU_NON = "NEW_LIEU_NON";
+
+    public static String EDIT_LIEU_OUI = "EDIT_LIEU_OUI";
+    public static String EDIT_LIEU_NON = "EDIT_LIEU_NON";
+
+    public static String DELETE_LIEU_OUI = "DELETE_LIEU_OUI";
+    public static String DELETE_LIEU_NON = "DELETE_LIEU_NON";
 }
