@@ -5,22 +5,22 @@
 
 package Behind;
 
-import my.cr.PacketCom.PacketCom;
-import my.cr.PacketCom.Protocolable;
+import SSL.NetworkServerSSL;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.cr.PacketCom.PacketCom;
 
 
 public class Traitement implements Runnable{
-    private NetworkServer socket;
+    private NetworkServerSSL socket;
 
 
 
     /**************************************************************************/
     /*Constructeurs*/
     /**************************************************************************/
-    public Traitement(NetworkServer socket){
+    public Traitement(NetworkServerSSL socket){
         this.socket = socket;
     }
 
@@ -54,11 +54,11 @@ public class Traitement implements Runnable{
     /**************************************************************************/
     /*Getters - Setters*/
     /**************************************************************************/
-    public NetworkServer getSocket() {
+    public NetworkServerSSL getSocket() {
         return socket;
     }
 
-    public void setSocket(NetworkServer socket) {
+    public void setSocket(NetworkServerSSL socket) {
         this.socket = socket;
     }
 }

@@ -7,7 +7,7 @@ package GUI.Panels.Consultation;
 import Containers.Volontaire;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
-import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.LinkedList;
@@ -26,13 +26,13 @@ public class M_Consultation extends javax.swing.JPanel {
      */
 
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
 
     public M_Consultation() {
         initComponents();
     }
 
-    public M_Consultation(Main parent, NetworkClient socket) {
+    public M_Consultation(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

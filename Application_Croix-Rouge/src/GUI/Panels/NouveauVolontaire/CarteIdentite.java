@@ -7,6 +7,7 @@ package GUI.Panels.NouveauVolontaire;
 import GUI.Panels.Main;
 import Network.NetworkClient;
 import NewReader.NewCardReader;
+import SSL.NetworkClientSSL;
 
 /**
  *
@@ -18,10 +19,10 @@ public class CarteIdentite extends javax.swing.JPanel {
      * Creates new form CarteIdentite
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     NewCardReader cardReader;
 
-    public CarteIdentite(Main parent, NetworkClient socket) {
+    public CarteIdentite(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

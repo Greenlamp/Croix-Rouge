@@ -4,7 +4,7 @@
  */
 package GUI.Panels;
 
-import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.LinkedList;
@@ -22,7 +22,7 @@ public class M_Connexion extends javax.swing.JPanel {
      * Creates new form M_Connexion
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
 
     public M_Connexion() {
         initComponents();
@@ -30,7 +30,7 @@ public class M_Connexion extends javax.swing.JPanel {
         LpassIncorrect.setVisible(false);
     }
 
-    public M_Connexion(Main parent, NetworkClient socket) {
+    public M_Connexion(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

@@ -10,6 +10,7 @@ import GUI.Panels.Consultation.M_Consultation;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.LinkedList;
@@ -27,13 +28,13 @@ public class M_NewEditGroupes extends javax.swing.JPanel {
      * Creates new form M_NewEditGroupes
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     LinkedList<String> listeDroit = null;
     LinkedList<String> fullDroit = null;
     Groupe groupe = null;
     boolean edited = false;
 
-    public M_NewEditGroupes(Main parent, NetworkClient socket, String titre) {
+    public M_NewEditGroupes(Main parent, NetworkClientSSL socket, String titre) {
         initComponents();
         Ltitre.setText(titre);
         this.socket = socket;

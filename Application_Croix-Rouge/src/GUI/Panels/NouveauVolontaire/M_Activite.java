@@ -11,6 +11,7 @@ import EasyCheck.EasyCheck;
 import EasyDate.EasyDate;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.io.BufferedInputStream;
@@ -38,14 +39,14 @@ public class M_Activite extends javax.swing.JPanel {
      * Creates new form M_Activite
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     Volontaire volontaire = null;
     String matricule = null;
     boolean edited = false;
 
     byte[] photocopiePermis = null;
 
-    public M_Activite(Main parent, NetworkClient socket) {
+    public M_Activite(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

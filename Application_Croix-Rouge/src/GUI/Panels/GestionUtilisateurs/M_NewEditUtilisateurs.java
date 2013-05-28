@@ -9,6 +9,7 @@ import EasyDate.EasyDate;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class M_NewEditUtilisateurs extends javax.swing.JPanel {
      * Creates new form M_NewEditUtilisateurs
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     LinkedList<String> listeGroupe = null;
     LinkedList<String> fullGroupe = null;
     Utilisateur utilisateur = null;
@@ -37,7 +38,7 @@ public class M_NewEditUtilisateurs extends javax.swing.JPanel {
         initComponents();
     }
 
-    public M_NewEditUtilisateurs(Main parent, NetworkClient socket, String titre) {
+    public M_NewEditUtilisateurs(Main parent, NetworkClientSSL socket, String titre) {
         initComponents();
         Jtitre.setText(titre);
         this.socket = socket;

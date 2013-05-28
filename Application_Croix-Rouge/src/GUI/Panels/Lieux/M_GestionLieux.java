@@ -10,6 +10,7 @@ import GUI.Panels.Consultation.M_Consultation;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.LinkedList;
@@ -27,13 +28,13 @@ public class M_GestionLieux extends javax.swing.JPanel {
      * Creates new form M_GestionLieux
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
 
     public M_GestionLieux() {
         initComponents();
     }
 
-    public M_GestionLieux(Main parent, NetworkClient socket) {
+    public M_GestionLieux(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

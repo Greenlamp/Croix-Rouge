@@ -8,6 +8,7 @@ import Containers.Urgence;
 import Containers.Volontaire;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.logging.Level;
@@ -23,11 +24,11 @@ public class M_Urgence extends javax.swing.JPanel {
      * Creates new form M_Urgence
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     Volontaire volontaire = null;
     String matricule = null;
     boolean edited = false;
-    public M_Urgence(Main parent, NetworkClient socket) {
+    public M_Urgence(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

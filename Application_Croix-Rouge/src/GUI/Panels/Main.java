@@ -45,6 +45,7 @@ import GUI.Panels.Vehicules.M_GestionVehicules;
 import GUI.Panels.Vehicules.M_NewEditVehicule;
 import my.cr.PacketCom.PacketCom;
 import Recherche.TupleRecherche;
+import SSL.NetworkClientSSL;
 import States.States;
 import java.awt.Image;
 import java.io.IOException;
@@ -117,7 +118,7 @@ public class Main extends javax.swing.JFrame {
 
     private String actualState = Main.UNLOGGED;
 
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
 
     Volontaire volontaire = null;
     private String matricule = null;
@@ -144,7 +145,7 @@ public class Main extends javax.swing.JFrame {
 
         String host = FileAccess.getConfig("configs", "HOST");
         String port = FileAccess.getConfig("configs", "PORT");
-        socket = new NetworkClient(host, Integer.parseInt(port), false);
+        socket = new NetworkClientSSL(host, Integer.parseInt(port), false);
         refreshPanel();
     }
 
@@ -391,22 +392,6 @@ public class Main extends javax.swing.JFrame {
 
             M_NewEditGrilleHoraire m_NewEditGrilleHoraire = new M_NewEditGrilleHoraire(this, this.socket, "Nouvelle grille d'horaire");
             Gscene.add(m_NewEditGrilleHoraire);
-            Gscene.revalidate();
-        }else if(this.getActualState().equals(Main.GESTION_EQUIPES)){
-            Gscene.removeAll();
-            Gscene.repaint();
-            Gscene.revalidate();
-
-            M_ConsulterEquipesVolontaire mConsulterEquipesVolontaire = new M_ConsulterEquipesVolontaire(this, socket);
-            Gscene.add(mConsulterEquipesVolontaire);
-            Gscene.revalidate();
-        }else if(this.getActualState().equals(Main.EDITNEWEQUIPE)){
-            Gscene.removeAll();
-            Gscene.repaint();
-            Gscene.revalidate();
-
-            M_NewEditEquipeVolontaire mNewEditEquipeVolontaire = new M_NewEditEquipeVolontaire(this, socket);
-            Gscene.add(mNewEditEquipeVolontaire);
             Gscene.revalidate();
         }else if(this.getActualState().equals(Main.SEARCH_CRIT)){
             Gscene.removeAll();

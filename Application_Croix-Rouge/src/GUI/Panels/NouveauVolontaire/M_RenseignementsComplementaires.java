@@ -8,6 +8,7 @@ import Containers.Complementaire;
 import Containers.Volontaire;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.text.ParseException;
@@ -29,11 +30,16 @@ public class M_RenseignementsComplementaires extends javax.swing.JPanel {
      * Creates new form M_RenseignementsComplementaires
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     Volontaire volontaire = null;
     String matricule = null;
     boolean edited = false;
-    public M_RenseignementsComplementaires(Main parent, NetworkClient socket) {
+    /**
+     *
+     * @param parent
+     * @param socket
+     */
+    public M_RenseignementsComplementaires(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

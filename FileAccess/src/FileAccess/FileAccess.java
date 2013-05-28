@@ -5,6 +5,7 @@
 
 package FileAccess;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,6 +30,14 @@ public class FileAccess {
         if(prop.containsKey(key)){
             retour = prop.getProperty(key);
         }
+        return retour;
+    }
+
+    public static File getFile(String nameFile){
+        File retour = null;
+        String sep = System.getProperty("file.separator");
+        String path = System.getProperty("user.dir") + sep + nameFile;
+        retour = new File(path);
         return retour;
     }
 }

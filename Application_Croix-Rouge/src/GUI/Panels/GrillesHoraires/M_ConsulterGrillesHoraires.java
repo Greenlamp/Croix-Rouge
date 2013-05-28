@@ -9,6 +9,7 @@ import GUI.Panels.Consultation.M_Consultation;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.LinkedList;
@@ -26,9 +27,9 @@ public class M_ConsulterGrillesHoraires extends javax.swing.JPanel {
      * Creates new form M_ConsulterGrillesHoraires
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
 
-    public M_ConsulterGrillesHoraires(Main parent, NetworkClient socket) {
+    public M_ConsulterGrillesHoraires(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

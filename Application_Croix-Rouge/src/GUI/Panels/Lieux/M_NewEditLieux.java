@@ -9,6 +9,7 @@ import Containers.Vehicule;
 import EasyCheck.EasyCheck;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import States.States;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,11 +25,11 @@ public class M_NewEditLieux extends javax.swing.JPanel {
      * Creates new form M_NewEditGroupes
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     String lieu = null;
     boolean edited = false;
 
-    public M_NewEditLieux(Main parent, NetworkClient socket, String titre) {
+    public M_NewEditLieux(Main parent, NetworkClientSSL socket, String titre) {
         initComponents();
         Ltitre.setText(titre);
         this.socket = socket;

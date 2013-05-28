@@ -9,6 +9,7 @@ import Containers.Utilisateur;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.awt.event.MouseEvent;
@@ -27,9 +28,9 @@ public class M_GestionUtilisateurs extends javax.swing.JPanel {
      * Creates new form M_GestionDroits
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
 
-    public M_GestionUtilisateurs(Main parent, NetworkClient socket) {
+    public M_GestionUtilisateurs(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

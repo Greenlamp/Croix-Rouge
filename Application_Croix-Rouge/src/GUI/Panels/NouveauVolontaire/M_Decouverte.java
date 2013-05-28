@@ -8,6 +8,7 @@ import Containers.Decouverte;
 import Containers.Volontaire;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.text.SimpleDateFormat;
@@ -27,11 +28,11 @@ public class M_Decouverte extends javax.swing.JPanel {
      * Creates new form M_Decouverte
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     Volontaire volontaire = null;
     String matricule = null;
     boolean edited = false;
-    public M_Decouverte(Main parent, NetworkClient socket) {
+    public M_Decouverte(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

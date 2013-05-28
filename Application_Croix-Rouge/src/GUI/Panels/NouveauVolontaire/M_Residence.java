@@ -8,6 +8,7 @@ import Containers.Residence;
 import Containers.Volontaire;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.logging.Level;
@@ -24,11 +25,11 @@ public class M_Residence extends javax.swing.JPanel {
      * Creates new form M_Residence
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     Volontaire volontaire = null;
     String matricule = null;
     boolean edited = false;
-    public M_Residence(Main parent, NetworkClient socket) {
+    public M_Residence(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

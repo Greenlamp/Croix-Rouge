@@ -11,6 +11,7 @@ import EasyCheck.EasyCheck;
 import EasyDate.EasyDate;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.io.BufferedInputStream;
@@ -36,7 +37,7 @@ public class M_Formations extends javax.swing.JPanel {
      * Creates new form M_Formations
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     Volontaire volontaire = null;
     String matricule = null;
     boolean edited = false;
@@ -47,7 +48,7 @@ public class M_Formations extends javax.swing.JPanel {
     byte[] photocopieSISU = null;
     byte[] photocopieM = null;
 
-    public M_Formations(Main parent, NetworkClient socket) {
+    public M_Formations(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

@@ -12,6 +12,7 @@ import EasyDate.EasyDate;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import Util.TableRender;
@@ -36,14 +37,14 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
      * Creates new form M_NewEditGrilleHoraire
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     int row, column;
     Grille grille = null;
     Grille grilleOld = null;
     boolean dataSetted = false;
     String type = null;
 
-    public M_NewEditGrilleHoraire(Main parent, NetworkClient socket, String titre) {
+    public M_NewEditGrilleHoraire(Main parent, NetworkClientSSL socket, String titre) {
         initComponents();
         Gtitre.setText(titre);
         this.socket = socket;

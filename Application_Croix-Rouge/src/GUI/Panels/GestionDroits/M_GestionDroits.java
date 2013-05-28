@@ -8,6 +8,7 @@ import GUI.Panels.Consultation.M_Consultation;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.LinkedList;
@@ -25,13 +26,13 @@ public class M_GestionDroits extends javax.swing.JPanel {
      * Creates new form M_GestionDroits
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
 
     public M_GestionDroits() {
         initComponents();
     }
 
-    public M_GestionDroits(Main parent, NetworkClient socket) {
+    public M_GestionDroits(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;

@@ -5,15 +5,15 @@
 
 package Serveur;
 
-import Behind.NetworkServer;
 import Behind.Traitement;
+import SSL.NetworkServerSSL;
 import Threads.PoolThread;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 public class ServeurPool implements Runnable{
-    NetworkServer reseau;
+    NetworkServerSSL reseau;
     int port;
     PoolThread poolThread;
 
@@ -24,7 +24,7 @@ public class ServeurPool implements Runnable{
     /**************************************************************************/
     public ServeurPool(int port, int nbThreads){
         try {
-            this.reseau = new NetworkServer(port);
+            this.reseau = new NetworkServerSSL(port);
             this.poolThread = new PoolThread(nbThreads);
         } catch (Exception ex) {
             Logger.getLogger(ServeurPool.class.getName()).log(Level.SEVERE, null, ex);
@@ -33,7 +33,7 @@ public class ServeurPool implements Runnable{
 
     ServeurPool(int port, int nbThreads, String protocole) {
         try {
-            this.reseau = new NetworkServer(port, protocole);
+            this.reseau = new NetworkServerSSL(port, protocole);
             this.poolThread = new PoolThread(nbThreads);
         } catch (Exception ex) {
             Logger.getLogger(ServeurPool.class.getName()).log(Level.SEVERE, null, ex);
@@ -52,7 +52,7 @@ public class ServeurPool implements Runnable{
             int nbClient = 0;
             while(goOn){
                 goOn = reseau.accept();
-                Traitement traitement = new Traitement(new NetworkServer(reseau.getSocketService()));
+                Traitement traitement = new Traitement(new NetworkServerSSL(reseau.getSocketService()));
                 this.poolThread.assign(traitement);
                 nbClient++;
             }

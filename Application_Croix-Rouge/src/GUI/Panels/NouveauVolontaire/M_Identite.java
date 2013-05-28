@@ -9,6 +9,7 @@ import Containers.Volontaire;
 import EasyCheck.EasyCheck;
 import GUI.Panels.Main;
 import Network.NetworkClient;
+import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.awt.Graphics2D;
@@ -37,12 +38,12 @@ public class M_Identite extends javax.swing.JPanel {
      * Creates new form M_Identite
      */
     Main parent = null;
-    NetworkClient socket = null;
+    NetworkClientSSL socket = null;
     Volontaire volontaire = null;
     String matricule = null;
     boolean edited = false;
 
-    public M_Identite(Main parent, NetworkClient socket) {
+    public M_Identite(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;
