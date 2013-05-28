@@ -161,4 +161,31 @@ public class EasyDate {
 
         return true;
     }
+
+    public static boolean isValidHour(String date){
+        if(date == null){
+            return false;
+        }
+        String format = "HH:mm";
+        Date dateC = null;
+        String after = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            sdf.setLenient(true);
+            dateC = sdf.parse(date);
+            after = sdf.format(dateC);
+        } catch (Exception ex) {
+            return false;
+        }
+
+        try{
+            if(!date.equals(after)){
+                return false;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+
+        return true;
+    }
 }

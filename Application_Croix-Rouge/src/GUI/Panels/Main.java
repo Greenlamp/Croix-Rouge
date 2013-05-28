@@ -20,7 +20,7 @@ import Containers.Vehicule;
 import Containers.Volontaire;
 import EquipeVolontaire.M_ConsulterEquipesVolontaire;
 import EquipeVolontaire.M_NewEditEquipeVolontaire;
-import EquipeVolontaire.M_SearchCrit;
+import GUI.Panels.Recherche.M_SearchCrit;
 import FileAccess.FileAccess;
 import GUI.Panels.GestionDroits.M_GestionDroits;
 import GUI.Panels.GestionGroupes.M_GestionGroupes;

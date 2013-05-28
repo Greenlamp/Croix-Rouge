@@ -8,6 +8,7 @@ import Containers.CelluleGrille;
 import Containers.Grille;
 import Containers.Key;
 import Containers.Vehicule;
+import EasyDate.EasyDate;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
@@ -401,6 +402,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         GregorianCalendar gc = new GregorianCalendar();
         gc.set(GregorianCalendar.YEAR, annee);
         gc.set(GregorianCalendar.WEEK_OF_YEAR, numeroSemaine);
+        gc.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.MONDAY);
         String dateDebut = new SimpleDateFormat("dd/MM/yyyy").format(gc.getTime());
 
         try {
@@ -425,9 +427,12 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void BmodifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BmodifierActionPerformed
-        Ggrille.setValueAt(Gheure.getText(), this.row, this.column);
-        modifierHeureColonne(this.row, this.column);
-        Memorise();
+        if(checkHeure(Gheure.getText())){;
+            if(modifierHeureColonne(this.row, this.column)){
+                Ggrille.setValueAt(Gheure.getText(), this.row, this.column);
+                Memorise();
+            }
+        }
     }//GEN-LAST:event_BmodifierActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -651,10 +656,10 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
             CelluleGrille cellule = key.getValue();
             int column = cellule.getColumn();
             int row = cellule.getRow();
-            String date = EasyDate.EasyDate.getDateOnly(cellule.getDate());
+            String date = EasyDate.getDateOnly(cellule.getDate());
             String jour = cellule.getJour();
-            String heureDebut = EasyDate.EasyDate.getHourOnly(cellule.getHeureDebut());
-            String heureFin = EasyDate.EasyDate.getHourOnly(cellule.getHeureFin());
+            String heureDebut = EasyDate.getHourOnly(cellule.getHeureDebut());
+            String heureFin = EasyDate.getHourOnly(cellule.getHeureFin());
             String role = cellule.getRole();
             String nomVolontaire = cellule.getNomPrenom();
 
@@ -781,7 +786,6 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 grille.addCellule(k, i, cellule);
             }
         }
-        System.out.println("ok");
     }
 
     private void cacher(boolean value) {
@@ -861,24 +865,47 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         }
     }
 
-    private void modifierHeureColonne(int row, int column) {
-        String heureEdited = Ggrille.getValueAt(row, column).toString();
+    private boolean modifierHeureColonne(int row, int column) {
+        String heureEdited = Gheure.getText();
         int[] rowToEdit = null;
         if(row == 2){
-            editerHeure("debut", 6, heureEdited.split(" - ")[1]);
+            String heure = editerHeure("debut", 6, heureEdited.split(" - ")[1]);
+            if(heure != null){
+                Ggrille.setValueAt(heure, 6, column);
+            }else{
+                return false;
+            }
         }else if(row == 6){
-            editerHeure("fin", 2, heureEdited.split(" - ")[0]);
-            editerHeure("debut", 10, heureEdited.split(" - ")[1]);
+            String heure = editerHeure("fin", 2, heureEdited.split(" - ")[0]);
+            String heure2 = editerHeure("debut", 10, heureEdited.split(" - ")[1]);
+            if(heure != null && heure2 != null){
+                Ggrille.setValueAt(heure, 2, column);
+                Ggrille.setValueAt(heure2, 10, column);
+            }else{
+                return false;
+            }
         }else if(row == 10){
-            editerHeure("fin", 6, heureEdited.split(" - ")[0]);
-            editerHeure("debut", 14, heureEdited.split(" - ")[1]);
+            String heure = editerHeure("fin", 6, heureEdited.split(" - ")[0]);
+            String heure2 = editerHeure("debut", 14, heureEdited.split(" - ")[1]);
+            if(heure != null && heure2 != null){
+                Ggrille.setValueAt(heure, 6, column);
+                Ggrille.setValueAt(heure2, 14, column);
+            }else{
+                Gheure.requestFocus();
+                return false;
+            }
         }else if(row == 14){
-            editerHeure("fin", 10, heureEdited.split(" - ")[0]);
+            String heure = editerHeure("fin", 10, heureEdited.split(" - ")[0]);
+            if(heure != null){
+                Ggrille.setValueAt(heure, 10, column);
+            }else{
+                return false;
+            }
         }
-        System.out.println("ok");
+        return true;
     }
 
-    private void editerHeure(String type, int row, String heureEdited) {
+    private String editerHeure(String type, int row, String heureEdited) {
         if(type.equals("debut")){
             String heureToEdit = Ggrille.getValueAt(row, column).toString();
             String[] split = heureToEdit.split(" - ");
@@ -886,7 +913,11 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
             String fin = split[1];
             debut = heureEdited;
             heureToEdit = debut + " - " + fin;
-            Ggrille.setValueAt(heureToEdit, row, column);
+            if(!checkHeure(heureToEdit)){
+                return null;
+            }
+            return heureToEdit;
+            //Ggrille.setValueAt(heureToEdit, row, column);
         }else{
             String heureToEdit = Ggrille.getValueAt(row, column).toString();
             String[] split = heureToEdit.split(" - ");
@@ -894,7 +925,59 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
             String fin = split[1];
             fin = heureEdited;
             heureToEdit = debut + " - " + fin;
-            Ggrille.setValueAt(heureToEdit, row, column);
+            if(!checkHeure(heureToEdit)){
+                return null;
+            }
+            return heureToEdit;
+            //Ggrille.setValueAt(heureToEdit, row, column);
         }
+    }
+
+    private boolean checkHeure(String heure) {
+        String[] split = heure.split(" - ");
+        if(split.length != 2){
+            parent.afficherMessage("veuillez entrez deux heures au format hh:mm - hh:mm");
+            Gheure.requestFocus();
+            return false;
+        }
+        String heureDebut = split[0];
+        String heureFin = split[1];
+
+        if(heureDebut.split(":").length != 2){
+            parent.afficherMessage("veuillez entrez deux heures au format hh:mm - hh:mm");
+            Gheure.requestFocus();
+            return false;
+        }
+
+        if(heureFin.split(":").length != 2){
+            parent.afficherMessage("veuillez entrez deux heures au format hh:mm - hh:mm");
+            Gheure.requestFocus();
+            return false;
+        }
+
+        if(!EasyDate.isValidHour(heureDebut)){
+            parent.afficherMessage("L'heure de début n'est pas valide");
+            Gheure.requestFocus();
+            return false;
+        }
+
+        if(!EasyDate.isValidHour(heureFin)){
+            parent.afficherMessage("L'heure de fin n'est pas valide");
+            Gheure.requestFocus();
+            return false;
+        }
+        try {
+            Date heureDebutD = new SimpleDateFormat("HH:mm").parse(heureDebut);
+            Date heureFinD = new SimpleDateFormat("HH:mm").parse(heureFin);
+            if(heureDebutD.compareTo(heureFinD) > 0){
+                parent.afficherMessage("L'heure de début est supérieur à l'heure de fin");
+                Gheure.requestFocus();
+                return false;
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(M_NewEditGrilleHoraire.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return true;
     }
 }
