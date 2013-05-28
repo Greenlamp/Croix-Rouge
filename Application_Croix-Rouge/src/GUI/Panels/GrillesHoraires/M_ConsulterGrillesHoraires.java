@@ -182,7 +182,15 @@ public class M_ConsulterGrillesHoraires extends javax.swing.JPanel {
     }//GEN-LAST:event_BnouveauActionPerformed
 
     private void BsupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BsupprimerActionPerformed
-        // TODO add your handling code here:
+        int row = Gtableau.getSelectedRow();
+        if(row == -1){
+            return;
+        }
+        String semaine = (String)Gtableau.getValueAt(row, 0);
+        String annee = (String)Gtableau.getValueAt(row, 1);
+        String ambulance = (String)Gtableau.getValueAt(row, 6);
+        String lieu = (String)Gtableau.getValueAt(row, 7);
+        deleteGrille(Integer.parseInt(semaine), Integer.parseInt(annee), ambulance, lieu);
     }//GEN-LAST:event_BsupprimerActionPerformed
 
     private void GtableauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GtableauMouseClicked
@@ -239,14 +247,8 @@ public class M_ConsulterGrillesHoraires extends javax.swing.JPanel {
         Object contenu = packetReponse.getObjet();
 
         if(type.equals(States.GET_GRILLES_HORAIRES_OUI)){
-            LinkedList<String[]> listeEquipes = (LinkedList<String[]>) contenu;
-            for(String[] equipe : listeEquipes){
-                Vector vector = new Vector();
-                for(String elm : equipe){
-                    vector.addElement(elm);
-                }
-                SwingUtils.addToTable(Gtableau, vector);
-            }
+            LinkedList<Object[]> listeGrille = (LinkedList<Object[]>) contenu;
+            SwingUtils.addToTable(Gtableau, listeGrille);
         }else{
             System.out.println("Erreur.");
         }
@@ -284,5 +286,27 @@ public class M_ConsulterGrillesHoraires extends javax.swing.JPanel {
             Logger.getLogger(M_ConsulterGrillesHoraires.class.getName()).log(Level.SEVERE, null, ex);
         }
         return lock;
+    }
+
+    private void deleteGrille(int semaine, int annee, String ambulance, String lieu) {
+        Object[] data = {semaine, annee, ambulance, lieu};
+        PacketCom packet = new PacketCom(States.DELETE_GRILLE, (Object)data);
+        socket.send(packet);
+        try {
+            PacketCom retour = socket.receive();
+            String type = retour.getType();
+            if(type.equals(States.DELETE_GRILLE_OUI)){
+                parent.afficherMessage("Suppression de la grille horaire réussie");
+            }else if(type.equals(States.DELETE_GRILLE_NON)){
+                String message = (String)retour.getObjet();
+                parent.afficherMessage(message);
+            }else{
+                String message = (String)retour.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(M_ConsulterGrillesHoraires.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        parent.changeState(Main.GESTION_GRILLES_HORAIRES);
     }
 }

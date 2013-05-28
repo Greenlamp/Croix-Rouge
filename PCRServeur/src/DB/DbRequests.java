@@ -29,6 +29,7 @@ import FileAccess.FileAccess;
 import Util.Parametres;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
@@ -910,9 +911,9 @@ public class DbRequests implements DBA{
         return resultat;
     }
 
-    public LinkedList<String[]> getGrillesHoraires() throws Exception{
-        LinkedList<String[]> listeGrilles = new LinkedList<>();
-        String request = "SELECT numéroSemaine, dateDebut, dateFin, dateCréation, dateModification, ambulance, lieu, année FROM grillehoraire";
+    public LinkedList<Object[]> getGrillesHoraires() throws Exception{
+        LinkedList<Object[]> listeGrilles = new LinkedList<>();
+        String request = "SELECT numéroSemaine, dateDebut, dateFin, dateCréation, dateModification, idVehicule, idLieu, année FROM grillehoraire";
         ResultSet rs = mysql.pSelect(request, null);
         while(rs.next()){
             int numéroSemaine = rs.getInt("numéroSemaine");
@@ -924,39 +925,44 @@ public class DbRequests implements DBA{
             String dateCréationS = EasyDate.getDateHour(dateCréation);
             Timestamp dateModification = rs.getTimestamp("dateModification");
             String dateModificationS = EasyDate.getDateHour(dateModification);
-            String ambulance = rs.getString("ambulance");
-            String lieu = rs.getString("lieu");
+            int idVehicule = rs.getInt("idVehicule");
+            Vehicule vehicule = getVehicule(idVehicule);
+            int idLieu = rs.getInt("idLieu");
+            String lieu = getLieu(idLieu);
             int année = rs.getInt("année");
 
-            String[] data = {String.valueOf(année), String.valueOf(numéroSemaine), dateDebutS, dateFinS, dateCréationS, dateModificationS, ambulance, lieu};
+            Object[] data = {String.valueOf(numéroSemaine), String.valueOf(année), dateDebutS, dateFinS, dateCréationS, dateModificationS, vehicule.getNom(), lieu};
             listeGrilles.add(data);
         }
         return listeGrilles;
     }
 
-    public int insertGrilleHoraire(int semaine, String dateDebut, String dateFin, String nomAmbulance, String lieu, int annee) throws Exception{
-        if(semaine == -1 && dateDebut == null && dateFin == null && nomAmbulance == null && lieu == null && annee == -1){
+    public int insertGrilleHoraire(Grille grille) throws Exception{
+        if(grille.getSemaine() == -1 && grille.getDateDebut() == null && grille.getDateFin() == null && grille.getVehicule() == null && grille.getLieu() == null && grille.getAnnee() == -1){
             return -1;
         }
-        int idGrilleHoraire = getIdGrilleHoraire(semaine, annee, nomAmbulance, lieu);
-        if(idGrilleHoraire == -1){
+        int idGrilleHoraire = getIdGrilleHoraire(grille.getSemaine(), grille.getAnnee(), grille.getVehicule().getNom(), grille.getLieu());
+        if(idGrilleHoraire != -1){
             return idGrilleHoraire;
         }
-        String request = "INSERT INTO grilleHoraire(dateCréation, dateModification, numéroSemaine, dateDebut, dateFin, ambulance, lieu, locked, année) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        int idVehicule = insertVehicule(grille.getVehicule());
+        int idLieu = insertLieu(grille.getLieu());
+
+        String request = "INSERT INTO grilleHoraire"
+                + "(dateCréation, dateModification, numéroSemaine, dateDebut, dateFin, idVehicule, idLieu, locked, année)"
+                + " VALUES(now(), now(), ?, ?, ?, ?, ?, ?, ?)";
         Parametres params = new Parametres();
-        params.addDate(new Date());
-        params.addDate(new Date());
-        params.addInt(semaine);
-        params.addDate(EasyDate.getDateOnly(dateDebut));
-        params.addDate(EasyDate.getDateOnly(dateFin));
-        params.addString(nomAmbulance);
-        params.addString(lieu);
+        params.addInt(grille.getSemaine());
+        params.addDate(EasyDate.getDateOnly(grille.getDateDebut()));
+        params.addDate(EasyDate.getDateOnly(grille.getDateFin()));
+        params.addInt(idVehicule);
+        params.addInt(idLieu);
         params.addInt(0);
-        params.addInt(annee);
+        params.addInt(grille.getAnnee());
 
         mysql.pUpdate(request, params);
 
-        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Equipe";
+        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM grilleHoraire";
         ResultSet rs = mysql.pSelect(request, null);
         while(rs.next()){
             idGrilleHoraire = rs.getInt("id");
@@ -964,23 +970,69 @@ public class DbRequests implements DBA{
         return idGrilleHoraire;
     }
 
-    public int insertCellule(String jour, String date, String heure, String role, int row, int column, int idGrilleHoraire) throws Exception{
-        if(date == null || heure == null || role == null || idGrilleHoraire == -1){
+    private int insertVehicule(Vehicule vehicule) throws Exception{
+        if(vehicule == null){
             return -1;
         }
-        int idCellule = getIdCellule(idGrilleHoraire, jour, heure, role);
-        if(idCellule == -1){
+        int idVehicule = getIdVehicule(vehicule.getNom());
+        if(idVehicule != -1){
+            return idVehicule;
+        }
+        String request = "INSERT INTO Vehicules(nom, numeroPlaque) VALUES(?, ?)";
+        Parametres params = new Parametres();
+        params.addString(vehicule.getNom());
+        params.addString(vehicule.getNumeroPlaque());
+
+        mysql.pUpdate(request, params);
+
+        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Vehicules";
+        ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            idVehicule = rs.getInt("id");
+        }
+        return idVehicule;
+    }
+
+    private int insertLieu(String lieu) throws Exception{
+        if(lieu == null){
+            return -1;
+        }
+        int idLieu = getIdLieu(lieu);
+        if(idLieu != -1){
+            return idLieu;
+        }
+        String request = "INSERT INTO Lieux(nom) VALUES(?)";
+        Parametres params = new Parametres();
+        params.addString(lieu);
+
+        mysql.pUpdate(request, params);
+
+        request = "SELECT DISTINCT LAST_INSERT_ID() as 'id' FROM Lieux";
+        ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            idLieu = rs.getInt("id");
+        }
+        return idLieu;
+    }
+
+    public int insertCellule(CelluleGrille cellule, int idGrilleHoraire) throws Exception{
+        if(cellule.getDate() == null || cellule.getHeureDebut() == null || cellule.getHeureFin() == null || cellule.getRole() == null|| cellule.getJour() == null || idGrilleHoraire == -1){
+            return -1;
+        }
+        int idCellule = getIdCellule(idGrilleHoraire, cellule.getDate(), cellule.getHeureDebut(), cellule.getHeureFin(), cellule.getRole(), cellule.getRow(), cellule.getColumn());
+        if(idCellule != -1){
             return idCellule;
         }
-        String request = "INSERT INTO caseHoraire(idGrilleHoraire, date, heurePrestation, role, numRow, numColumn, jour) VALUES(,, ?, ?, ?, ?, ?, ?)";
+        String request = "INSERT INTO caseHoraire(idGrilleHoraire, date, heureDebutPrestation, heureFinPrestation, role, numRow, numColumn, jour) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         Parametres params = new Parametres();
         params.addInt(idGrilleHoraire);
-        params.addDate(EasyDate.getDateOnly(date));
-        params.addString(heure);
-        params.addString(role);
-        params.addInt(row);
-        params.addInt(column);
-        params.addString(jour);
+        params.addDate(EasyDate.getDateOnly(cellule.getDate()));
+        params.addDateHour(cellule.getHeureDebut());
+        params.addDateHour(cellule.getHeureFin());
+        params.addString(cellule.getRole());
+        params.addInt(cellule.getRow());
+        params.addInt(cellule.getColumn());
+        params.addString(cellule.getJour());
 
         mysql.pUpdate(request, params);
 
@@ -992,17 +1044,20 @@ public class DbRequests implements DBA{
         return idCellule;
     }
 
-    public int getIdCellule(int idGrilleHoraire, String jour, String heure, String role) throws Exception{
-        if(idGrilleHoraire == -1 || jour == null || heure == null || role == null){
+    public int getIdCellule(int idGrilleHoraire, Date date, Date heureDebut, Date heureFin, String role, int row, int column) throws Exception{
+        if(idGrilleHoraire == -1 || date == null || heureDebut == null|| heureFin == null || role == null){
             return -1;
         }
         int idCellule = -1;
-        String request = "SELECT idCaseHoraire FROM CaseHoraire WHERE idGrilleHoraire = ? AND jour = ? AND heurePrestation = ? AND role = ?";
+        String request = "SELECT idCaseHoraire FROM CaseHoraire WHERE idGrilleHoraire = ? AND date = ? AND heureDebutPrestation = ? AND heureFinPrestation = ? AND role = ? AND numrow = ? AND numcolumn = ?";
         Parametres params = new Parametres();
         params.addInt(idGrilleHoraire);
-        params.addString(jour);
-        params.addString(heure);
+        params.addDate(date);
+        params.addDateHour(heureDebut);
+        params.addDateHour(heureFin);
         params.addString(role);
+        params.addInt(row);
+        params.addInt(column);
 
         ResultSet rs = mysql.pSelect(request, params);
         while(rs.next()){
@@ -1011,18 +1066,19 @@ public class DbRequests implements DBA{
         return idCellule;
     }
 
-    public int EditCellule(String jour, String date, String heure, String role, int row, int column, int idGrilleHoraire, String nouvelleHeure) throws Exception{
-        if(idGrilleHoraire == -1 || heure == null || date == null){
+    public int EditCellule(CelluleGrille oldCellule, int idGrilleHoraire, CelluleGrille newCellule) throws Exception{
+        if(idGrilleHoraire == -1 || oldCellule.getHeureDebut() == null || oldCellule.getHeureFin() == null || oldCellule.getDate() == null || newCellule.getHeureDebut() == null || newCellule.getHeureFin() == null){
             return -1;
         }
-        int idCellule = getIdCellule(idGrilleHoraire, jour, heure, role);
+        int idCellule = getIdCellule(idGrilleHoraire, oldCellule.getDate(), oldCellule.getHeureDebut(), oldCellule.getHeureFin(), oldCellule.getRole(), oldCellule.getRow(), oldCellule.getColumn());
         if(idCellule == -1){
             return -1;
         }
 
-        String request = "UPDATE caseHoraire SET heurePrestation = ? WHERE idCaseHoraire = ?";
+        String request = "UPDATE caseHoraire SET heureDebutPrestation = ?, heureFinPrestation = ? WHERE idCaseHoraire = ?";
         Parametres params = new Parametres();
-        params.addString(heure);
+        params.addDateHour(newCellule.getHeureDebut());
+        params.addDateHour(newCellule.getHeureFin());
         params.addInt(idCellule);
 
         mysql.pUpdate(request, params);
@@ -1060,37 +1116,46 @@ public class DbRequests implements DBA{
         }
     }
 
-    public int getIdGrilleHoraire(int semaine, int année, String ambulance, String lieu) throws Exception{
-        if(semaine == -1 || année == -1 || ambulance == null || lieu == null){
+    public int getIdGrilleHoraire(int semaine, int année, String vehicule, String lieu) throws Exception{
+        if(semaine == -1 || année == -1 || vehicule == null || lieu == null){
             return -1;
         }
+        int idVehicule = getIdVehicule(vehicule);
+        int idLieu = getIdLieu(lieu);
         int idGrille = -1;
-        String request = "SELECT idGrilleHoraire FROM GrilleHoraire WHERE numéroSemaine = ? AND année = ? AND ambulance = ? AND lieu = ?";
+        String request = "SELECT idGrilleHoraire FROM GrilleHoraire WHERE numéroSemaine = ? AND année = ? AND idVehicule = ? AND idLieu = ?";
         Parametres params = new Parametres();
         params.addInt(semaine);
         params.addInt(année);
-        params.addString(ambulance);
-        params.addString(lieu);
+        params.addInt(idVehicule);
+        params.addInt(idLieu);
 
         ResultSet rs = mysql.pSelect(request, params);
         while(rs.next()){
-            idGrille = rs.getInt("idCaseHoraire");
+            idGrille = rs.getInt("idGrilleHoraire");
         }
         return idGrille;
     }
 
     public Grille getGrille(int idGrilleHoraire) throws Exception{
+        if(idGrilleHoraire == -1){
+            return null;
+        }
         Grille grille = new Grille();
-        String request = "SELECT numéroSemaine, dateDebut, dateFin, ambulance, lieu, année FROM GrilleHoraire WHERE idGrilleHoraire = ?";
+        String request = "SELECT numéroSemaine, dateDebut, dateFin, idVehicule, idLieu, année FROM GrilleHoraire WHERE idGrilleHoraire = ?";
         Parametres params = new Parametres();
         params.addInt(idGrilleHoraire);
         ResultSet rs = mysql.pSelect(request, params);
         while(rs.next()){
             int numeroSemaine = rs.getInt("numéroSemaine");
-            String dateDebut = EasyDate.getDateOnly(rs.getString("dateDebut"));
-            String dateFin = EasyDate.getDateOnly(rs.getString("dateFin"));
-            String ambulance = rs.getString("ambulance");
-            String lieu = rs.getString("lieu");
+            java.util.Date dateDebut = rs.getDate("dateDebut");
+            //String dateDebut = EasyDate.getDateOnly(rs.getString("dateDebut"));
+            java.util.Date dateFin = rs.getDate("dateFin");
+            //String dateFin = EasyDate.getDateOnly(rs.getString("dateFin"));
+            int idVehicule = rs.getInt("idVehicule");
+            Vehicule vehicule = getVehicule(idVehicule);
+            int idLieu = rs.getInt("idLieu");
+            String lieu = getLieu(idLieu);
             int annee = rs.getInt("année");
 
             grille.setAnnee(annee);
@@ -1098,21 +1163,21 @@ public class DbRequests implements DBA{
             grille.setDateDebut(dateDebut);
             grille.setDateFin(dateFin);
             grille.setLieu(lieu);
-            grille.setNomAmbulance(ambulance);
+            grille.setVehicule(vehicule);
         }
         return grille;
     }
 
     public LinkedList<Key> getCellules(int idGrilleHoraire) throws Exception{
         LinkedList<Key> cellules = new LinkedList<>();
-        String request = "SELECT idCaseHoraire, date, heurePrestation, role, numrow, numcolumn, jour FROM CaseHoraire WHERE idGrilleHoraire = ?";
+        String request = "SELECT date, heureDebutPrestation, heureFinPrestation, role, numrow, numcolumn, jour FROM CaseHoraire WHERE idGrilleHoraire = ?";
         Parametres params = new Parametres();
         params.addInt(idGrilleHoraire);
         ResultSet rs = mysql.pSelect(request, params);
         while(rs.next()){
-            int idCaseHoraire = rs.getInt("idCaseHoraire");
-            String date = EasyDate.getDateOnly(rs.getString("date"));
-            String heurePrestation = rs.getString("heurePrestation");
+            Date date = rs.getTimestamp("date");
+            Date heureDebutPrestation = rs.getTimestamp("heureDebutPrestation");
+            Date heureFinPrestation = rs.getTimestamp("heureFinPrestation");
             String role = rs.getString("role");
             int row = rs.getInt("numRow");
             int column = rs.getInt("numColumn");
@@ -1120,11 +1185,12 @@ public class DbRequests implements DBA{
 
             CelluleGrille cellule = new CelluleGrille();
             cellule.setJour(jour);
-            cellule.setHeure(heurePrestation);
             cellule.setRole(role);
-            cellule.setDate(date);
             cellule.setColumn(column);
             cellule.setRow(row);
+            cellule.setDate(date);
+            cellule.setHeureDebut(heureDebutPrestation);
+            cellule.setHeureFin(heureFinPrestation);
             Key key = new Key(row, column, cellule);
             cellules.add(key);
         }
@@ -1132,7 +1198,10 @@ public class DbRequests implements DBA{
     }
 
     public void getVolontaireGrille(Grille grille, int idGrilleHoraire) throws Exception{
-        String request = "SELECT c.idCaseHoraire, date, heurePrestation, role, numRow, numColumn, jour, nom, prenom FROM (CaseHoraire c INNER JOIN assignationCaseHoraire a ON(c.idCaseHoraire = a.idCaseHoraire)) INNER JOIN volontaires v ON(v.matricule = a.matricule) WHERE c.idGrilleHoraire = ?";
+        if(grille == null || idGrilleHoraire == -1){
+            return;
+        }
+        String request = "SELECT CaseHoraire.idCaseHoraire, date, heureDebutPrestation, heureFinPrestation, role, numRow, numColumn, jour, nom, prenom FROM (CaseHoraire INNER JOIN assignationCaseHoraire ON(CaseHoraire.idCaseHoraire = assignationCaseHoraire.idCaseHoraire)) INNER JOIN volontaires ON(volontaires.matricule = assignationCaseHoraire.matricule) WHERE CaseHoraire.idGrilleHoraire = ?";
         Parametres params = new Parametres();
         params.addInt(idGrilleHoraire);
         ResultSet rs = mysql.pSelect(request, params);
@@ -1151,28 +1220,29 @@ public class DbRequests implements DBA{
         }
     }
 
-    public int editGrilleHoraire(int semaine, int annee, String nomAmbulance, String lieu) throws Exception{
-        int idGrille = getIdGrilleHoraire(semaine, annee, nomAmbulance, lieu);
+    public int editGrilleHoraire(Grille oldGrille) throws Exception{
+        int idGrille = getIdGrilleHoraire(oldGrille.getSemaine(), oldGrille.getAnnee(), oldGrille.getVehicule().getNom(), oldGrille.getLieu());
         if(idGrille == -1){
             return idGrille;
         }
-        String request = "UPDATE GrilleHoraire SET dateModification = ? WHERE idGrilleHoraire = ?";
+        String request = "UPDATE GrilleHoraire SET dateModification = now() WHERE idGrilleHoraire = ?";
         Parametres params = new Parametres();
-        params.addDate(new Date());
         params.addInt(idGrille);
 
         mysql.pUpdate(request, params);
         return idGrille;
     }
 
-    public boolean checkLockGrille(int annee, int semaine, String nomAmbulance, String lieu) throws Exception{
-        String request = "SELECT locked FROM GrilleHoraire WHERE numéroSemaine = ? AND ambulance = ? AND année = ? and lieu = ?";
+    public boolean checkLockGrille(int semaine, int annee, String nomVehicule, String lieu) throws Exception{
+        int idVehicule = getIdVehicule(nomVehicule);
+        String request = "SELECT locked FROM GrilleHoraire WHERE numéroSemaine = ? AND idVehicule = ? AND année = ? and idlieu = ?";
         int locked = -1;
+        int idLieu = getIdLieu(lieu);
         Parametres params = new Parametres();
         params.addInt(semaine);
-        params.addString(nomAmbulance);
+        params.addInt(idVehicule);
         params.addInt(annee);
-        params.addString(lieu);
+        params.addInt(idLieu);
         ResultSet rs = mysql.pSelect(request, params);
         while(rs.next()){
             locked = rs.getInt("locked");
@@ -1184,24 +1254,27 @@ public class DbRequests implements DBA{
         }
     }
 
-    public void lockGrille(int semaine, int année, String ambulance, String lieu) throws Exception{
-        String request = "UPDATE GrilleHoraire SET locked = 1 WHERE numéroSemaine = ? AND année = ? AND ambulance = ? AND lieu = ?";
+    public void lockGrille(int semaine, int année, Vehicule vehicule, String lieu) throws Exception{
+        int idVehicule = getIdVehicule(vehicule.getNom());
+        String request = "UPDATE GrilleHoraire SET locked = 1 WHERE numéroSemaine = ? AND année = ? AND idVehicule = ? AND lieu = ?";
         Parametres params = new Parametres();
         params.addInt(semaine);
         params.addInt(année);
-        params.addString(ambulance);
+        params.addInt(idVehicule);
         params.addString(lieu);
 
         mysql.pUpdate(request, params);
     }
 
-    public void unlockGrille(int semaine, int année, String ambulance, String lieu) throws Exception{
-        String request = "UPDATE GrilleHoraire SET locked = 0 WHERE numéroSemaine = ? AND année = ? AND ambulance = ? AND lieu = ?";
+    public void unlockGrille(int semaine, int année, Vehicule vehicule, String lieu) throws Exception{
+        int idVehicule = getIdVehicule(vehicule.getNom());
+        int idLieu = getIdLieu(lieu);
+        String request = "UPDATE GrilleHoraire SET locked = 0 WHERE numéroSemaine = ? AND année = ? AND idVehicule = ? AND idLieu = ?";
         Parametres params = new Parametres();
         params.addInt(semaine);
         params.addInt(année);
-        params.addString(ambulance);
-        params.addString(lieu);
+        params.addInt(idVehicule);
+        params.addInt(idLieu);
 
         mysql.pUpdate(request, params);
     }
@@ -2550,5 +2623,108 @@ public class DbRequests implements DBA{
         Parametres params = new Parametres();
         params.addString(nom);
         mysql.pUpdate(request, params);
+    }
+
+    private Vehicule getVehicule(int idVehicule) throws Exception{
+        if(idVehicule == -1){
+            return null;
+        }
+        Vehicule vehicule = null;
+        String request = "SELECT nom, numeroPlaque FROM Vehicules WHERE idVehicule = ?";
+        Parametres params = new Parametres();
+        params.addInt(idVehicule);
+
+        ResultSet rs = mysql.pSelect(request, params);
+        while(rs.next()){
+            String nom = rs.getString("nom");
+            String numeroPlaque = rs.getString("numeroPlaque");
+            vehicule = new Vehicule();
+            vehicule.setNom(nom);
+            vehicule.setNumeroPlaque(numeroPlaque);
+        }
+        return vehicule;
+    }
+
+    private String getLieu(int idLieu) throws Exception{
+        if(idLieu == -1){
+            return null;
+        }
+        String lieu = null;
+        String request = "SELECT nom FROM Lieux WHERE idLieu = ?";
+        Parametres params = new Parametres();
+        params.addInt(idLieu);
+
+        ResultSet rs = mysql.pSelect(request, params);
+        while(rs.next()){
+            lieu = rs.getString("nom");
+        }
+        return lieu;
+    }
+
+    private int getIdVehicule(String nom) throws Exception{
+        if(nom == null || nom.isEmpty()){
+            return -1;
+        }
+        int idVehicule = -1;
+        String request = "SELECT idVehicule FROM Vehicules WHERE nom = ?";
+        Parametres params = new Parametres();
+        params.addString(nom);
+
+        ResultSet rs = mysql.pSelect(request, params);
+        while(rs.next()){
+            idVehicule = rs.getInt("idVehicule");
+        }
+        return idVehicule;
+    }
+
+    private int getIdLieu(String nom) throws Exception{
+        if(nom == null || nom.isEmpty()){
+            return -1;
+        }
+        int idLieu = -1;
+        String request = "SELECT idLieu FROM Lieux WHERE nom = ?";
+        Parametres params = new Parametres();
+        params.addString(nom);
+
+        ResultSet rs = mysql.pSelect(request, params);
+        while(rs.next()){
+            idLieu = rs.getInt("idLieu");
+        }
+        return idLieu;
+    }
+
+    public void supprimerGrille(int idGrilleHoraire) throws Exception{
+        if(idGrilleHoraire == -1){
+            return;
+        }
+        String request = "SELECT idCaseHoraire FROM CaseHoraire WHERE idGrilleHoraire = ?";
+        Parametres params = new Parametres();
+        params.addInt(idGrilleHoraire);
+        
+        ResultSet rs = mysql.pSelect(request, params);
+        LinkedList<Integer> listeId = new LinkedList<>();
+        while(rs.next()){
+            int idCaseHoraire = rs.getInt("idCaseHoraire");
+            listeId.add(idCaseHoraire);
+        }
+        
+        for(int idCaseHoraire : listeId){
+            request = "DELETE FROM AssignationCaseHoraire WHERE idCaseHoraire = ?";
+            params = new Parametres();
+            params.addInt(idCaseHoraire);
+            mysql.pUpdate(request, params);
+        }
+        
+        for(int idCaseHoraire : listeId){
+            request = "DELETE FROM CaseHoraire WHERE idCaseHoraire = ?";
+            params = new Parametres();
+            params.addInt(idCaseHoraire);
+            mysql.pUpdate(request, params);
+        }
+        
+        request = "DELETE FROM GrilleHoraire WHERE idGrilleHoraire = ?";
+        params = new Parametres();
+        params.addInt(idGrilleHoraire);
+        mysql.pUpdate(request, params);        
     }
 }

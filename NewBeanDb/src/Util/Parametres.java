@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -74,6 +75,28 @@ public class Parametres {
         }
     }
 
+    public void addDateHour(java.util.Date value) throws Exception{
+        if(value == null){
+            addNull();
+        }else{
+            Timestamp timestamp = new java.sql.Timestamp(value.getTime());
+            KeyPair keyPair = new KeyPair("timestamp", timestamp);
+            params.add(keyPair);
+        }
+    }
+
+    public void addHour(String value) throws Exception{
+        if(value == null || value.isEmpty()){
+            addNull();
+        }else{
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            java.util.Date dateUtil = sdf.parse(value);
+            java.sql.Date dateSql = new java.sql.Date(dateUtil.getTime());
+            KeyPair keyPair = new KeyPair("date", dateSql);
+            params.add(keyPair);
+        }
+    }
+
     public void addChar(char value){
         String value2 = String.valueOf(value);
         KeyPair keyPair = new KeyPair("String", value2);
@@ -120,6 +143,8 @@ public class Parametres {
                 ps.setNull(i, java.sql.Types.OTHER);
             }else if(kp.getKey().equals("Blob")){
                 ps.setBlob(i, (java.sql.Blob)kp.getValue());
+            }else if(kp.getKey().equals("timestamp")){
+                ps.setTimestamp(i, (Timestamp)kp.getValue());
             }
             i++;
         }

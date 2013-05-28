@@ -17,6 +17,11 @@ public class Vehicule implements Serializable{
         setNumeroPlaque(null);
     }
 
+    public Vehicule(String nom, String numeroPlaque){
+        setNom(nom);
+        setNumeroPlaque(numeroPlaque);
+    }
+
     public Vehicule(Vehicule vehicule) {
         setNom(vehicule.getNom());
         setNumeroPlaque(vehicule.getNumeroPlaque());

@@ -6,33 +6,41 @@
 package Containers;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class CelluleGrille implements Serializable{
     private String jour;
-    private String heure;
     private String role;
     private String nomPrenom;
-    private String date;
+    private Date date;
+    private Date heureDebut;
+    private Date heureFin;
     private int row;
     private int column;
 
     public CelluleGrille(){
         setJour(null);
-        setHeure(null);
         setRole(null);
         setNomPrenom(null);
         setDate(null);
+        setHeureDebut(null);
+        setHeureFin(null);
     }
 
     CelluleGrille(CelluleGrille value) {
         setJour(value.getJour());
-        setHeure(value.getHeure());
         setRole(value.getRole());
         setNomPrenom(value.getNomPrenom());
-        setDate(value.getDate());
         setRow(value.getRow());
         setColumn(value.getColumn());
+        setDate(value.getDate());
+        setHeureDebut(value.getHeureDebut());
+        setHeureFin(value.getHeureFin());
     }
 
     public String getJour() {
@@ -42,15 +50,6 @@ public class CelluleGrille implements Serializable{
     public void setJour(String jour) {
         if(jour != null && jour.isEmpty()) jour = null;
         this.jour = jour;
-    }
-
-    public String getHeure() {
-        return heure;
-    }
-
-    public void setHeure(String heure) {
-        if(heure != null && heure.isEmpty()) heure = null;
-        this.heure = heure;
     }
 
     public String getRole() {
@@ -87,12 +86,53 @@ public class CelluleGrille implements Serializable{
         this.column = column;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
-        if(date != null && date.isEmpty()) date = null;
+    public void setDate(Date date) {
         this.date = date;
+    }
+
+    public void setDateString(String date) {
+        if(EasyDate.EasyDate.isValidDate(date, null)){
+            try {
+                this.date = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+            } catch (ParseException ex) {
+                Logger.getLogger(CelluleGrille.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public Date getHeureDebut() {
+        return heureDebut;
+    }
+
+    public void setHeureDebut(Date heureDebut) {
+        this.heureDebut = heureDebut;
+    }
+
+    public void setHeureDebutString(String heureDebut) {
+        try {
+            this.heureDebut = new SimpleDateFormat("HH:mm").parse(heureDebut);
+        } catch (ParseException ex) {
+            Logger.getLogger(CelluleGrille.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public Date getHeureFin() {
+        return heureFin;
+    }
+
+    public void setHeureFin(Date heureFin) {
+        this.heureFin = heureFin;
+    }
+
+    public void setHeureFinString(String heureFin) {
+        try {
+            this.heureFin = new SimpleDateFormat("HH:mm").parse(heureFin);
+        } catch (ParseException ex) {
+            Logger.getLogger(CelluleGrille.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -7,6 +7,7 @@ package GUI.Panels.GrillesHoraires;
 import Containers.CelluleGrille;
 import Containers.Grille;
 import Containers.Key;
+import Containers.Vehicule;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import Network.NetworkClient;
@@ -19,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +47,8 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         Gtitre.setText(titre);
         this.socket = socket;
         this.parent = parent;
+        comboVehicules();
+        comboLieux();
 
         type = parent.getTypeGrille();
         if(type == null){
@@ -89,11 +93,9 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         Ggrille = new javax.swing.JTable();
         Lambulance = new javax.swing.JLabel();
-        Gambulance = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         Gsemaine = new javax.swing.JTextField();
         Llieu = new javax.swing.JLabel();
-        Glieu = new javax.swing.JTextField();
         Lheure = new javax.swing.JLabel();
         Gheure = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
@@ -107,6 +109,8 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         Gdate = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         Benregistrer = new javax.swing.JButton();
+        Gvehicule = new javax.swing.JComboBox();
+        Glieu = new javax.swing.JComboBox();
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -131,7 +135,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 .addComponent(Baccueil)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Gtitre)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(1129, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,15 +174,11 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
 
         Lambulance.setText("Ambulance");
 
-        Gambulance.setText("1er DEPART 112");
-
         jLabel2.setText("Semaine:");
 
         Gsemaine.setText("22");
 
         Llieu.setText("Lieu");
-
-        Glieu.setText("LIEGE 2 - 832-BDG");
 
         Lheure.setText("Heure");
 
@@ -230,7 +230,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Gdate)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -269,8 +269,8 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                             .addComponent(Llieu))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(Gambulance)
-                            .addComponent(Glieu, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
+                            .addComponent(Gvehicule, 0, 210, Short.MAX_VALUE)
+                            .addComponent(Glieu, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -303,19 +303,19 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Lambulance)
-                            .addComponent(Gambulance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
                             .addComponent(Gsemaine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton2)
                             .addComponent(jLabel3)
-                            .addComponent(Gannee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(Gannee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Gvehicule, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(6, 6, 6)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Llieu)
-                            .addComponent(Glieu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Lheure)
                             .addComponent(Gheure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Bmodifier)))
+                            .addComponent(Bmodifier)
+                            .addComponent(Glieu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Benregistrer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(9, 9, 9)
@@ -330,8 +330,10 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -411,14 +413,20 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         } catch (ParseException ex) {
             Logger.getLogger(M_NewEditGrilleHoraire.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if(dataSetted){
+        if(dataSetted && Gvehicule.getItemCount() > 0 && Glieu.getItemCount() >0){
             Memorise();
             cacher(true);
+        }
+        if(Gvehicule.getItemCount() == 0){
+            parent.afficherMessage("Aucuns véhicule existant");
+        }else if(Glieu.getItemCount() == 0){
+            parent.afficherMessage("Aucuns lieux existant");
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void BmodifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BmodifierActionPerformed
         Ggrille.setValueAt(Gheure.getText(), this.row, this.column);
+        modifierHeureColonne(this.row, this.column);
         Memorise();
     }//GEN-LAST:event_BmodifierActionPerformed
 
@@ -479,15 +487,15 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
     private javax.swing.JButton Baccueil;
     private javax.swing.JButton Benregistrer;
     private javax.swing.JButton Bmodifier;
-    private javax.swing.JTextField Gambulance;
     private javax.swing.JTextField Gannee;
     private javax.swing.JTextField Gdate;
     private javax.swing.JTable Ggrille;
     private javax.swing.JTextField Gheure;
-    private javax.swing.JTextField Glieu;
+    private javax.swing.JComboBox Glieu;
     private javax.swing.JLabel Gnum;
     private javax.swing.JTextField Gsemaine;
     private javax.swing.JLabel Gtitre;
+    private javax.swing.JComboBox Gvehicule;
     private javax.swing.JLabel Lambulance;
     private javax.swing.JLabel Lheure;
     private javax.swing.JLabel Llieu;
@@ -519,7 +527,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         SwingUtils.addToTable(Ggrille, vector);
 
         vector = new Vector();
-        data = new Object[]{"Prestation de", "06h30 - 14h30", "06h30 - 14h30", "06h30 - 14h30", "06h30 - 14h30", "06h30 - 14h30", "08h00 - 13h00", "08h00 - 13h00"};
+        data = new Object[]{"Prestation de", "06:30 - 14:30", "06:30 - 14:30", "06:30 - 14:30", "06:30 - 14:30", "06:30 - 14:30", "08:00 - 13:00", "08:00 - 13:00"};
         for(Object elm : data){
             vector.add(elm);
         }
@@ -547,7 +555,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         SwingUtils.addToTable(Ggrille, vector);
 
         vector = new Vector();
-        data = new Object[]{"Prestation de", "14h30 - 17h30", "14h30 - 17h30", "14h30 - 17h30", "14h30 - 17h30", "14h30 - 17h30", "13h00 - 18h00", "13h00 - 18h00"};
+        data = new Object[]{"Prestation de", "14:30 - 17:30", "14:30 - 17:30", "14:30 - 17:30", "14:30 - 17:30", "14:30 - 17:30", "13:00 - 18:00", "13:00 - 18:00"};
         for(Object elm : data){
             vector.add(elm);
         }
@@ -575,7 +583,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         SwingUtils.addToTable(Ggrille, vector);
 
         vector = new Vector();
-        data = new Object[]{"Prestation de", "17h30 - 22h30", "17h30 - 22h30", "17h30 - 22h30", "17h30 - 22h30", "17h30 - 22h30", "18h00 - 23h00", "18h00 - 23h00"};
+        data = new Object[]{"Prestation de", "17:30 - 22:30", "17:30 - 22:30", "17:30 - 22:30", "17:30 - 22:30", "17:30 - 22:30", "18:00 - 23:00", "18:00 - 23:00"};
         for(Object elm : data){
             vector.add(elm);
         }
@@ -603,7 +611,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         SwingUtils.addToTable(Ggrille, vector);
 
         vector = new Vector();
-        data = new Object[]{"Prestation de", "22h30 - 08h00", "22h30 - 06h30", "22h30 - 06h30", "22h30 - 06h30", "22h30 - 08h00", "23h00 - 08h00", "23h00 - 06h30"};
+        data = new Object[]{"Prestation de", "22:30 - 08:00", "22:30 - 06:30", "22:30 - 06:30", "22:30 - 06:30", "22:30 - 08:00", "23:00 - 08:00", "23:00 - 06:30"};
         for(Object elm : data){
             vector.add(elm);
         }
@@ -632,8 +640,8 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
     }
 
     private void refreshTableau() {
-        Gambulance.setText(grille.getNomAmbulance());
-        Glieu.setText(grille.getLieu());
+        reglerVehicule(grille.getVehicule());
+        reglerLieu(grille.getLieu());
         Gsemaine.setText(String.valueOf(grille.getSemaine()));
         Gannee.setText(String.valueOf(grille.getAnnee()));
 
@@ -643,15 +651,26 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
             CelluleGrille cellule = key.getValue();
             int column = cellule.getColumn();
             int row = cellule.getRow();
-            String date = cellule.getDate();
+            String date = EasyDate.EasyDate.getDateOnly(cellule.getDate());
             String jour = cellule.getJour();
-            String heure = cellule.getHeure();
+            String heureDebut = EasyDate.EasyDate.getHourOnly(cellule.getHeureDebut());
+            String heureFin = EasyDate.EasyDate.getHourOnly(cellule.getHeureFin());
             String role = cellule.getRole();
             String nomVolontaire = cellule.getNomPrenom();
 
+
             Ggrille.setValueAt(date, 0, column);
             Ggrille.setValueAt(jour, 1, column);
-            Ggrille.setValueAt(heure, 2, column);
+            String heureConcat = heureDebut + " - " + heureFin;
+            if(row>=3 && row <=5){
+                Ggrille.setValueAt(heureConcat, 2, column);
+            }else if(row>=7 && row <=9){
+                Ggrille.setValueAt(heureConcat, 6, column);
+            }else if(row>=11 && row <=13){
+                Ggrille.setValueAt(heureConcat, 10, column);
+            }else if(row>=15 && row <=17){
+                Ggrille.setValueAt(heureConcat, 14, column);
+            }
             Ggrille.setValueAt(role, row, 0);
             Ggrille.setValueAt(nomVolontaire, row, column);
             if(nomVolontaire != null && !nomVolontaire.isEmpty()){
@@ -662,12 +681,14 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
 
     private void Memorise() {
         grille = new Grille();
-        grille.setDateDebut((String)Ggrille.getValueAt(0, 1));
-        grille.setDateFin((String)Ggrille.getValueAt(0, 7));
+        grille.setDateDebutString((String)Ggrille.getValueAt(0, 1));
+        grille.setDateFinString((String)Ggrille.getValueAt(0, 7));
         grille.setSemaine(Integer.parseInt(Gsemaine.getText()));
         grille.setAnnee(Integer.parseInt(Gannee.getText()));
-        grille.setNomAmbulance(Gambulance.getText());
-        grille.setLieu(Glieu.getText());
+        String selectedVehicule = Gvehicule.getSelectedItem().toString();
+        String[] splitVehicule = selectedVehicule.split(" # ");
+        grille.setVehicule(new Vehicule(splitVehicule[0], splitVehicule[1]));
+        grille.setLieu(Glieu.getSelectedItem().toString());
 
         for(int k=3; k<6; k++){
             for(int i=1; i<8; i++){
@@ -678,8 +699,12 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 String nomVolontaire = (String)Ggrille.getValueAt(k, i);
                 CelluleGrille cellule = new CelluleGrille();
                 cellule.setJour(jour);
-                cellule.setHeure(heure);
-                cellule.setDate(date);
+                String[] splitHeure = heure.split(" - ");
+                String heureDebut = splitHeure[0];
+                String heureFin = splitHeure[1];
+                cellule.setHeureDebutString(heureDebut);
+                cellule.setHeureFinString(heureFin);
+                cellule.setDateString(date);
                 cellule.setRole(role);
                 cellule.setNomPrenom(nomVolontaire);
                 cellule.setRow(k);
@@ -687,17 +712,189 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 grille.addCellule(k, i, cellule);
             }
         }
+
+        for(int k=7; k<10; k++){
+            for(int i=1; i<8; i++){
+                String date = (String)Ggrille.getValueAt(0, i);
+                String jour = (String)Ggrille.getValueAt(1, i);
+                String heure = (String)Ggrille.getValueAt(6, i);
+                String role = (String)Ggrille.getValueAt(k, 0);
+                String nomVolontaire = (String)Ggrille.getValueAt(k, i);
+                CelluleGrille cellule = new CelluleGrille();
+                cellule.setJour(jour);
+                String[] splitHeure = heure.split(" - ");
+                String heureDebut = splitHeure[0];
+                String heureFin = splitHeure[1];
+                cellule.setHeureDebutString(heureDebut);
+                cellule.setHeureFinString(heureFin);
+                cellule.setDateString(date);
+                cellule.setRole(role);
+                cellule.setNomPrenom(nomVolontaire);
+                cellule.setRow(k);
+                cellule.setColumn(i);
+                grille.addCellule(k, i, cellule);
+            }
+        }
+
+        for(int k=11; k<14; k++){
+            for(int i=1; i<8; i++){
+                String date = (String)Ggrille.getValueAt(0, i);
+                String jour = (String)Ggrille.getValueAt(1, i);
+                String heure = (String)Ggrille.getValueAt(10, i);
+                String role = (String)Ggrille.getValueAt(k, 0);
+                String nomVolontaire = (String)Ggrille.getValueAt(k, i);
+                CelluleGrille cellule = new CelluleGrille();
+                cellule.setJour(jour);
+                String[] splitHeure = heure.split(" - ");
+                String heureDebut = splitHeure[0];
+                String heureFin = splitHeure[1];
+                cellule.setHeureDebutString(heureDebut);
+                cellule.setHeureFinString(heureFin);
+                cellule.setDateString(date);
+                cellule.setRole(role);
+                cellule.setNomPrenom(nomVolontaire);
+                cellule.setRow(k);
+                cellule.setColumn(i);
+                grille.addCellule(k, i, cellule);
+            }
+        }
+
+        for(int k=15; k<18; k++){
+            for(int i=1; i<8; i++){
+                String date = (String)Ggrille.getValueAt(0, i);
+                String jour = (String)Ggrille.getValueAt(1, i);
+                String heure = (String)Ggrille.getValueAt(14, i);
+                String role = (String)Ggrille.getValueAt(k, 0);
+                String nomVolontaire = (String)Ggrille.getValueAt(k, i);
+                CelluleGrille cellule = new CelluleGrille();
+                cellule.setJour(jour);
+                String[] splitHeure = heure.split(" - ");
+                String heureDebut = splitHeure[0];
+                String heureFin = splitHeure[1];
+                cellule.setHeureDebutString(heureDebut);
+                cellule.setHeureFinString(heureFin);
+                cellule.setDateString(date);
+                cellule.setRole(role);
+                cellule.setNomPrenom(nomVolontaire);
+                cellule.setRow(k);
+                cellule.setColumn(i);
+                grille.addCellule(k, i, cellule);
+            }
+        }
+        System.out.println("ok");
     }
 
     private void cacher(boolean value) {
         Ggrille.setVisible(value);
         Lambulance.setVisible(value);
-        Gambulance.setVisible(value);
+        Gvehicule.setVisible(value);
         Llieu.setVisible(value);
         Glieu.setVisible(value);
         Lheure.setVisible(value);
         Gheure.setVisible(value);
         Bmodifier.setVisible(value);
         Benregistrer.setVisible(value);
+    }
+
+    private void comboVehicules() {
+        LinkedList<Object[]> vehicules = null;
+        PacketCom packet = new PacketCom(States.GET_VEHICULES_ALL, null);
+        socket.send(packet);
+        try {
+            PacketCom retour = socket.receive();
+            String type = retour.getType();
+            if(type.equals(States.GET_VEHICULES_ALL_OUI)){
+                vehicules = (LinkedList<Object[]>) retour.getObjet();
+                for(Object[] elm : vehicules){
+                    String line = elm[0] + " # " + elm[1];
+                    SwingUtils.addToComboBox(Gvehicule, line);
+                }
+            }else{
+                String message = (String)retour.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(M_NewEditGrilleHoraire.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void comboLieux() {
+        LinkedList<Object[]> lieux = null;
+        PacketCom packet = new PacketCom(States.GET_LIEUX_ALL, null);
+        socket.send(packet);
+        try {
+            PacketCom retour = socket.receive();
+            String type = retour.getType();
+            if(type.equals(States.GET_LIEUX_ALL_OUI)){
+                lieux = (LinkedList<Object[]>) retour.getObjet();
+                for(Object[] elm : lieux){
+                    SwingUtils.addToComboBox(Glieu, (String)elm[0]);
+                }
+            }else{
+                String message = (String)retour.getObjet();
+                parent.afficherMessage(message);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(M_NewEditGrilleHoraire.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void reglerVehicule(Vehicule vehicule) {
+        String key = vehicule.getNom() + " # " + vehicule.getNumeroPlaque();
+        boolean found = false;
+        for(int i=0; i<Gvehicule.getItemCount() && !found; i++){
+            if(Gvehicule.getItemAt(i).toString().equals(key)){
+                Gvehicule.setSelectedIndex(i);
+                found = true;
+            }
+        }
+    }
+
+    private void reglerLieu(String lieu) {
+        String key = lieu;
+        boolean found = false;
+        for(int i=0; i<Glieu.getItemCount() && !found; i++){
+            if(Glieu.getItemAt(i).toString().equals(key)){
+                Glieu.setSelectedIndex(i);
+                found = true;
+            }
+        }
+    }
+
+    private void modifierHeureColonne(int row, int column) {
+        String heureEdited = Ggrille.getValueAt(row, column).toString();
+        int[] rowToEdit = null;
+        if(row == 2){
+            editerHeure("debut", 6, heureEdited.split(" - ")[1]);
+        }else if(row == 6){
+            editerHeure("fin", 2, heureEdited.split(" - ")[0]);
+            editerHeure("debut", 10, heureEdited.split(" - ")[1]);
+        }else if(row == 10){
+            editerHeure("fin", 6, heureEdited.split(" - ")[0]);
+            editerHeure("debut", 14, heureEdited.split(" - ")[1]);
+        }else if(row == 14){
+            editerHeure("fin", 10, heureEdited.split(" - ")[0]);
+        }
+        System.out.println("ok");
+    }
+
+    private void editerHeure(String type, int row, String heureEdited) {
+        if(type.equals("debut")){
+            String heureToEdit = Ggrille.getValueAt(row, column).toString();
+            String[] split = heureToEdit.split(" - ");
+            String debut = split[0];
+            String fin = split[1];
+            debut = heureEdited;
+            heureToEdit = debut + " - " + fin;
+            Ggrille.setValueAt(heureToEdit, row, column);
+        }else{
+            String heureToEdit = Ggrille.getValueAt(row, column).toString();
+            String[] split = heureToEdit.split(" - ");
+            String debut = split[0];
+            String fin = split[1];
+            fin = heureEdited;
+            heureToEdit = debut + " - " + fin;
+            Ggrille.setValueAt(heureToEdit, row, column);
+        }
     }
 }

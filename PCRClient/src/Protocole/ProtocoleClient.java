@@ -179,6 +179,10 @@ public class ProtocoleClient implements Protocolable{
             return packet;
         }else if (type.equals(States.DELETE_LIEU_NON)) {
             return packet;
+        }else if (type.equals(States.DELETE_GRILLE_NON)) {
+            return packet;
+        }else if (type.equals(States.DELETE_GRILLE_OUI)) {
+            return packet;
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }

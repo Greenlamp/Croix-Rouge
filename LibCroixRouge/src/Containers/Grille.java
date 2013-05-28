@@ -5,32 +5,35 @@
 
 package Containers;
 
+import EasyDate.EasyDate;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 
 public class Grille implements Serializable{
-    private String nomAmbulance;
+    private Vehicule vehicule;
     private String lieu;
     private LinkedList<Key> grilles;
     private int semaine;
     private int annee;
-    private String dateDebut;
-    private String dateFin;
+    private Date dateDebut;
+    private Date dateFin;
 
     public Grille(){
-        setNomAmbulance(null);
         setLieu(null);
         setDateDebut(null);
         setDateFin(null);
         setGrilles(new LinkedList<Key>());
+        setVehicule(null);
+        setDateDebut(null);
+        setDateFin(null);
     }
 
     public Grille(Grille grille) {
-        setNomAmbulance(grille.getNomAmbulance());
+        setVehicule(grille.getVehicule());
         setLieu(grille.getLieu());
         setDateDebut(grille.getDateDebut());
         setDateFin(grille.getDateFin());
@@ -64,31 +67,20 @@ public class Grille implements Serializable{
         this.semaine = semaine;
     }
 
-    public String getDateDebut() {
+    public Date getDateDebut() {
         return dateDebut;
     }
 
-    public void setDateDebut(String dateDebut) {
-        if(dateDebut != null && dateDebut.isEmpty()) dateDebut = null;
+    public void setDateDebut(Date dateDebut) {
         this.dateDebut = dateDebut;
     }
 
-    public String getDateFin() {
+    public Date getDateFin() {
         return dateFin;
     }
 
-    public void setDateFin(String dateFin) {
-        if(dateFin != null && dateFin.isEmpty()) dateFin = null;
+    public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
-    }
-
-    public String getNomAmbulance() {
-        return nomAmbulance;
-    }
-
-    public void setNomAmbulance(String nomAmbulance) {
-        if(nomAmbulance != null && nomAmbulance.isEmpty()) nomAmbulance = null;
-        this.nomAmbulance = nomAmbulance;
     }
 
     public int getAnnee() {
@@ -131,6 +123,36 @@ public class Grille implements Serializable{
                 grilles.add(newKey);
                 break;
             }
+        }
+    }
+
+    public Vehicule getVehicule() {
+        return vehicule;
+    }
+
+    public void setVehicule(Vehicule vehicule) {
+        this.vehicule = vehicule;
+    }
+
+    public void setDateDebutString(String dateDebut) {
+        if(EasyDate.isValidDate(dateDebut, null)){
+            try {
+                this.dateDebut = new SimpleDateFormat("dd/MM/yyyy").parse(dateDebut);
+            } catch (ParseException ex) {
+            }
+        }else{
+            this.dateDebut = null;
+        }
+    }
+
+    public void setDateFinString(String dateFin) {
+        if(EasyDate.isValidDate(dateFin, null)){
+            try {
+                this.dateFin = new SimpleDateFormat("dd/MM/yyyy").parse(dateFin);
+            } catch (ParseException ex) {
+            }
+        }else{
+            this.dateFin = null;
         }
     }
 }

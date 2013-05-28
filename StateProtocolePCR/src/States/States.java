@@ -44,7 +44,7 @@ public interface States {
 
     public static String NEW_GRILLE_HORAIRE = "NEW_GRILLE_HORAIRE";
     public static String EDIT_GRILLE_HORAIRE = "EDIT_GRILLE_HORAIRE";
-
+    public static String DELETE_GRILLE = "DELETE_GRILLE";
     public static String GET_GRILLE = "GET_GRILLE";
     public static String CHECK_LOCK_GRILLE = "CHECK_LOCK_GRILLE";
 
@@ -125,6 +125,8 @@ public interface States {
     public static String NEW_GRILLE_HORAIRE_NON = "NEW_GRILLE_HORAIRE_NON";
     public static String EDIT_GRILLE_HORAIRE_OUI = "EDIT_GRILLE_HORAIRE_OUI";
     public static String EDIT_GRILLE_HORAIRE_NON = "EDIT_GRILLE_HORAIRE_NON";
+    public static String DELETE_GRILLE_OUI = "DELETE_GRILLE_OUI";
+    public static String DELETE_GRILLE_NON = "DELETE_GRILLE_NON";
 
     public static String GET_GRILLE_OUI = "GET_GRILLE_OUI";
     public static String GET_GRILLE_NON = "GET_GRILLE_NON";
