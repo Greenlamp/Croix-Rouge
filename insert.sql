@@ -79,7 +79,7 @@ INSERT INTO `droits` (`idDroit`, `nom`, `description`) VALUES
 (24, 'SEE_HORAIRE', NULL),
 (25, 'CREATE_HORAIRE', NULL),
 (26, 'EDIT_HORAIRE', NULL),
-(27, 'EDIT_HORAIRE_STAG', NULL),
+(27, 'SEE_HORAIRE_MISS', NULL),
 (28, 'SEE_LIEU', NULL),
 (29, 'CREATE_LIEU', NULL),
 (30, 'EDIT_LIEU', NULL),
@@ -134,6 +134,7 @@ INSERT INTO `possederDroit` (`idGroupe`, `idDroit`) VALUES
 (9, 24),
 (9, 25),
 (9, 26),
+(9, 27),
 (10, 31),
 (11, 32);
 

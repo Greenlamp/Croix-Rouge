@@ -12,6 +12,7 @@ import Containers.Formations;
 import Containers.Grille;
 import Containers.Groupe;
 import Containers.Identite;
+import Containers.ReservationVehicule;
 import Containers.Residence;
 import Containers.Telephone;
 import Containers.Urgence;
@@ -43,6 +44,7 @@ import GUI.Panels.NouveauVolontaire.M_Téléphone;
 import GUI.Panels.NouveauVolontaire.M_Urgence;
 import GUI.Panels.Vehicules.M_GestionVehicules;
 import GUI.Panels.Vehicules.M_NewEditVehicule;
+import GUI.Panels.Vehicules.M_ReservationVehicule;
 import my.cr.PacketCom.PacketCom;
 import Recherche.TupleRecherche;
 import SSL.NetworkClientSSL;
@@ -107,6 +109,8 @@ public class Main extends javax.swing.JFrame {
     public static String NOUVEAU_LIEU = "NOUVEAU_LIEU";
     public static String EDIT_LIEU = "EDIT_LIEU";
 
+    public static String RESERVATION_VEHICULE = "RESERVATION_VEHICULE";
+
 
 
     private boolean connected = false;
@@ -135,6 +139,7 @@ public class Main extends javax.swing.JFrame {
 
     private Vehicule vehicule = null;
     private String lieu = null;
+    private ReservationVehicule reservationVehicule = null;
 
 
     public Main() {
@@ -279,9 +284,6 @@ public class Main extends javax.swing.JFrame {
             Gscene.removeAll();
             Gscene.repaint();
             Gscene.revalidate();
-
-            //M_NouveauVolontaire m_NouveauVolontaire = new M_NouveauVolontaire(this, this.socket);
-            //Gscene.add(m_NouveauVolontaire);
 
             M_Identite mIdentite = new M_Identite(this, socket);
             Gscene.add(mIdentite);
@@ -488,6 +490,14 @@ public class Main extends javax.swing.JFrame {
 
             M_NewEditLieux m_NewEditLieux = new M_NewEditLieux(this, socket, "Modifier lieu");
             Gscene.add(m_NewEditLieux);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.EDIT_LIEU)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_ReservationVehicule m_ReservationVehicule = new M_ReservationVehicule(this, socket);
+            Gscene.add(m_ReservationVehicule);
             Gscene.revalidate();
         }
     }
@@ -721,5 +731,17 @@ public class Main extends javax.swing.JFrame {
 
     public void setLieu(String lieu) {
         this.lieu = lieu;
+    }
+
+    public ReservationVehicule getReservationVehicule() {
+        return reservationVehicule;
+    }
+
+    public void setReservationVehicule(ReservationVehicule reservationVehicule) {
+        this.reservationVehicule = reservationVehicule;
+    }
+
+    public LinkedList<String> getDroits(){
+        return this.droits;
     }
 }

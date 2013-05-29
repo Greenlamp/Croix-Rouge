@@ -134,6 +134,16 @@ public class ProtocoleServeur implements Protocolable{
             return actionEditLieu(type, contenu);
         }else if(type.equals(States.DELETE_LIEU)){
             return actionDeleteLieu(type, contenu);
+        }else if(type.equals(States.GET_RESERVATION_ALL)){
+            return actionGetReservationAll(type, contenu);
+        }else if(type.equals(States.GET_RESERVATION)){
+            return actionGetReservation(type, contenu);
+        }else if(type.equals(States.NEW_RESERVATION)){
+            return actionNewReservation(type, contenu);
+        }else if(type.equals(States.EDIT_RESERVATION)){
+            return actionEditReservation(type, contenu);
+        }else if(type.equals(States.DELETE_RESERVATION)){
+            return actionDeleteReservation(type, contenu);
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }
@@ -1560,5 +1570,25 @@ public class ProtocoleServeur implements Protocolable{
 
         dbRequests.getMysql().commit();
         return new PacketCom(States.DELETE_LIEU_OUI, null);
+    }
+
+    private PacketCom actionGetReservationAll(String type, Object contenu) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private PacketCom actionGetReservation(String type, Object contenu) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private PacketCom actionNewReservation(String type, Object contenu) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private PacketCom actionEditReservation(String type, Object contenu) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private PacketCom actionDeleteReservation(String type, Object contenu) {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }

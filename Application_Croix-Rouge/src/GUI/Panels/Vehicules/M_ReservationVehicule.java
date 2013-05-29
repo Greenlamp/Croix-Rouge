@@ -4,16 +4,15 @@
  */
 package GUI.Panels.Vehicules;
 
+import Containers.ReservationVehicule;
 import Containers.Vehicule;
 import GUI.Panels.Consultation.M_Consultation;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
-import Network.NetworkClient;
 import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
 import java.util.LinkedList;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Greenlamp
  */
-public class M_GestionVehicules extends javax.swing.JPanel {
+public class M_ReservationVehicule extends javax.swing.JPanel {
 
     /**
      * Creates new form M_GestionVehicules
@@ -29,11 +28,11 @@ public class M_GestionVehicules extends javax.swing.JPanel {
     Main parent = null;
     NetworkClientSSL socket = null;
 
-    public M_GestionVehicules() {
+    public M_ReservationVehicule() {
         initComponents();
     }
 
-    public M_GestionVehicules(Main parent, NetworkClientSSL socket) {
+    public M_ReservationVehicule(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;
@@ -57,12 +56,11 @@ public class M_GestionVehicules extends javax.swing.JPanel {
         Gtableau = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("Gestion des véhicules");
+        jLabel1.setText("Réservation véhicule");
 
         Baccueil1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         Baccueil1.setForeground(new java.awt.Color(0, 0, 255));
@@ -101,14 +99,14 @@ public class M_GestionVehicules extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Nom", "Numero Plaque"
+                "Nom", "Debut", "Fin"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -140,14 +138,6 @@ public class M_GestionVehicules extends javax.swing.JPanel {
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton3.setText("Réservation vehicule");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -160,24 +150,17 @@ public class M_GestionVehicules extends javax.swing.JPanel {
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
-                            .addComponent(jButton1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(38, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 605, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -225,22 +208,19 @@ public class M_GestionVehicules extends javax.swing.JPanel {
         if(evt.getClickCount() == 2){
             int row = Gtableau.getSelectedRow();
             String nom = (String)Gtableau.getValueAt(row, 0);
-            Vehicule vehicule = getVehicule(nom);
-            parent.setVehicule(vehicule);
+            String debut = (String)Gtableau.getValueAt(row, 0);
+            String fin = (String)Gtableau.getValueAt(row, 0);
+            ReservationVehicule reservationVehicule = getReservationVehicule(nom, debut, fin);
+            parent.setReservationVehicule(reservationVehicule);
             parent.changeState(Main.EDIT_VEHICULE);
         }
     }//GEN-LAST:event_GtableauMouseClicked
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        parent.changeState(Main.RESERVATION_VEHICULE);
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Baccueil1;
     private javax.swing.JTable Gtableau;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -248,7 +228,7 @@ public class M_GestionVehicules extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void refreshListe() {
-        PacketCom packet = new PacketCom(States.GET_VEHICULES_ALL, null);
+        PacketCom packet = new PacketCom(States.GET_RESERVATION_ALL, null);
         socket.send(packet);
         try {
             PacketCom packetReponse = socket.receive();
@@ -262,23 +242,23 @@ public class M_GestionVehicules extends javax.swing.JPanel {
         String type = packetReponse.getType();
         Object contenu = packetReponse.getObjet();
 
-        if(type.equals(States.GET_VEHICULES_ALL_OUI)){
-            LinkedList<Object[]> listeVehicule = (LinkedList<Object[]>) contenu;
-            SwingUtils.addToTable(Gtableau, listeVehicule);
+        if(type.equals(States.GET_RESERVATION_ALL_OUI)){
+            LinkedList<Object[]> listeReservation = (LinkedList<Object[]>) contenu;
+            SwingUtils.addToTable(Gtableau, listeReservation);
         }else{
             System.out.println("Erreur.");
         }
     }
 
     private void deleteVehicule(String nom) {
-        PacketCom packet = new PacketCom(States.DELETE_VEHICULE, (Object)nom);
+        PacketCom packet = new PacketCom(States.DELETE_RESERVATION, (Object)nom);
         socket.send(packet);
         try {
             PacketCom retour = socket.receive();
             String type = retour.getType();
-            if(type.equals(States.DELETE_VEHICULE_OUI)){
-                parent.afficherMessage("Suppression du véhicule réussi");
-            }else if(type.equals(States.DELETE_VEHICULE_NON)){
+            if(type.equals(States.DELETE_RESERVATION_OUI)){
+                parent.afficherMessage("Suppression de la réservation réussi");
+            }else if(type.equals(States.DELETE_RESERVATION_NON)){
                 String message = (String)retour.getObjet();
                 parent.afficherMessage(message);
             }else{
@@ -286,21 +266,21 @@ public class M_GestionVehicules extends javax.swing.JPanel {
                 parent.afficherMessage(message);
             }
         } catch (Exception ex) {
-            Logger.getLogger(M_GestionVehicules.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(M_ReservationVehicule.class.getName()).log(Level.SEVERE, null, ex);
         }
         parent.changeState(Main.GESTION_VEHICULES);
     }
 
-    private Vehicule getVehicule(String nom) {
-        PacketCom packet = new PacketCom(States.GET_VEHICULE, (Object)nom);
+    private ReservationVehicule getReservationVehicule(String nom, String debut, String fin) {
+        PacketCom packet = new PacketCom(States.GET_RESERVATION, (Object)nom);
         socket.send(packet);
         try {
             PacketCom retour = socket.receive();
             String type = retour.getType();
-            if(type.equals(States.GET_VEHICULE_OUI)){
-                Vehicule vehicule = (Vehicule)retour.getObjet();
-                return vehicule;
-            }else if(type.equals(States.GET_VEHICULE_NON)){
+            if(type.equals(States.GET_RESERVATION_OUI)){
+                ReservationVehicule reservationVehicule = (ReservationVehicule)retour.getObjet();
+                return reservationVehicule;
+            }else if(type.equals(States.GET_RESERVATION_NON)){
                 String message = (String)retour.getObjet();
                 parent.afficherMessage(message);
             }else{
@@ -308,7 +288,7 @@ public class M_GestionVehicules extends javax.swing.JPanel {
                 parent.afficherMessage(message);
             }
         } catch (Exception ex) {
-            Logger.getLogger(M_GestionVehicules.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(M_ReservationVehicule.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

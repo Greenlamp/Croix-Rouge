@@ -20,6 +20,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.Security;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
@@ -33,6 +34,7 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 import my.cr.PacketCom.PacketCom;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 
 public class NetworkClientSSL {
@@ -121,6 +123,8 @@ public class NetworkClientSSL {
     }
 
     private SSLSocket getSocket(String host, int port) throws Exception{
+        BouncyCastleProvider bc = new BouncyCastleProvider();
+        Security.addProvider(bc);
         SSLContext SslC = null;
         SslC = SSLContext.getInstance("SSLv3");
         KeyManagerFactory kmf = null;

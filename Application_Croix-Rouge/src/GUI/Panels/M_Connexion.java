@@ -174,32 +174,62 @@ public class M_Connexion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BvaliderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BvaliderActionPerformed
-        // TODO add your handling code here:
+        //On se connecte au serveur
         parent.connectSql();
+        //On cache les message d'erreur
         LuserIncorrect.setVisible(false);
         LpassIncorrect.setVisible(false);
+        //On recupere le login et le password, qu'on met dans un tableau
         String[] objets = {Glogin.getText(), Gpassword.getText()};
+        //On envoie un objet PacketCom avec comme parametre:
+        //Type: "LOGIN"
+        //Objet: le tableau contenant le login et le password
         socket.send(new PacketCom(States.LOGIN, (Object)objets));
         try {
+            //On attend la réponse du serveur
             PacketCom packetCom = socket.receive();
+            //On regarde quel est le type de la réponse
             String type = packetCom.getType();
+            //Si le type vaut "LOGIN_OUI" c'est que la connexion
+            //à réussi
             if(type.equals(States.LOGIN_OUI)){
+                //On récupère les droits de l'utilisateur
                 LinkedList<String> droits = getDroits();
+                //On enregistre ces droits dans Main.
                 parent.setDroits(droits);
+                //On enregistre le login de l'utilisateur dans Main
                 parent.setLoginUser(Glogin.getText());
+                //On change l'état pour quitter le module
+                //de connexion et aller sur le menu
                 parent.changeState(Main.LOGGED);
+            //Si le type vaut "LOGIN_NON_USER" c'est que le
+            //login est incorrect
             }else if(type.equals(States.LOGIN_NON_USER)){
+                //On affiche le message d'erreur
                 LuserIncorrect.setVisible(true);
+                //on se déconnecte du serveur
                 parent.disconnectSql();
+            //Si le type vaut "LOGIN_NON_PASS" c'est que le
+            //password est incorrect
             }else if(type.equals(States.LOGIN_NON_PASS)){
+                //On affiche le message d'erreur
                 LpassIncorrect.setVisible(true);
+                //on se déconnecte du serveur
                 parent.disconnectSql();
+            //Si le type vaut "LOGIN_NON" c'est qu'une
+            //erreur s'est produite durant la connexion
             }else if(type.equals(States.LOGIN_NON)){
+                //on récupère le message d'erreur que le serveur
+                //a envoyé
                 String message = (String)packetCom.getObjet();
+                //on affiche le message d'erreur
                 parent.afficherMessage(message);
+                //on se déconnecte du serveur
                 parent.disconnectSql();
             }
         } catch (Exception ex) {
+            //Si on arrive pas à se connecter, c'est que
+            //le serveur est éteint
             parent.afficherMessage("Le serveur n'est pas allumé");
         }
     }//GEN-LAST:event_BvaliderActionPerformed

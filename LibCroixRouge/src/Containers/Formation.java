@@ -2,23 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Containers;
 
-import EasyDate.EasyDate;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+public class Formation implements Serializable {
 
-public class Formation implements Serializable{
     private String nom;
     private Date dateObtention;
     private String numero;
@@ -33,7 +26,7 @@ public class Formation implements Serializable{
     private String fragmentDateExpiration;
     private String fragmentDateExamen;
 
-    public Formation(){
+    public Formation() {
         setNom(null);
         setDateObtention(null);
         setNumero(null);
@@ -54,7 +47,9 @@ public class Formation implements Serializable{
     }
 
     public void setNom(String nom) {
-        if(nom != null && nom.isEmpty()) nom = null;
+        if (nom != null && nom.isEmpty()) {
+            nom = null;
+        }
         this.nom = nom;
     }
 
@@ -79,7 +74,9 @@ public class Formation implements Serializable{
     }
 
     public void setLieu(String lieu) {
-        if(lieu != null && lieu.isEmpty()) lieu = null;
+        if (lieu != null && lieu.isEmpty()) {
+            lieu = null;
+        }
         this.lieu = lieu;
     }
 
@@ -96,24 +93,27 @@ public class Formation implements Serializable{
     }
 
     public void setNumeroService112(String numeroService112) {
-        if(numeroService112 != null && numeroService112.isEmpty()) numeroService112 = null;
+        if (numeroService112 != null && numeroService112.isEmpty()) {
+            numeroService112 = null;
+        }
         this.numeroService112 = numeroService112;
     }
 
     /*public File getPhotocopie() {
-        return photocopie;
-    }
+     return photocopie;
+     }
 
-    public void setPhotocopie(File photocopie) {
-        this.photocopie = photocopie;
-    }*/
-
+     public void setPhotocopie(File photocopie) {
+     this.photocopie = photocopie;
+     }*/
     public String getNumero() {
         return numero;
     }
 
     public void setNumero(String numero) {
-        if(numero != null && numero.isEmpty()) numero = null;
+        if (numero != null && numero.isEmpty()) {
+            numero = null;
+        }
         this.numero = numero;
     }
 
@@ -130,7 +130,9 @@ public class Formation implements Serializable{
     }
 
     public void setFragmentDateObtention(String fragmentDateObtention) {
-        if(fragmentDateObtention != null && fragmentDateObtention.isEmpty()) fragmentDateObtention = null;
+        if (fragmentDateObtention != null && fragmentDateObtention.isEmpty()) {
+            fragmentDateObtention = null;
+        }
         this.fragmentDateObtention = fragmentDateObtention;
     }
 
@@ -139,7 +141,9 @@ public class Formation implements Serializable{
     }
 
     public void setFragmentDateExpiration(String fragmentDateExpiration) {
-        if(fragmentDateExpiration != null && fragmentDateExpiration.isEmpty()) fragmentDateExpiration = null;
+        if (fragmentDateExpiration != null && fragmentDateExpiration.isEmpty()) {
+            fragmentDateExpiration = null;
+        }
         this.fragmentDateExpiration = fragmentDateExpiration;
     }
 
@@ -148,7 +152,9 @@ public class Formation implements Serializable{
     }
 
     public void setFragmentDateExamen(String fragmentDateExamen) {
-        if(fragmentDateExamen != null && fragmentDateExamen.isEmpty()) fragmentDateExamen = null;
+        if (fragmentDateExamen != null && fragmentDateExamen.isEmpty()) {
+            fragmentDateExamen = null;
+        }
         this.fragmentDateExamen = fragmentDateExamen;
     }
 
@@ -161,7 +167,7 @@ public class Formation implements Serializable{
     }
 
     public void setBlobPhotocopieInBlob(java.sql.Blob blob) {
-        if(blob != null){
+        if (blob != null) {
             try {
                 int blobLength = (int) blob.length();
                 this.blobPhotocopie = blob.getBytes(1, blobLength);
@@ -171,5 +177,4 @@ public class Formation implements Serializable{
             }
         }
     }
-
 }

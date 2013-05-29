@@ -72,6 +72,12 @@ public interface States {
     public static String EDIT_LIEU = "EDIT_LIEU";
     public static String DELETE_LIEU = "DELETE_LIEU";
 
+    public static String GET_RESERVATION_ALL = "GET_RESERVATION_ALL";
+    public static String GET_RESERVATION = "GET_RESERVATION";
+    public static String NEW_RESERVATION = "NEW_RESERVATION";
+    public static String EDIT_RESERVATION = "EDIT_RESERVATION";
+    public static String DELETE_RESERVATION = "DELETE_RESERVATION";
+
 
 
     //Client
@@ -194,4 +200,20 @@ public interface States {
 
     public static String DELETE_LIEU_OUI = "DELETE_LIEU_OUI";
     public static String DELETE_LIEU_NON = "DELETE_LIEU_NON";
+
+
+    public static String GET_RESERVATION_ALL_OUI = "GET_RESERVATION_ALL_OUI";
+    public static String GET_RESERVATION_ALL_NON = "GET_RESERVATION_ALL_NON";
+
+    public static String GET_RESERVATION_OUI = "GET_RESERVATION_OUI";
+    public static String GET_RESERVATION_NON = "GET_RESERVATION_NON";
+
+    public static String NEW_RESERVATION_OUI = "NEW_RESERVATION_OUI";
+    public static String NEW_RESERVATION_NON = "NEW_RESERVATION_NON";
+
+    public static String EDIT_RESERVATION_OUI = "EDIT_RESERVATION_OUI";
+    public static String EDIT_RESERVATION_NON = "EDIT_RESERVATION_NON";
+
+    public static String DELETE_RESERVATION_OUI = "DELETE_RESERVATION_OUI";
+    public static String DELETE_RESERVATION_NON = "DELETE_RESERVATION_NON";
 }

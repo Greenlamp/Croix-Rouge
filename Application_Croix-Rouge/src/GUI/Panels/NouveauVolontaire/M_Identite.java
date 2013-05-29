@@ -47,15 +47,32 @@ public class M_Identite extends javax.swing.JPanel {
         initComponents();
         this.socket = socket;
         this.parent = parent;
+        //Ajout des années dans la liste déroulante
+        //pour la date de naissance
         ComboBoxAnnee();
+        //On récupère le matricule du volontaire
+        //si il s'agit d'une modification
         matricule = parent.getMatricule();
+        //Donc si le matricule récupéré est vide
+        //c'est qu'il s'agit d'une création
+        //sinon c'est une création
+        //on modifie une booleene "edited"
+        //pour savoir partout dans le module
+        //si il s'agit d'une modification
+        //ou d'une création
         if(matricule != null){
             edited = true;
             Gtitre.setText("Modifier un volontaire");
         }else{
             edited = false;
         }
+        
+        //on récupère l'entiereté des volontaires déja
+        //enregistré localement
         volontaire = parent.getVolontaire();
+        //si volontaire n'est pas vide, et qu'on à les
+        //données demandé par la page "Identité
+        //on pre-rempli les champs adéquat
         if(volontaire != null){
             if(volontaire.getIdentite() != null){
                 this.completerChampIdentite();

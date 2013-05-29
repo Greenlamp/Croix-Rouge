@@ -183,6 +183,26 @@ public class ProtocoleClient implements Protocolable{
             return packet;
         }else if (type.equals(States.DELETE_GRILLE_OUI)) {
             return packet;
+        }else if (type.equals(States.GET_RESERVATION_ALL_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_RESERVATION_ALL_NON)) {
+            return packet;
+        }else if (type.equals(States.GET_RESERVATION_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_RESERVATION_NON)) {
+            return packet;
+        }else if (type.equals(States.NEW_RESERVATION_OUI)) {
+            return packet;
+        }else if (type.equals(States.NEW_RESERVATION_NON)) {
+            return packet;
+        }else if (type.equals(States.EDIT_RESERVATION_OUI)) {
+            return packet;
+        }else if (type.equals(States.EDIT_RESERVATION_NON)) {
+            return packet;
+        }else if (type.equals(States.DELETE_RESERVATION_OUI)) {
+            return packet;
+        }else if (type.equals(States.DELETE_RESERVATION_NON)) {
+            return packet;
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }
