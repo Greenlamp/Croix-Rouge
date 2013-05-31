@@ -11,7 +11,6 @@ import Containers.Vehicule;
 import EasyDate.EasyDate;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
-import Network.NetworkClient;
 import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
@@ -49,8 +48,6 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         Gtitre.setText(titre);
         this.socket = socket;
         this.parent = parent;
-        comboVehicules();
-        comboLieux();
 
         type = parent.getTypeGrille();
         if(type == null){
@@ -368,6 +365,9 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         if(evt.getClickCount() == 2){
             int row = Ggrille.getSelectedRow();
             int column = Ggrille.getSelectedColumn();
+            if(!champAssignable(row, column)){
+                return;
+            }
             String role = (String)Ggrille.getValueAt(row, 0);
             int numeroColonneHeure = 0;
             if(row >= 3 && row <= 5){
@@ -397,6 +397,8 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
     }//GEN-LAST:event_GgrilleMouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        comboVehicules();
+        comboLieux();
         int annee = Integer.parseInt(Gannee.getText());
         int numeroSemaine = Integer.parseInt(Gsemaine.getText());
 
@@ -421,7 +423,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
             cacher(true);
         }
         if(Gvehicule.getItemCount() == 0){
-            parent.afficherMessage("Aucuns véhicule existant");
+            parent.afficherMessage("Aucuns véhicule existant ou disponible");
         }else if(Glieu.getItemCount() == 0){
             parent.afficherMessage("Aucuns lieux existant");
         }
@@ -452,6 +454,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void BenregistrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BenregistrerActionPerformed
+        Memorise();
         PacketCom packet = null;
         if(type.equals("new")){
             packet = new PacketCom(States.NEW_GRILLE_HORAIRE, (Object)grille);
@@ -646,6 +649,8 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
     }
 
     private void refreshTableau() {
+        comboVehicules();
+        comboLieux();
         reglerVehicule(grille.getVehicule());
         reglerLieu(grille.getLieu());
         Gsemaine.setText(String.valueOf(grille.getSemaine()));
@@ -802,13 +807,17 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
     }
 
     private void comboVehicules() {
+        SwingUtils.emptyComboBox(Gvehicule);
         LinkedList<Object[]> vehicules = null;
-        PacketCom packet = new PacketCom(States.GET_VEHICULES_ALL, null);
+        int semaine = Integer.parseInt(Gsemaine.getText());
+        int annee = Integer.parseInt(Gannee.getText());
+        Object[] data = {semaine, annee};
+        PacketCom packet = new PacketCom(States.GET_VEHICULES_DISPO, (Object)data);
         socket.send(packet);
         try {
             PacketCom retour = socket.receive();
             String type = retour.getType();
-            if(type.equals(States.GET_VEHICULES_ALL_OUI)){
+            if(type.equals(States.GET_VEHICULES_DISPO_OUI)){
                 vehicules = (LinkedList<Object[]>) retour.getObjet();
                 for(Object[] elm : vehicules){
                     String line = elm[0] + " # " + elm[1];
@@ -820,6 +829,9 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
             }
         } catch (Exception ex) {
             Logger.getLogger(M_NewEditGrilleHoraire.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(Gvehicule.getItemCount() == 0){
+            cacher(false);
         }
     }
 
@@ -977,6 +989,20 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
             }
         } catch (ParseException ex) {
             Logger.getLogger(M_NewEditGrilleHoraire.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return true;
+    }
+
+    private boolean champAssignable(int row, int column) {
+        if(column == 0 || column <= 2){
+            return false;
+        }
+        if(row == 6 || row == 10 || row == 14){
+            return false;
+        }
+        if(Ggrille.getValueAt(row, column) != null){
+            return false;
         }
 
         return true;

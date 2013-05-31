@@ -203,6 +203,10 @@ public class ProtocoleClient implements Protocolable{
             return packet;
         }else if (type.equals(States.DELETE_RESERVATION_NON)) {
             return packet;
+        }else if (type.equals(States.GET_VEHICULES_DISPO_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_VEHICULES_DISPO_NON)) {
+            return packet;
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }

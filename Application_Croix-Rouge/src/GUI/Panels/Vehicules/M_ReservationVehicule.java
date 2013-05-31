@@ -5,13 +5,14 @@
 package GUI.Panels.Vehicules;
 
 import Containers.ReservationVehicule;
-import Containers.Vehicule;
 import GUI.Panels.Consultation.M_Consultation;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,14 +100,14 @@ public class M_ReservationVehicule extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Nom", "Debut", "Fin"
+                "Nom", "DateDebut", "DateFin", "Semaine", "Année"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -192,30 +193,31 @@ public class M_ReservationVehicule extends javax.swing.JPanel {
     }//GEN-LAST:event_Baccueil1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        parent.changeState(Main.NOUVEAU_VEHICULE);
+        parent.changeState(Main.NOUVEAU_RESERVATION_VEHICULE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         int row = Gtableau.getSelectedRow();
-        if(row == -1){
+        if (row == -1) {
             return;
         }
-        String nom = (String)Gtableau.getValueAt(row, 0);
-        deleteVehicule(nom);
+        String nom = Gtableau.getValueAt(row, 0).toString();
+        String semaine = Gtableau.getValueAt(row, 3).toString();
+        String annee = Gtableau.getValueAt(row, 4).toString();
+        deleteReservation(nom, semaine, annee);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void GtableauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GtableauMouseClicked
-        if(evt.getClickCount() == 2){
+        if (evt.getClickCount() == 2) {
             int row = Gtableau.getSelectedRow();
-            String nom = (String)Gtableau.getValueAt(row, 0);
-            String debut = (String)Gtableau.getValueAt(row, 0);
-            String fin = (String)Gtableau.getValueAt(row, 0);
-            ReservationVehicule reservationVehicule = getReservationVehicule(nom, debut, fin);
+            String nom = Gtableau.getValueAt(row, 0).toString();
+            String semaine = Gtableau.getValueAt(row, 3).toString();
+            String annee = Gtableau.getValueAt(row, 4).toString();
+            ReservationVehicule reservationVehicule = getReservationVehicule(nom, semaine, annee);
             parent.setReservationVehicule(reservationVehicule);
-            parent.changeState(Main.EDIT_VEHICULE);
+            parent.changeState(Main.EDIT_RESERVATION_VEHICULE);
         }
     }//GEN-LAST:event_GtableauMouseClicked
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Baccueil1;
     private javax.swing.JTable Gtableau;
@@ -242,54 +244,79 @@ public class M_ReservationVehicule extends javax.swing.JPanel {
         String type = packetReponse.getType();
         Object contenu = packetReponse.getObjet();
 
-        if(type.equals(States.GET_RESERVATION_ALL_OUI)){
+        if (type.equals(States.GET_RESERVATION_ALL_OUI)) {
             LinkedList<Object[]> listeReservation = (LinkedList<Object[]>) contenu;
+            listeReservation = calculerDate(listeReservation);
             SwingUtils.addToTable(Gtableau, listeReservation);
-        }else{
+        } else {
             System.out.println("Erreur.");
         }
     }
 
-    private void deleteVehicule(String nom) {
-        PacketCom packet = new PacketCom(States.DELETE_RESERVATION, (Object)nom);
+    private void deleteReservation(String nom, String semaine, String annee) {
+        Object[] data = {nom, Integer.parseInt(semaine), Integer.parseInt(annee)};
+        PacketCom packet = new PacketCom(States.DELETE_RESERVATION, (Object) data);
         socket.send(packet);
         try {
             PacketCom retour = socket.receive();
             String type = retour.getType();
-            if(type.equals(States.DELETE_RESERVATION_OUI)){
+            if (type.equals(States.DELETE_RESERVATION_OUI)) {
                 parent.afficherMessage("Suppression de la réservation réussi");
-            }else if(type.equals(States.DELETE_RESERVATION_NON)){
-                String message = (String)retour.getObjet();
+            } else if (type.equals(States.DELETE_RESERVATION_NON)) {
+                String message = (String) retour.getObjet();
                 parent.afficherMessage(message);
-            }else{
-                String message = (String)retour.getObjet();
+            } else {
+                String message = (String) retour.getObjet();
                 parent.afficherMessage(message);
             }
         } catch (Exception ex) {
             Logger.getLogger(M_ReservationVehicule.class.getName()).log(Level.SEVERE, null, ex);
         }
-        parent.changeState(Main.GESTION_VEHICULES);
+        parent.changeState(Main.RESERVATION_VEHICULE);
     }
 
-    private ReservationVehicule getReservationVehicule(String nom, String debut, String fin) {
-        PacketCom packet = new PacketCom(States.GET_RESERVATION, (Object)nom);
+    private ReservationVehicule getReservationVehicule(String nom, String semaine, String annee) {
+        Object[] data = {nom, Integer.parseInt(semaine), Integer.parseInt(annee)};
+        PacketCom packet = new PacketCom(States.GET_RESERVATION, (Object) data);
         socket.send(packet);
         try {
             PacketCom retour = socket.receive();
             String type = retour.getType();
-            if(type.equals(States.GET_RESERVATION_OUI)){
-                ReservationVehicule reservationVehicule = (ReservationVehicule)retour.getObjet();
+            if (type.equals(States.GET_RESERVATION_OUI)) {
+                ReservationVehicule reservationVehicule = (ReservationVehicule) retour.getObjet();
                 return reservationVehicule;
-            }else if(type.equals(States.GET_RESERVATION_NON)){
-                String message = (String)retour.getObjet();
+            } else if (type.equals(States.GET_RESERVATION_NON)) {
+                String message = (String) retour.getObjet();
                 parent.afficherMessage(message);
-            }else{
-                String message = (String)retour.getObjet();
+            } else {
+                String message = (String) retour.getObjet();
                 parent.afficherMessage(message);
             }
         } catch (Exception ex) {
             Logger.getLogger(M_ReservationVehicule.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    private LinkedList<Object[]> calculerDate(LinkedList<Object[]> listeReservation) {
+        LinkedList<Object[]> nouvelleListe = new LinkedList<>();
+        for (Object[] elm : listeReservation) {
+            String nomVehicule = (String) elm[0];
+            int semaine = (int) elm[1];
+            int annee = (int) elm[2];
+
+            GregorianCalendar gc = new GregorianCalendar();
+            gc.set(GregorianCalendar.YEAR, annee);
+            gc.set(GregorianCalendar.WEEK_OF_YEAR, semaine);
+
+            gc.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.MONDAY);
+            String dateDebut = new SimpleDateFormat("dd/MM/yyyy").format(gc.getTime());
+
+            gc.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SUNDAY);
+            String dateFin = new SimpleDateFormat("dd/MM/yyyy").format(gc.getTime());
+
+            nouvelleListe.add(new Object[]{nomVehicule, dateDebut, dateFin, semaine, annee});
+        }
+        return nouvelleListe;
     }
 }

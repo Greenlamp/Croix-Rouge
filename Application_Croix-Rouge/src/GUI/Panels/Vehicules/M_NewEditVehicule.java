@@ -7,7 +7,6 @@ package GUI.Panels.Vehicules;
 import Containers.Vehicule;
 import EasyCheck.EasyCheck;
 import GUI.Panels.Main;
-import Network.NetworkClient;
 import SSL.NetworkClientSSL;
 import States.States;
 import java.util.logging.Level;

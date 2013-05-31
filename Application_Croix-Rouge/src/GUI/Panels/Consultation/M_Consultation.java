@@ -36,7 +36,7 @@ public class M_Consultation extends javax.swing.JPanel {
         initComponents();
         this.socket = socket;
         this.parent = parent;
-        chechRight();
+        checkRight();
         refreshListe();
     }
 
@@ -260,7 +260,7 @@ public class M_Consultation extends javax.swing.JPanel {
         }
     }
 
-    private void chechRight() {
+    private void checkRight() {
 
     }
 

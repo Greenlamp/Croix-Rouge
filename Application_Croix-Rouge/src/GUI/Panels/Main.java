@@ -19,8 +19,6 @@ import Containers.Urgence;
 import Containers.Utilisateur;
 import Containers.Vehicule;
 import Containers.Volontaire;
-import EquipeVolontaire.M_ConsulterEquipesVolontaire;
-import EquipeVolontaire.M_NewEditEquipeVolontaire;
 import GUI.Panels.Recherche.M_SearchCrit;
 import FileAccess.FileAccess;
 import GUI.Panels.GestionDroits.M_GestionDroits;
@@ -43,6 +41,7 @@ import GUI.Panels.NouveauVolontaire.M_Residence;
 import GUI.Panels.NouveauVolontaire.M_Téléphone;
 import GUI.Panels.NouveauVolontaire.M_Urgence;
 import GUI.Panels.Vehicules.M_GestionVehicules;
+import GUI.Panels.Vehicules.M_NewEditReservation;
 import GUI.Panels.Vehicules.M_NewEditVehicule;
 import GUI.Panels.Vehicules.M_ReservationVehicule;
 import my.cr.PacketCom.PacketCom;
@@ -110,6 +109,9 @@ public class Main extends javax.swing.JFrame {
     public static String EDIT_LIEU = "EDIT_LIEU";
 
     public static String RESERVATION_VEHICULE = "RESERVATION_VEHICULE";
+    public static String NOUVEAU_RESERVATION_VEHICULE = "NOUVEAU_RESERVATION_VEHICULE";
+    public static String EDIT_RESERVATION_VEHICULE = "EDIT_RESERVATION_VEHICULE";
+    public static String DELETE_RESERVATION_VEHICULE = "DELETE_RESERVATION_VEHICULE";
 
 
 
@@ -498,6 +500,30 @@ public class Main extends javax.swing.JFrame {
 
             M_ReservationVehicule m_ReservationVehicule = new M_ReservationVehicule(this, socket);
             Gscene.add(m_ReservationVehicule);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.RESERVATION_VEHICULE)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_ReservationVehicule m_ReservationVehicule = new M_ReservationVehicule(this, socket);
+            Gscene.add(m_ReservationVehicule);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.NOUVEAU_RESERVATION_VEHICULE)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditReservation m_NewEditReservationVehicule = new M_NewEditReservation(this, socket, "nouveau réservation véhicule");
+            Gscene.add(m_NewEditReservationVehicule);
+            Gscene.revalidate();
+        }else if(this.getActualState().equals(Main.EDIT_RESERVATION_VEHICULE)){
+            Gscene.removeAll();
+            Gscene.repaint();
+            Gscene.revalidate();
+
+            M_NewEditReservation m_NewEditReservationVehicule = new M_NewEditReservation(this, socket, "modifier réservation véhicule");
+            Gscene.add(m_NewEditReservationVehicule);
             Gscene.revalidate();
         }
     }

@@ -24,6 +24,18 @@ public class EasyCheck {
             return true;
         }
     }
+    public static boolean checkInt(String value) {
+        if(value == null || value.isEmpty()){
+            return false;
+        }
+
+        try{
+            Integer.parseInt(value);
+        }catch(Exception ex){
+            return false;
+        }
+        return true;
+    }
     public static boolean checkDate(String date, String format) {
         if(date.contains("-")){
             return true;

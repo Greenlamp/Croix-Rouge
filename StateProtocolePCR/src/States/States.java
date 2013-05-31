@@ -61,6 +61,7 @@ public interface States {
     public static String DELETE_UTILISATEUR = "DELETE_UTILISATEUR";
 
     public static String GET_VEHICULES_ALL = "GET_VEHICULES_ALL";
+    public static String GET_VEHICULES_DISPO = "GET_VEHICULES_DISPO";
     public static String GET_VEHICULE = "GET_VEHICULE";
     public static String NEW_VEHICULE = "NEW_VEHICULE";
     public static String EDIT_VEHICULE = "EDIT_VEHICULE";
@@ -216,4 +217,7 @@ public interface States {
 
     public static String DELETE_RESERVATION_OUI = "DELETE_RESERVATION_OUI";
     public static String DELETE_RESERVATION_NON = "DELETE_RESERVATION_NON";
+
+    public static String GET_VEHICULES_DISPO_OUI = "GET_VEHICULES_DISPO_OUI";
+    public static String GET_VEHICULES_DISPO_NON = "GET_VEHICULES_DISPO_NON";
 }

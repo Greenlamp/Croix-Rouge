@@ -45,7 +45,8 @@ INSERT INTO `groupes` (`idGroupe`, `nomGroupe`, `niveau`) VALUES
 (8, 'GestionLieux', 25),
 (9, 'GestionHoraires', 26),
 (10, 'GestionBirthday', 27),
-(11, 'GestionBrevet', 28);
+(11, 'GestionBrevet', 28),
+(12, 'GestionReservation', 29);
 
 
 --
@@ -84,7 +85,10 @@ INSERT INTO `droits` (`idDroit`, `nom`, `description`) VALUES
 (29, 'CREATE_LIEU', NULL),
 (30, 'EDIT_LIEU', NULL),
 (31, 'SEE_BIRTHDAY', NULL),
-(32, 'SEE_EXP_BREVET', NULL);
+(32, 'SEE_EXP_BREVET', NULL),
+(33, 'SEE_RESERVATIONS_VEHICULE', NULL),
+(34, 'CREATE_RESERVATIONS_VEHICULE', NULL),
+(35, 'EDIT_RESERVATIONS_VEHICULE', NULL);
 
 --
 -- Contenu de la table `appartenir`
@@ -102,6 +106,7 @@ INSERT INTO `appartenir` (`idUtilisateur`, `idGroupe`) VALUES
 (1, 9),
 (1, 10),
 (1, 11),
+(1, 12),
 (2, 2),
 (3, 2),
 (3, 3);
@@ -136,7 +141,10 @@ INSERT INTO `possederDroit` (`idGroupe`, `idDroit`) VALUES
 (9, 26),
 (9, 27),
 (10, 31),
-(11, 32);
+(11, 32),
+(12, 33),
+(12, 34),
+(12, 35);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

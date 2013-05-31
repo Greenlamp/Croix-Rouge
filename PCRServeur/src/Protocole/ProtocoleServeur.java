@@ -8,6 +8,7 @@ package Protocole;
 import Containers.Grille;
 import Containers.Groupe;
 import Containers.Key;
+import Containers.ReservationVehicule;
 import Containers.Utilisateur;
 import Containers.Vehicule;
 import Containers.Volontaire;
@@ -116,6 +117,8 @@ public class ProtocoleServeur implements Protocolable{
             return actionDeleteVolontaire(type, contenu);
         }else if(type.equals(States.GET_VEHICULES_ALL)){
             return actionGetVehiculeAll(type, contenu);
+        }else if(type.equals(States.GET_VEHICULES_DISPO)){
+            return actionGetVehiculeDispo(type, contenu);
         }else if(type.equals(States.NEW_VEHICULE)){
             return actionNewVehicule(type, contenu);
         }else if(type.equals(States.EDIT_VEHICULE)){
@@ -860,7 +863,7 @@ public class ProtocoleServeur implements Protocolable{
 
         try {
             //idGrilleHoraire = dbRequests.editGrilleHoraire(oldGrille.getSemaine(), oldGrille.getAnnee(), oldGrille.getNomAmbulance(), oldGrille.getLieu());
-            idGrilleHoraire = dbRequests.editGrilleHoraire(oldGrille);
+            idGrilleHoraire = dbRequests.editGrilleHoraire(oldGrille, newGrille);
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
             dbRequests.getMysql().rollback();
@@ -1283,6 +1286,35 @@ public class ProtocoleServeur implements Protocolable{
         return packetReponse;
     }
 
+    private PacketCom actionGetVehiculeDispo(String type, Object contenu) {
+        Object[] data = (Object[]) contenu;
+        int semaine = (int)data[0];
+        int annee = (int)data[1];
+        PacketCom packetReponse = null;
+        if(!droitsOffi.contains("SEE_VEHICULE")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
+            return packetRetour;
+        }
+        LinkedList<Object[]> listeVehicule = null;
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Vehicules", "Reservations"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_VEHICULES_DISPO_NON, "Impossible de récupérer la liste des véhicules");
+        }
+        try {
+            listeVehicule = dbRequests.getVehicules(semaine, annee);
+            packetReponse = new PacketCom(States.GET_VEHICULES_DISPO_OUI, (Object)listeVehicule);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            packetReponse = new PacketCom(States.GET_VEHICULES_DISPO_NON, "Impossible de récupérer la liste des véhicules");
+        }
+        dbRequests.getMysql().commit();
+        return packetReponse;
+    }
+
     private PacketCom actionNewVehicule(String type, Object contenu) {
         Vehicule vehicule = (Vehicule)contenu;
         if(!droitsOffi.contains("CREATE_VEHICULE")){
@@ -1573,22 +1605,170 @@ public class ProtocoleServeur implements Protocolable{
     }
 
     private PacketCom actionGetReservationAll(String type, Object contenu) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if(!droitsOffi.contains("SEE_RESERVATIONS_VEHICULE")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas le droit d'obtenir ces informations");
+            return packetRetour;
+        }
+        LinkedList<Object[]> listeReservation = null;
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Reservations", "Vehicules"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_RESERVATION_ALL_NON, "Impossible de récupérer la liste des véhicules réservé");
+        }
+        try {
+            listeReservation = dbRequests.getReservations();
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_RESERVATION_ALL_NON, "Impossible de récupérer la liste des véhicules réservé");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.GET_RESERVATION_ALL_OUI, (Object)listeReservation);
     }
 
     private PacketCom actionGetReservation(String type, Object contenu) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Object[] data = (Object[])contenu;
+        String vehicule = (String)data[0];
+        int semaine = (int)data[1];
+        int annee = (int)data[2];
+
+        if(!droitsOffi.contains("SEE_RESERVATIONS_VEHICULE")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Reservations", "Vehicules"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_RESERVATION_NON, "Impossible de récupérer la réservation du véhicule");
+        }
+
+        ReservationVehicule reservation = null;
+        try {
+            reservation = dbRequests.getReservation(vehicule, semaine, annee);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_RESERVATION_NON, "Impossible de récupérer la réservation du véhicule");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.GET_RESERVATION_OUI, (Object)reservation);
     }
 
     private PacketCom actionNewReservation(String type, Object contenu) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        ReservationVehicule reservation = (ReservationVehicule)contenu;
+        if(!droitsOffi.contains("CREATE_RESERVATIONS_VEHICULE")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Reservations", "Vehicules"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_RESERVATION_NON, "Impossible d'ajouter la réservation du véhicule");
+        }
+
+        ReservationVehicule exist;
+        try {
+            exist = dbRequests.getReservation(reservation.getNomVehicule(), reservation.getSemaine(), reservation.getAnnee());
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_RESERVATION_NON, "Impossible d'ajouter la réservation du véhicule");
+        }
+        if(exist != null){
+            return new PacketCom(States.NEW_RESERVATION_NON, "Réservation déja existante");
+        }
+
+        try {
+            dbRequests.nouveauReservation(reservation);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_RESERVATION_NON, "Impossible d'ajouter la réservation");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.NEW_RESERVATION_OUI, null);
     }
 
     private PacketCom actionEditReservation(String type, Object contenu) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        ReservationVehicule[] reservations = (ReservationVehicule[])contenu;
+        ReservationVehicule oldReservation = reservations[0];
+        ReservationVehicule newReservation = reservations[1];
+
+        if(!droitsOffi.contains("EDIT_RESERVATIONS_VEHICULE")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Reservations", "Vehicules"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_RESERVATION_NON, "Impossible de modifier la réservation");
+        }
+
+        ReservationVehicule exist = null;
+        if(!oldReservation.equals(newReservation)){
+            try {
+                exist = dbRequests.getReservation(newReservation.getNomVehicule(), newReservation.getSemaine(), newReservation.getAnnee());
+            } catch (Exception ex) {
+                Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+                dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_RESERVATION_NON, "Impossible de modifier la réservation");
+            }
+        }
+        if(exist != null){
+            return new PacketCom(States.EDIT_RESERVATION_NON, "Réservation déja existante");
+        }
+
+        try {
+            dbRequests.modifierReservation(oldReservation, newReservation);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_RESERVATION_NON, "Impossible de modifier la réservation");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.EDIT_RESERVATION_OUI, null);
     }
 
     private PacketCom actionDeleteReservation(String type, Object contenu) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Object[] data = (Object[])contenu;
+        String vehicule = (String)data[0];
+        int semaine = (int)data[1];
+        int annee = (int)data[2];
+        if(!droitsOffi.contains("EDIT_RESERVATIONS_VEHICULE")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Reservations", "Vehicules"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_RESERVATION_NON, "Impossible de supprimer la réservation");
+        }
+
+        try {
+            dbRequests.supprimerReservation(vehicule, semaine, annee);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.DELETE_RESERVATION_NON, "Impossible de supprimer la réservation");
+        }
+
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.DELETE_RESERVATION_OUI, null);
     }
 }

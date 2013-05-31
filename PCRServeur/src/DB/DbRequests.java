@@ -18,6 +18,7 @@ import Containers.Grille;
 import Containers.Groupe;
 import Containers.Identite;
 import Containers.Key;
+import Containers.ReservationVehicule;
 import Containers.Residence;
 import Containers.Telephone;
 import Containers.Urgence;
@@ -1220,13 +1221,19 @@ public class DbRequests implements DBA{
         }
     }
 
-    public int editGrilleHoraire(Grille oldGrille) throws Exception{
+    public int editGrilleHoraire(Grille oldGrille, Grille newGrille) throws Exception{
         int idGrille = getIdGrilleHoraire(oldGrille.getSemaine(), oldGrille.getAnnee(), oldGrille.getVehicule().getNom(), oldGrille.getLieu());
         if(idGrille == -1){
             return idGrille;
         }
-        String request = "UPDATE GrilleHoraire SET dateModification = now() WHERE idGrilleHoraire = ?";
+        String request = "UPDATE GrilleHoraire SET dateModification = now(), numéroSemaine = ?, dateDebut = ?, dateFin = ?, idVehicule = ?, idLieu = ?, année = ? WHERE idGrilleHoraire = ?";
         Parametres params = new Parametres();
+        params.addInt(newGrille.getSemaine());
+        params.addDate(newGrille.getDateDebut());
+        params.addDate(newGrille.getDateFin());
+        params.addInt(getIdVehicule(newGrille.getVehicule().getNom()));
+        params.addInt(getIdLieu(newGrille.getLieu()));
+        params.addInt(newGrille.getAnnee());
         params.addInt(idGrille);
 
         mysql.pUpdate(request, params);
@@ -2509,6 +2516,21 @@ public class DbRequests implements DBA{
         return listeVehicule;
     }
 
+    public LinkedList<Object[]> getVehicules(int semaine, int annee) throws Exception{
+        LinkedList<Object[]> listeVehicule = new LinkedList<>();
+        String request = "SELECT nom, numeroPlaque FROM vehicules WHERE idVehicule NOT IN(SELECT idVehicule FROM Reservations WHERE numeroSemaine= ? AND annee = ?)";
+        Parametres params = new Parametres();
+        params.addInt(semaine);
+        params.addInt(annee);
+        ResultSet rs = mysql.pSelect(request, params);
+        while(rs.next()){
+            String nom = rs.getString("nom");
+            String numeroPlaque = rs.getString("numeroPlaque");
+            listeVehicule.add(new Object[] {nom, numeroPlaque});
+        }
+        return listeVehicule;
+    }
+
     public Vehicule getVehicule(String nom) throws Exception{
         if(nom == null || nom.isEmpty()){
             return null;
@@ -2700,31 +2722,128 @@ public class DbRequests implements DBA{
         String request = "SELECT idCaseHoraire FROM CaseHoraire WHERE idGrilleHoraire = ?";
         Parametres params = new Parametres();
         params.addInt(idGrilleHoraire);
-        
+
         ResultSet rs = mysql.pSelect(request, params);
         LinkedList<Integer> listeId = new LinkedList<>();
         while(rs.next()){
             int idCaseHoraire = rs.getInt("idCaseHoraire");
             listeId.add(idCaseHoraire);
         }
-        
+
         for(int idCaseHoraire : listeId){
             request = "DELETE FROM AssignationCaseHoraire WHERE idCaseHoraire = ?";
             params = new Parametres();
             params.addInt(idCaseHoraire);
             mysql.pUpdate(request, params);
         }
-        
+
         for(int idCaseHoraire : listeId){
             request = "DELETE FROM CaseHoraire WHERE idCaseHoraire = ?";
             params = new Parametres();
             params.addInt(idCaseHoraire);
             mysql.pUpdate(request, params);
         }
-        
+
         request = "DELETE FROM GrilleHoraire WHERE idGrilleHoraire = ?";
         params = new Parametres();
         params.addInt(idGrilleHoraire);
-        mysql.pUpdate(request, params);        
+        mysql.pUpdate(request, params);
+    }
+
+    public LinkedList<Object[]> getReservations() throws Exception{
+        LinkedList<Object[]> listeReservation = new LinkedList<>();
+        String request = "SELECT idVehicule, numeroSemaine, annee FROM Reservations";
+        ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            int idVehicule = rs.getInt("idVehicule");
+            int semaine = rs.getInt("numeroSemaine");
+            int annee = rs.getInt("annee");
+            Vehicule vehicule = getVehicule(idVehicule);
+            listeReservation.add(new Object[] {vehicule.getNom(), semaine, annee});
+        }
+        return listeReservation;
+    }
+
+    public ReservationVehicule getReservation(String nomVehicule, int semaine, int annee) throws Exception{
+        if(nomVehicule == null || nomVehicule.isEmpty() || semaine == -1 || annee == -1){
+            return null;
+        }
+        ReservationVehicule reservationVehicule = null;
+
+        int idVehicule = getIdVehicule(nomVehicule);
+        if(idVehicule == -1){
+            return null;
+        }
+        String request = "SELECT idVehicule, numeroSemaine, annee FROM Reservations WHERE idVehicule = ? AND numeroSemaine = ? AND annee = ?";
+        Parametres params = new Parametres();
+        params.addInt(idVehicule);
+        params.addInt(semaine);
+        params.addInt(annee);
+
+        ResultSet rs = mysql.pSelect(request, params);
+        while(rs.next()){
+            reservationVehicule = new ReservationVehicule();
+            reservationVehicule.setNomVehicule(nomVehicule);
+            reservationVehicule.setSemaine(semaine);
+            reservationVehicule.setAnnee(annee);
+        }
+        return reservationVehicule;
+    }
+
+    public void nouveauReservation(ReservationVehicule reservation) throws Exception{
+        if(reservation == null){
+            return;
+        }
+
+        int idVehicule = getIdVehicule(reservation.getNomVehicule());
+        if(idVehicule == -1){
+            return;
+        }
+
+        String request = "INSERT INTO Reservations(idVehicule, numeroSemaine, annee) VALUES(?, ?, ?)";
+        Parametres params = new Parametres();
+        params.addInt(idVehicule);
+        params.addInt(reservation.getSemaine());
+        params.addInt(reservation.getAnnee());
+
+        mysql.pUpdate(request, params);
+    }
+
+    public void modifierReservation(ReservationVehicule oldReservation, ReservationVehicule newReservation) throws Exception{
+        if(oldReservation == null || newReservation == null){
+            return;
+        }
+        String request = "UPDATE Reservations SET idVehicule = ?, numeroSemaine = ?, annee = ? WHERE idVehicule = ? AND numeroSemaine = ? AND annee = ?";
+        Parametres params = new Parametres();
+        int oldIdVehicule = getIdVehicule(oldReservation.getNomVehicule());
+        int newIdVehicule = getIdVehicule(oldReservation.getNomVehicule());
+
+        params.addInt(newIdVehicule);
+        params.addInt(newReservation.getSemaine());
+        params.addInt(newReservation.getAnnee());
+
+        params.addInt(oldIdVehicule);
+        params.addInt(oldReservation.getSemaine());
+        params.addInt(oldReservation.getAnnee());
+
+        mysql.pUpdate(request, params);
+    }
+
+    public void supprimerReservation(String nomVehicule, int semaine, int annee) throws Exception{
+        if(nomVehicule == null || nomVehicule.isEmpty() || semaine == -1 || annee == -1){
+            return;
+        }
+        int idVehicule = getIdVehicule(nomVehicule);
+        if(idVehicule == -1){
+            return;
+        }
+
+        String request = "DELETE FROM Reservations WHERE idVehicule = ? AND numeroSemaine = ? AND annee = ?";
+        Parametres params = new Parametres();
+        params.addInt(idVehicule);
+        params.addInt(semaine);
+        params.addInt(annee);
+
+        mysql.pUpdate(request, params);
     }
 }

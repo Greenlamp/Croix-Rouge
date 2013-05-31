@@ -11,13 +11,19 @@ import java.util.Date;
 
 public class ReservationVehicule implements Serializable{
     private String nomVehicule;
-    private Date debut;
-    private Date fin;
+    private int semaine;
+    private int annee;
 
     public ReservationVehicule(){
         setNomVehicule(null);
-        setDebut(null);
-        setFin(null);
+        setSemaine(-1);
+        setAnnee(-1);
+    }
+
+    public ReservationVehicule(ReservationVehicule reservation) {
+        setNomVehicule(reservation.getNomVehicule());
+        setSemaine(reservation.getSemaine());
+        setAnnee(reservation.getAnnee());
     }
 
     public String getNomVehicule() {
@@ -29,19 +35,19 @@ public class ReservationVehicule implements Serializable{
         this.nomVehicule = nomVehicule;
     }
 
-    public Date getDebut() {
-        return debut;
+    public int getSemaine() {
+        return semaine;
     }
 
-    public void setDebut(Date debut) {
-        this.debut = debut;
+    public void setSemaine(int semaine) {
+        this.semaine = semaine;
     }
 
-    public Date getFin() {
-        return fin;
+    public int getAnnee() {
+        return annee;
     }
 
-    public void setFin(Date fin) {
-        this.fin = fin;
+    public void setAnnee(int annee) {
+        this.annee = annee;
     }
 }
