@@ -2918,15 +2918,17 @@ public class DbRequests implements DBA{
 
     public LinkedList<Object[]> getHoraireMiss() throws Exception{
         LinkedList<Object[]> retour = new LinkedList<Object[]>();
-        String request = "SELECT (SELECT nom  FROM Vehicules WHERE idVehicule = (idVehicule)) AS 'vehicule', (SELECT nom FROM Lieux WHERE idLieu = (idLieu)) AS 'lieu', numéroSemaine, dateDebut, dateFin FROM GrilleHoraire WHERE idGrilleHoraire IN(SELECT idGrilleHoraire FROM CaseHoraire Group By idGrilleHoraire HAVING(84 - count(detail) != 0))";
+        String request = "SELECT idVehicule, idLieu, numéroSemaine, dateDebut, dateFin FROM GrilleHoraire WHERE idGrilleHoraire IN(SELECT idGrilleHoraire FROM CaseHoraire Group By idGrilleHoraire HAVING(84 - count(detail) != 0))";
         ResultSet rs = mysql.pSelect(request, null);
         while(rs.next()){
-            String vehicule = rs.getString("vehicule");
-            String lieu = rs.getString("lieu");
+            int idVehicule = rs.getInt("idVehicule");
+            int idLieu = rs.getInt("idLieu");
+            String nomVehicule = getVehicule(idVehicule).getNom();
+            String lieu = getLieu(idLieu);
             int semaine = rs.getInt("numéroSemaine");
             Date dateDebut = rs.getTimestamp("dateDebut");
             Date dateFin = rs.getTimestamp("dateFin");
-            Object[] data = {vehicule, lieu, semaine, EasyDate.getDateOnly(dateDebut), EasyDate.getDateOnly(dateFin)};
+            Object[] data = {nomVehicule, lieu, semaine, EasyDate.getDateOnly(dateDebut), EasyDate.getDateOnly(dateFin)};
             retour.add(data);
         }
         return retour;
