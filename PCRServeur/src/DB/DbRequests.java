@@ -2934,8 +2934,20 @@ public class DbRequests implements DBA{
 
     public LinkedList<Object[]> getExpBrevet() throws Exception{
         LinkedList<Object[]> retour = new LinkedList<Object[]>();
-         String request = "SELECT nom, prenom, A.nomFormation, A.dateExpiration FROM(SELECT FormationsSuivie.matricule, Formation.idFormation, nomFormation, DATE_FORMAT(dateExpiration, '%d/%m/%Y') AS 'dateExpiration' FROM Formation INNER JOIN(FormationsSuivie) ON(FormationsSuivie.idFormation = Formation.idFormation) WHERE STR_TO_DATE(DATE_FORMAT(DATE_ADD(dateExpiration, INTERVAL - 1 MONTH),'%d/%m/%Y'),'%d/%m/%Y') <= now()) A, Volontaires WHERE Volontaires.matricule = A.matricule;";
+
+        String request = "SELECT nom, prenom, A.nomFormation, A.dateExpiration FROM(SELECT 	FormationsSuivie.matricule, Formation.idFormation, nomFormation, DATE_FORMAT(dateExpiration, '%d/%m/%Y') AS 'dateExpiration' FROM Formation INNER JOIN(FormationsSuivie)ON(FormationsSuivie.idFormation = Formation.idFormation)WHERE STR_TO_DATE(DATE_FORMAT(DATE_ADD(dateExpiration, INTERVAL - 1 MONTH),'%d/%m/%Y'),'%d/%m/%Y') <= now()) A, Volontaires WHERE Volontaires.matricule = A.matricule";
         ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            String nom = rs.getString("nom");
+            String prenom = rs.getString("prenom");
+            String nomFormation = rs.getString("nomFormation");
+            String dateExpiration = rs.getString("dateExpiration");
+            Object[] data = {nom, prenom, nomFormation, dateExpiration};
+            retour.add(data);
+        }
+
+        request = "SELECT nom, prenom, B.nomFormation, DATE_FORMAT(B.dateExpiration, '%d/%m/%Y') AS 'dateExpiration' FROM(SELECT matricule, nomFormation, STR_TO_DATE(SUBSTRING(fragmentDateExpiration, INSTR(fragmentDateExpiration, '#')+1, 15),REPLACE(REPLACE(SUBSTRING(fragmentDateExpiration, 1, INSTR(fragmentDateExpiration, '#') - 1), 'mm', '%m'), 'yyyy', '%Y')) AS 'dateExpiration' FROM Formation INNER JOIN(FormationsSuivie)ON(Formation.idFormation = FormationsSuivie.idFormation)WHERE fragmentDateExpiration != '') B, Volontaires WHERE B.dateExpiration <= now() AND Volontaires.matricule = B.matricule";
+        rs = mysql.pSelect(request, null);
         while(rs.next()){
             String nom = rs.getString("nom");
             String prenom = rs.getString("prenom");

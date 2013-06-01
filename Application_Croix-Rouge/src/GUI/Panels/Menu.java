@@ -224,7 +224,7 @@ public class Menu extends javax.swing.JPanel {
         panelBrev.setBackground(new java.awt.Color(153, 153, 153));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("Brevets Expiré dans le mois:");
+        jLabel1.setText("Brevet(s) Expiré dans le mois:");
 
         Gbrevet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -268,7 +268,7 @@ public class Menu extends javax.swing.JPanel {
         panelAnniv.setBackground(new java.awt.Color(153, 153, 153));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("Anniversaire de la semaine:");
+        jLabel2.setText("Anniversaire(s) de la semaine:");
 
         Ganniv.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -297,7 +297,7 @@ public class Menu extends javax.swing.JPanel {
                 .addGroup(panelAnnivLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelAnnivLayout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(0, 153, Short.MAX_VALUE))
+                        .addGap(0, 134, Short.MAX_VALUE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -314,7 +314,7 @@ public class Menu extends javax.swing.JPanel {
         panelGrille.setBackground(new java.awt.Color(153, 153, 153));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel3.setText("Grille Horaire non complète:");
+        jLabel3.setText("Grille(s) Horaire non complète:");
 
         Ggrille.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
