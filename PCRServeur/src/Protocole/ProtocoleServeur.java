@@ -23,6 +23,8 @@ import my.LibCritereAndroid.Criteres.ByCodePostal;
 import my.LibCritereAndroid.Criteres.ByDateNaissance;
 import my.LibCritereAndroid.Criteres.ByFormation;
 import my.LibCritereAndroid.Criteres.ByNom;
+import my.LibCritereAndroid.Criteres.ByPermanent;
+import my.LibCritereAndroid.Criteres.ByPermis;
 import my.LibCritereAndroid.Criteres.ByPrenom;
 import my.LibCritereAndroid.Criteres.CritereCustom;
 import my.LibCritereAndroid.Criteres.TraitementRecherche;
@@ -604,6 +606,15 @@ public class ProtocoleServeur implements Protocolable{
                 ByCodePostal byCodePostal = new ByCodePostal(critere.getDonnee(), dbRequests);
                 byCodePostal.doSearch();
                 listeCritereCustoms.add(byCodePostal);
+            }else if(critere.getType().equals("permanent")){
+                boolean permanent = (critere.getDonnee().equals("permanent") ? true : false);
+                ByPermanent byPermanent = new ByPermanent(permanent, dbRequests);
+                byPermanent.doSearch();
+                listeCritereCustoms.add(byPermanent);
+            }else if(critere.getType().equals("permis")){
+                ByPermis byPermis = new ByPermis(critere.getDonnee(), dbRequests);
+                byPermis.doSearch();
+                listeCritereCustoms.add(byPermis);
             }
         }
 

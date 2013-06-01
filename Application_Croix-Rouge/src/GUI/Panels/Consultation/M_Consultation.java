@@ -27,6 +27,7 @@ public class M_Consultation extends javax.swing.JPanel {
 
     Main parent = null;
     NetworkClientSSL socket = null;
+    LinkedList<String[]> volontaires = null;
 
     public M_Consultation() {
         initComponents();
@@ -57,8 +58,9 @@ public class M_Consultation extends javax.swing.JPanel {
         Gtableau = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        Gnom = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -130,6 +132,18 @@ public class M_Consultation extends javax.swing.JPanel {
         jLabel2.setText("Recherche rapide par nom:");
 
         jButton1.setText("ok");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Refresh");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -144,9 +158,11 @@ public class M_Consultation extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Gnom, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -157,8 +173,9 @@ public class M_Consultation extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(Gnom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
                 .addContainerGap())
@@ -217,17 +234,37 @@ public class M_Consultation extends javax.swing.JPanel {
         parent.changeState(Main.LOGGED);
     }//GEN-LAST:event_BaccueilActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String nom = Gnom.getText();
+        if(nom != null && !nom.isEmpty()){
+            refreshListe();
+            LinkedList<Object[]> tab = new LinkedList<Object[]>();
+            SwingUtils.emptyTable(Gtableau);
+            for(String[] elm : volontaires){
+                if(elm[0].equals(nom.toUpperCase())){
+                    tab.add(elm);
+                }
+            }
+            SwingUtils.addToTable(Gtableau, tab);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        refreshListe();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Baccueil;
+    private javax.swing.JTextField Gnom;
     private javax.swing.JTable Gtableau;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
     private void refreshListe() {
@@ -244,7 +281,7 @@ public class M_Consultation extends javax.swing.JPanel {
     private void reponseFromServeur(PacketCom packetReponse) {
         String type = packetReponse.getType();
         Object contenu = packetReponse.getObjet();
-
+        SwingUtils.emptyTable(Gtableau);
         if(type.equals(States.GET_VOLONTAIRE_ALL_OUI)){
             LinkedList<String[]> listeVolontaires = (LinkedList<String[]>) contenu;
             listeVolontaires = trier(listeVolontaires);
@@ -255,6 +292,7 @@ public class M_Consultation extends javax.swing.JPanel {
                 }
                 SwingUtils.addToTable(Gtableau, vector);
             }
+            this.volontaires = listeVolontaires;
         }else{
             System.out.println("Erreur.");
         }

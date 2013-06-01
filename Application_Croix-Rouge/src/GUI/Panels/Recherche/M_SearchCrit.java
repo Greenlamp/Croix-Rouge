@@ -89,27 +89,27 @@ public class M_SearchCrit extends javax.swing.JPanel {
         Gdimanche = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        GdotNom = new javax.swing.JRadioButton();
         Gnom = new javax.swing.JTextField();
-        GdotPrenom = new javax.swing.JRadioButton();
         Gprenom = new javax.swing.JTextField();
-        GdotDateNaissance = new javax.swing.JRadioButton();
-        GdotFormation = new javax.swing.JRadioButton();
         Bajouter = new javax.swing.JButton();
         Gformation = new javax.swing.JComboBox();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        GdotCp = new javax.swing.JRadioButton();
+        Gamu = new javax.swing.JCheckBox();
+        Gtms = new javax.swing.JCheckBox();
+        Gvsl = new javax.swing.JCheckBox();
+        Gtpmr = new javax.swing.JCheckBox();
         GcodePostal = new javax.swing.JTextField();
         Gannee = new javax.swing.JComboBox();
         jLabel8 = new javax.swing.JLabel();
         Gmois = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
         Gjour = new javax.swing.JComboBox();
+        Gpermanent = new javax.swing.JCheckBox();
+        Gvolontaire = new javax.swing.JCheckBox();
+        GdotNom = new javax.swing.JCheckBox();
+        GdotPrenom = new javax.swing.JCheckBox();
+        GdotDateNaissance = new javax.swing.JCheckBox();
+        GdotFormation = new javax.swing.JCheckBox();
+        GdotCp = new javax.swing.JCheckBox();
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -178,6 +178,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
             }
         });
 
+        Brechercher.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Brechercher.setText("Rechercher");
         Brechercher.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -366,19 +367,11 @@ public class M_SearchCrit extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Critères");
 
-        GdotNom.setBackground(new java.awt.Color(153, 153, 153));
-        buttonGroup1.add(GdotNom);
-        GdotNom.setText("Selon le nom");
-
         Gnom.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 GnomMouseClicked(evt);
             }
         });
-
-        GdotPrenom.setBackground(new java.awt.Color(153, 153, 153));
-        buttonGroup1.add(GdotPrenom);
-        GdotPrenom.setText("Selon le prénom");
 
         Gprenom.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -386,14 +379,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
             }
         });
 
-        GdotDateNaissance.setBackground(new java.awt.Color(153, 153, 153));
-        buttonGroup1.add(GdotDateNaissance);
-        GdotDateNaissance.setText("Selon la date de naissance");
-
-        GdotFormation.setBackground(new java.awt.Color(153, 153, 153));
-        buttonGroup1.add(GdotFormation);
-        GdotFormation.setText("Selon la formation");
-
+        Bajouter.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         Bajouter.setText("Ajouter le critère à la liste");
         Bajouter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -407,29 +393,19 @@ public class M_SearchCrit extends javax.swing.JPanel {
             }
         });
 
-        jCheckBox1.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox1.setText("Chauffeur amu/112");
+        Gamu.setBackground(new java.awt.Color(153, 153, 153));
+        Gamu.setText("Chauffeur amu/112");
 
-        jCheckBox2.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox2.setText("Chauffeur tms/105");
+        Gtms.setBackground(new java.awt.Color(153, 153, 153));
+        Gtms.setText("Chauffeur tms/105");
 
-        jCheckBox3.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox3.setText("Chauffeur vsl");
+        Gvsl.setBackground(new java.awt.Color(153, 153, 153));
+        Gvsl.setText("Chauffeur vsl");
+        Gvsl.setEnabled(false);
 
-        jCheckBox4.setBackground(new java.awt.Color(153, 153, 153));
-        jCheckBox4.setText("Chauffeur tpmr");
-
-        jRadioButton1.setBackground(new java.awt.Color(153, 153, 153));
-        buttonGroup2.add(jRadioButton1);
-        jRadioButton1.setText("Volontaire");
-
-        jRadioButton2.setBackground(new java.awt.Color(153, 153, 153));
-        buttonGroup2.add(jRadioButton2);
-        jRadioButton2.setText("Permanent");
-
-        GdotCp.setBackground(new java.awt.Color(153, 153, 153));
-        buttonGroup1.add(GdotCp);
-        GdotCp.setText("Selon le code postal");
+        Gtpmr.setBackground(new java.awt.Color(153, 153, 153));
+        Gtpmr.setText("Chauffeur tpmr");
+        Gtpmr.setEnabled(false);
 
         GcodePostal.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -450,6 +426,27 @@ public class M_SearchCrit extends javax.swing.JPanel {
             }
         });
 
+        Gpermanent.setBackground(new java.awt.Color(153, 153, 153));
+        Gpermanent.setText("Permanent");
+
+        Gvolontaire.setBackground(new java.awt.Color(153, 153, 153));
+        Gvolontaire.setText("Volontaire");
+
+        GdotNom.setBackground(new java.awt.Color(153, 153, 153));
+        GdotNom.setText("Selon le nom");
+
+        GdotPrenom.setBackground(new java.awt.Color(153, 153, 153));
+        GdotPrenom.setText("Selon le prénom");
+
+        GdotDateNaissance.setBackground(new java.awt.Color(153, 153, 153));
+        GdotDateNaissance.setText("Selon la date de naissance");
+
+        GdotFormation.setBackground(new java.awt.Color(153, 153, 153));
+        GdotFormation.setText("Selon la formation");
+
+        GdotCp.setBackground(new java.awt.Color(153, 153, 153));
+        GdotCp.setText("Selon le code postal");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -467,21 +464,16 @@ public class M_SearchCrit extends javax.swing.JPanel {
                             .addComponent(GdotCp)
                             .addComponent(GdotFormation)
                             .addComponent(GdotDateNaissance)
-                            .addComponent(GdotNom)
-                            .addComponent(jLabel2)
                             .addComponent(GdotPrenom)
+                            .addComponent(GdotNom)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox1)
-                                    .addComponent(jCheckBox3))
+                                    .addComponent(Gamu)
+                                    .addComponent(Gvsl))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox2)
-                                    .addComponent(jCheckBox4)))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jRadioButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton2))
+                                    .addComponent(Gtms)
+                                    .addComponent(Gtpmr)))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(Gjour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -491,16 +483,21 @@ public class M_SearchCrit extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(Gannee, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(Gannee, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(Gvolontaire)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gpermanent))
+                            .addComponent(jLabel2))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(GdotNom)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Gnom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -523,22 +520,22 @@ public class M_SearchCrit extends javax.swing.JPanel {
                 .addComponent(Gformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jCheckBox2))
+                    .addComponent(Gamu)
+                    .addComponent(Gtms))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox3)
-                    .addComponent(jCheckBox4))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
-                .addGap(18, 18, 18)
+                    .addComponent(Gvsl)
+                    .addComponent(Gtpmr))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(GdotCp)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(GcodePostal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE)
-                .addComponent(Bajouter)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Gpermanent)
+                    .addComponent(Gvolontaire))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Bajouter, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -575,14 +572,46 @@ public class M_SearchCrit extends javax.swing.JPanel {
     private void BajouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BajouterActionPerformed
         if(GdotNom.isSelected()){
             AjouterCritereNom();
+            GdotNom.setSelected(false);
+            Gnom.setText(null);
         }else if(GdotPrenom.isSelected()){
             AjouterCriterePrenom();
+            GdotPrenom.setSelected(false);
+            Gprenom.setText(null);
         }else if(GdotDateNaissance.isSelected()){
             AjouterCritereDateNaissance();
+            GdotDateNaissance.setSelected(false);
         }else if(GdotFormation.isSelected()){
             AjouterCritereFormation();
+            GdotFormation.setSelected(false);
         }else if(GdotCp.isSelected()){
             AjouterCritereCodePostal();
+            GdotCp.setSelected(false);
+            GcodePostal.setText(null);
+        }
+        if(Gpermanent.isSelected()){
+            ajouterCriterePermanent(true);
+            Gpermanent.setSelected(false);
+        }
+        if(Gvolontaire.isSelected()){
+            ajouterCriterePermanent(false);
+            Gvolontaire.setSelected(false);
+        }
+        if(Gamu.isSelected()){
+            ajouterCriterePermis("amu");
+            Gamu.setSelected(false);
+        }
+        if(Gtms.isSelected()){
+            ajouterCriterePermis("tms");
+            Gtms.setSelected(false);
+        }
+        if(Gtms.isSelected()){
+            ajouterCriterePermis("vsl");
+            Gtms.setSelected(false);
+        }
+        if(Gtpmr.isSelected()){
+            ajouterCriterePermis("tpmr");
+            Gtpmr.setSelected(false);
         }
     }//GEN-LAST:event_BajouterActionPerformed
 
@@ -694,14 +723,15 @@ public class M_SearchCrit extends javax.swing.JPanel {
     private javax.swing.JButton Brechercher;
     private javax.swing.JButton Bretirer;
     private javax.swing.JButton Bvider;
+    private javax.swing.JCheckBox Gamu;
     private javax.swing.JComboBox Gannee;
     private javax.swing.JTextField GcodePostal;
     private javax.swing.JCheckBox Gdimanche;
-    private javax.swing.JRadioButton GdotCp;
-    private javax.swing.JRadioButton GdotDateNaissance;
-    private javax.swing.JRadioButton GdotFormation;
-    private javax.swing.JRadioButton GdotNom;
-    private javax.swing.JRadioButton GdotPrenom;
+    private javax.swing.JCheckBox GdotCp;
+    private javax.swing.JCheckBox GdotDateNaissance;
+    private javax.swing.JCheckBox GdotFormation;
+    private javax.swing.JCheckBox GdotNom;
+    private javax.swing.JCheckBox GdotPrenom;
     private javax.swing.JRadioButton Ge;
     private javax.swing.JComboBox Gformation;
     private javax.swing.JRadioButton Gi;
@@ -715,20 +745,21 @@ public class M_SearchCrit extends javax.swing.JPanel {
     private javax.swing.JComboBox Gmois;
     private javax.swing.JTextField Gnom;
     private javax.swing.JRadioButton Go;
+    private javax.swing.JCheckBox Gpermanent;
     private javax.swing.JTextField Gprenom;
     private javax.swing.JTable Gresultat;
     private javax.swing.JCheckBox Gsamedi;
     private javax.swing.JRadioButton Gt;
+    private javax.swing.JCheckBox Gtms;
+    private javax.swing.JCheckBox Gtpmr;
     private javax.swing.JCheckBox Gvendredi;
+    private javax.swing.JCheckBox Gvolontaire;
+    private javax.swing.JCheckBox Gvsl;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -739,8 +770,6 @@ public class M_SearchCrit extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     // End of variables declaration//GEN-END:variables
@@ -802,6 +831,20 @@ public class M_SearchCrit extends javax.swing.JPanel {
         String mot = "-" + cpt + "- Code Postal -> " + codePostal;
         SwingUtils.addToList(GlisteCriteres, mot);
         listeCriteres.add(new Critere(cpt, "codePostal", codePostal));
+    }
+
+    private void ajouterCriterePermanent(boolean permanent) {
+        cpt++;
+        String mot = "-"+cpt+"- type -> " + (permanent ? "permanent" : "volontaire");
+        SwingUtils.addToList(GlisteCriteres, mot);
+        listeCriteres.add(new Critere(cpt, "permanent", (permanent ? "permanent" : "volontaire")));
+    }
+
+    private void ajouterCriterePermis(String type) {
+        cpt++;
+        String mot = "-"+cpt+"- permis -> " + type;
+        SwingUtils.addToList(GlisteCriteres, mot);
+        listeCriteres.add(new Critere(cpt, "permis", type));
     }
 
     private void TraitementResultat(LinkedList<TupleRecherche> listeResultat) {
