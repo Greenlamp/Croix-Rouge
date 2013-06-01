@@ -5,8 +5,13 @@
 package GUI.Panels;
 
 import Helpers.SwingUtils;
+import SSL.NetworkClientSSL;
+import States.States;
 import java.util.LinkedList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import my.cr.PacketCom.PacketCom;
 
 /**
  *
@@ -17,16 +22,22 @@ public class Menu extends javax.swing.JPanel {
     /**
      * Creates new form Menu
      */
-    Main parent;
+    Main parent = null;
+    NetworkClientSSL socket = null;
+
     public Menu() {
         initComponents();
     }
 
-    Menu(Main parent) {
+    Menu(Main parent, NetworkClientSSL socket) {
         initComponents();
+        this.socket = socket;
         this.parent = parent;
         cacherInterdit();
-        fillBidon();
+        //fillBidon();
+        getAnniversaires();
+        getBrevetsExpire();
+        getHorairesNonComplet();
     }
 
     /**
@@ -266,7 +277,15 @@ public class Menu extends javax.swing.JPanel {
             new String [] {
                 "Nom", "Prenom", "Date de naissance"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(Ganniv);
 
         javax.swing.GroupLayout panelAnnivLayout = new javax.swing.GroupLayout(panelAnniv);
@@ -556,6 +575,81 @@ public class Menu extends javax.swing.JPanel {
             panelGrille.setVisible(false);
         }else{
             panelGrille.setVisible(true);
+        }
+    }
+
+    private void getAnniversaires() {
+        if(parent.getDroits().contains("SEE_BIRTHDAY")){
+            PacketCom packet = new PacketCom(States.GET_BIRTHDAY, null);
+            socket.send(packet);
+            try {
+                PacketCom retour = socket.receive();
+                traitementBirthday(retour);
+            } catch (Exception ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void getBrevetsExpire() {
+        if(parent.getDroits().contains("SEE_EXP_BREVET")){
+            PacketCom packet = new PacketCom(States.GET_EXP_BREVET, null);
+            socket.send(packet);
+            try {
+                PacketCom retour = socket.receive();
+                traitementExpBrevet(retour);
+            } catch (Exception ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void getHorairesNonComplet() {
+        if(parent.getDroits().contains("SEE_HORAIRE_MISS")){
+            PacketCom packet = new PacketCom(States.GET_HORAIRE_MISS, null);
+            socket.send(packet);
+            try {
+                PacketCom retour = socket.receive();
+                traitementHoraireMiss(retour);
+            } catch (Exception ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void traitementBirthday(PacketCom retour) {
+        String type = retour.getType();
+        if(type.equals(States.GET_BIRTHDAY_OUI)){
+            LinkedList<Object[]> listeBirthday = (LinkedList<Object[]>) retour.getObjet();
+            SwingUtils.emptyTable(Ganniv);
+            SwingUtils.addToTable(Ganniv, listeBirthday);
+        }else{
+            String message = (String)retour.getObjet();
+            parent.afficherMessage(message);
+        }
+    }
+
+    private void traitementExpBrevet(PacketCom retour) {
+        String type = retour.getType();
+        if(type.equals(States.GET_EXP_BREVET_OUI)){
+            LinkedList<Object[]> listeBrevet = (LinkedList<Object[]>) retour.getObjet();
+            SwingUtils.emptyTable(Gbrevet);
+            SwingUtils.addToTable(Gbrevet, listeBrevet);
+        }else{
+            String message = (String)retour.getObjet();
+            parent.afficherMessage(message);
+        }
+    }
+
+    private void traitementHoraireMiss(PacketCom retour) {
+        String type = retour.getType();
+        if(type.equals(States.GET_HORAIRE_MISS_OUI)){
+            LinkedList<Object[]> listeGrille = (LinkedList<Object[]>) retour.getObjet();
+            SwingUtils.emptyTable(Ggrille);
+            SwingUtils.addToTable(Ggrille, listeGrille);
+        }else{
+            String message = (String)retour.getObjet();
+            parent.afficherMessage(message);
         }
     }
 }

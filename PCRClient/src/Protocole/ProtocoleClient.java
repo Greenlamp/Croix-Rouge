@@ -207,6 +207,18 @@ public class ProtocoleClient implements Protocolable{
             return packet;
         }else if (type.equals(States.GET_VEHICULES_DISPO_NON)) {
             return packet;
+        }else if (type.equals(States.GET_BIRTHDAY_NON)) {
+            return packet;
+        }else if (type.equals(States.GET_BIRTHDAY_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_EXP_BREVET_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_EXP_BREVET_NON)) {
+            return packet;
+        }else if (type.equals(States.GET_HORAIRE_MISS_OUI)) {
+            return packet;
+        }else if (type.equals(States.GET_HORAIRE_MISS_NON)) {
+            return packet;
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }

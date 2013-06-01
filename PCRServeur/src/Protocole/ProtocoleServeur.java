@@ -151,6 +151,12 @@ public class ProtocoleServeur implements Protocolable{
             return actionEditReservation(type, contenu);
         }else if(type.equals(States.DELETE_RESERVATION)){
             return actionDeleteReservation(type, contenu);
+        }else if(type.equals(States.GET_BIRTHDAY)){
+            return actionGetBirthday(type, contenu);
+        }else if(type.equals(States.GET_EXP_BREVET)){
+            return actionGetExpBrevet(type, contenu);
+        }else if(type.equals(States.GET_HORAIRE_MISS)){
+            return actionGetHoraireMiss(type, contenu);
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }
@@ -1845,5 +1851,83 @@ public class ProtocoleServeur implements Protocolable{
 
         dbRequests.getMysql().commit();
         return new PacketCom(States.DELETE_RESERVATION_OUI, null);
+    }
+
+    private PacketCom actionGetBirthday(String type, Object contenu) {
+        if(!droitsOffi.contains("SEE_BIRTHDAY")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Volontaires"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_BIRTHDAY_NON, "Impossible de récupérer les anniversaires");
+        }
+
+        LinkedList<Object[]> listeBirthday = null;
+        try {
+            listeBirthday = dbRequests.getBirthday();
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_BIRTHDAY_NON, "Impossible de récupérer les anniversaires");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.GET_BIRTHDAY_OUI, (Object)listeBirthday);
+    }
+
+    private PacketCom actionGetExpBrevet(String type, Object contenu) {
+        if(!droitsOffi.contains("SEE_EXP_BREVET")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Formation", "FormationsSuivie", "Volontaires"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_EXP_BREVET_NON, "Impossible de récupérer les brevets qui vont expirés");
+        }
+
+        LinkedList<Object[]> listeExpBrevet = null;
+        try {
+            listeExpBrevet = dbRequests.getExpBrevet();
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_EXP_BREVET_NON, "Impossible de récupérer les brevets qui vont expirés");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.GET_EXP_BREVET_OUI, (Object)listeExpBrevet);
+    }
+
+    private PacketCom actionGetHoraireMiss(String type, Object contenu) {
+        if(!droitsOffi.contains("SEE_HORAIRE_MISS")){
+            PacketCom packetRetour = new PacketCom(States.INSUFFICIENT_PRIVILEGES, "Vous ne possédez pas les droits nécessaires");
+            return packetRetour;
+        }
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"Vehicules", "Lieux", "CaseHoraire", "GrilleHoraire"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_HORAIRE_MISS_NON, "Impossible de récupérer les Grilles incomplètes");
+        }
+
+        LinkedList<Object[]> listeHoraireMiss = null;
+        try {
+            listeHoraireMiss = dbRequests.getHoraireMiss();
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_HORAIRE_MISS_NON, "Impossible de récupérer les Grilles incomplètes");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.GET_HORAIRE_MISS_OUI, (Object)listeHoraireMiss);
     }
 }

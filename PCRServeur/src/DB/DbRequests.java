@@ -2901,4 +2901,49 @@ public class DbRequests implements DBA{
         }
         return copie;
     }
+
+    public LinkedList<Object[]> getBirthday() throws Exception{
+        LinkedList<Object[]> retour = new LinkedList<Object[]>();
+        String request = "SELECT nom, prenom, dateNaissance FROM Volontaires WHERE STR_TO_DATE(DATE_FORMAT(dateNaissance,'%d/%m'), '%d/%m') >= STR_TO_DATE(DATE_FORMAT(now(),'%d/%m'), '%d/%m') AND STR_TO_DATE(DATE_FORMAT(dateNaissance,'%d/%m'),'%d/%m') <= STR_TO_DATE(DATE_FORMAT(DATE_ADD(now(), INTERVAL + 7 DAY),'%d/%m'),'%d/%m');";
+        ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            String nom = rs.getString("nom");
+            String prenom = rs.getString("prenom");
+            Date dateNaissance = rs.getTimestamp("dateNaissance");
+            Object[] data = {nom, prenom, EasyDate.getDateOnly(dateNaissance)};
+            retour.add(data);
+        }
+        return retour;
+    }
+
+    public LinkedList<Object[]> getHoraireMiss() throws Exception{
+        LinkedList<Object[]> retour = new LinkedList<Object[]>();
+        String request = "SELECT (SELECT nom  FROM Vehicules WHERE idVehicule = (idVehicule)) AS 'vehicule', (SELECT nom FROM Lieux WHERE idLieu = (idLieu)) AS 'lieu', numéroSemaine, dateDebut, dateFin FROM GrilleHoraire WHERE idGrilleHoraire IN(SELECT idGrilleHoraire FROM CaseHoraire Group By idGrilleHoraire HAVING(84 - count(detail) != 0))";
+        ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            String vehicule = rs.getString("vehicule");
+            String lieu = rs.getString("lieu");
+            int semaine = rs.getInt("numéroSemaine");
+            Date dateDebut = rs.getTimestamp("dateDebut");
+            Date dateFin = rs.getTimestamp("dateFin");
+            Object[] data = {vehicule, lieu, semaine, EasyDate.getDateOnly(dateDebut), EasyDate.getDateOnly(dateFin)};
+            retour.add(data);
+        }
+        return retour;
+    }
+
+    public LinkedList<Object[]> getExpBrevet() throws Exception{
+        LinkedList<Object[]> retour = new LinkedList<Object[]>();
+         String request = "SELECT nom, prenom, A.nomFormation, A.dateExpiration FROM(SELECT FormationsSuivie.matricule, Formation.idFormation, nomFormation, DATE_FORMAT(dateExpiration, '%d/%m/%Y') AS 'dateExpiration' FROM Formation INNER JOIN(FormationsSuivie) ON(FormationsSuivie.idFormation = Formation.idFormation) WHERE STR_TO_DATE(DATE_FORMAT(DATE_ADD(dateExpiration, INTERVAL - 1 MONTH),'%d/%m/%Y'),'%d/%m/%Y') <= now()) A, Volontaires WHERE Volontaires.matricule = A.matricule;";
+        ResultSet rs = mysql.pSelect(request, null);
+        while(rs.next()){
+            String nom = rs.getString("nom");
+            String prenom = rs.getString("prenom");
+            String nomFormation = rs.getString("nomFormation");
+            String dateExpiration = rs.getString("dateExpiration");
+            Object[] data = {nom, prenom, nomFormation, dateExpiration};
+            retour.add(data);
+        }
+        return retour;
+    }
 }

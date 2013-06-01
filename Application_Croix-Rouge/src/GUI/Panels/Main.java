@@ -271,7 +271,7 @@ public class Main extends javax.swing.JFrame {
             Gscene.repaint();
             Gscene.revalidate();
 
-            Menu menu = new Menu(this);
+            Menu menu = new Menu(this, this.socket);
             Gscene.add(menu);
             Gscene.revalidate();
         }else if(this.getActualState().equals(Main.CONSULTATION)){

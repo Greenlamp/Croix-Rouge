@@ -79,6 +79,13 @@ public interface States {
     public static String EDIT_RESERVATION = "EDIT_RESERVATION";
     public static String DELETE_RESERVATION = "DELETE_RESERVATION";
 
+    public static String GET_BIRTHDAY = "GET_BIRTHDAY";
+    public static String GET_EXP_BREVET = "GET_EXP_BREVET";
+    public static String GET_HORAIRE_MISS = "GET_HORAIRE_MISS";
+
+
+
+
 
 
     //Client
@@ -220,4 +227,13 @@ public interface States {
 
     public static String GET_VEHICULES_DISPO_OUI = "GET_VEHICULES_DISPO_OUI";
     public static String GET_VEHICULES_DISPO_NON = "GET_VEHICULES_DISPO_NON";
+
+    public static String GET_BIRTHDAY_OUI = "GET_BIRTHDAY_OUI";
+    public static String GET_BIRTHDAY_NON = "GET_BIRTHDAY_NON";
+
+    public static String GET_EXP_BREVET_OUI = "GET_EXP_BREVET_OUI";
+    public static String GET_EXP_BREVET_NON = "GET_EXP_BREVET_NON";
+
+    public static String GET_HORAIRE_MISS_OUI = "GET_HORAIRE_MISS_OUI";
+    public static String GET_HORAIRE_MISS_NON = "GET_HORAIRE_MISS_NON";
 }

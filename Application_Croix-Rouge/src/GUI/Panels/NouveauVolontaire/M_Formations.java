@@ -2836,7 +2836,7 @@ public class M_Formations extends javax.swing.JPanel {
     private void ComboBoxAnnee() {
         String annéeToday = new SimpleDateFormat("yyyy").format(new Date());
         int année = Integer.parseInt(annéeToday);
-        for(int i=année; i>=1920; i--){
+        for(int i=année + 50; i>=1920; i--){
             GanneeObtenuBEPS.addItem(i);
             GanneeValableBEPS.addItem(i);
             GanneeObtenuBDS.addItem(i);
