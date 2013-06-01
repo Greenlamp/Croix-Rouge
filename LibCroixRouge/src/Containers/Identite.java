@@ -27,6 +27,7 @@ public class Identite implements Serializable{
     private Date dateNaissance;
     private byte[] photo;
     private boolean completed;
+    private boolean permanent;
 
     public Identite(){
         setMatricule(null);
@@ -37,6 +38,7 @@ public class Identite implements Serializable{
         setDateNaissance(null);
         setPhoto(null);
         setCompleted(false);
+        setPermanent(false);
     }
 
     public String getNom() {
@@ -127,5 +129,17 @@ public class Identite implements Serializable{
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public boolean isPermanent() {
+        return permanent;
+    }
+
+    public void setPermanent(boolean permanent) {
+        this.permanent = permanent;
+    }
+
+    public void setPermanent(int permanent) {
+        this.permanent = (permanent == 1 ? true : false);
     }
 }

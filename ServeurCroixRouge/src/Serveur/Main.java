@@ -5,10 +5,13 @@
 
 package Serveur;
 
+import FileAccess.FileAccess;
+
 
 public class Main {
     public static void main(String args[]) {
-        int port = 8500;//A changer avec FileAccess.
+        int port = Integer.parseInt(FileAccess.getConfig("configs", "PORT"));
+        int nbThread = Integer.parseInt(FileAccess.getConfig("configs", "NB_THREADS"));
         ServeurPool serveurPool = new ServeurPool(port, 5, "Protocole.ProtocoleServeur");
         Thread myThread = new Thread(serveurPool);
         myThread.start();

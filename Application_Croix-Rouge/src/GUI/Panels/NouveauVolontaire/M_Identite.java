@@ -8,7 +8,6 @@ import Containers.Identite;
 import Containers.Volontaire;
 import EasyCheck.EasyCheck;
 import GUI.Panels.Main;
-import Network.NetworkClient;
 import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
@@ -66,7 +65,7 @@ public class M_Identite extends javax.swing.JPanel {
         }else{
             edited = false;
         }
-        
+
         //on récupère l'entiereté des volontaires déja
         //enregistré localement
         volontaire = parent.getVolontaire();
@@ -90,6 +89,7 @@ public class M_Identite extends javax.swing.JPanel {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         Gtitre = new javax.swing.JLabel();
         Baccueil1 = new javax.swing.JButton();
@@ -111,6 +111,8 @@ public class M_Identite extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         Gannee = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
+        Gvolontaire = new javax.swing.JRadioButton();
+        Gpermanent = new javax.swing.JRadioButton();
         jPanel12 = new javax.swing.JPanel();
         jLabel114 = new javax.swing.JLabel();
         jLabel115 = new javax.swing.JLabel();
@@ -224,6 +226,15 @@ public class M_Identite extends javax.swing.JPanel {
 
         jLabel9.setText("Date de naissance");
 
+        Gvolontaire.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup2.add(Gvolontaire);
+        Gvolontaire.setSelected(true);
+        Gvolontaire.setText("Volontaire");
+
+        Gpermanent.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup2.add(Gpermanent);
+        Gpermanent.setText("Permanent");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -254,7 +265,11 @@ public class M_Identite extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(Gannee, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(Gannee, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(Gvolontaire)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gpermanent)))
                         .addGap(0, 199, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -288,6 +303,10 @@ public class M_Identite extends javax.swing.JPanel {
                     .addComponent(Gmois, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
                     .addComponent(Gannee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Gvolontaire)
+                    .addComponent(Gpermanent))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -390,7 +409,7 @@ public class M_Identite extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Gphoto)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(235, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -425,9 +444,9 @@ public class M_Identite extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -498,10 +517,13 @@ public class M_Identite extends javax.swing.JPanel {
     private javax.swing.JComboBox Gjour;
     private javax.swing.JComboBox Gmois;
     private javax.swing.JTextField Gnom;
+    private javax.swing.JRadioButton Gpermanent;
     private javax.swing.JLabel Gphoto;
     private javax.swing.JTextField Gprenom;
     private javax.swing.JLabel Gtitre;
+    private javax.swing.JRadioButton Gvolontaire;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel114;
     private javax.swing.JLabel jLabel115;
@@ -559,6 +581,7 @@ public class M_Identite extends javax.swing.JPanel {
         String annee = Gannee.getSelectedItem().toString();
         String dateNaissance = jour + "/" + mois + "/" + annee;
         String matricule = parent.getMatricule();
+        boolean permanent = (Gpermanent.isSelected() ? true : false);
         byte[] photoId = null;
         if(Gphoto.getIcon() != null){
             Image photo = iconToImage(Gphoto.getIcon());
@@ -591,6 +614,7 @@ public class M_Identite extends javax.swing.JPanel {
         identite.setSexe(sexe);
         identite.setNomJeuneFille(nomEpouse);
         identite.setCompleted(false);
+        identite.setPermanent(permanent);
         try {
             identite.setDateNaissance(new SimpleDateFormat("dd/MM/yyyy").parse(dateNaissance));
         } catch (ParseException ex) {
@@ -630,6 +654,7 @@ public class M_Identite extends javax.swing.JPanel {
         String sexe = volontaire.getIdentite().getSexe();
         String nomEpouse = volontaire.getIdentite().getNomJeuneFille();
         Date dateNaissance = volontaire.getIdentite().getDateNaissance();
+        boolean permanent = volontaire.getIdentite().isPermanent();
         int jour = 1;
         int mois = 1;
         int annee = 2000;
@@ -651,6 +676,11 @@ public class M_Identite extends javax.swing.JPanel {
         Gepouse.setText(nomEpouse);
         Gjour.setSelectedIndex(jour-1);
         Gmois.setSelectedIndex(mois-1);
+        if(permanent){
+            Gpermanent.setSelected(true);
+        }else{
+            Gvolontaire.setSelected(true);
+        }
 
         boolean found = false;
         for(int i=0; i<Gannee.getItemCount() && !found; i++){
@@ -662,6 +692,7 @@ public class M_Identite extends javax.swing.JPanel {
         if(volontaire.getIdentite().getPhoto() != null){
             Gphoto.setIcon(new ImageIcon(volontaire.getIdentite().getPhoto()));
         }
+
     }
 
     private void envoyerClasse() {

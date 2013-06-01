@@ -52,5 +52,4 @@ public class Key implements Serializable{
     public void setValue(CelluleGrille value) {
         this.value = value;
     }
-
 }

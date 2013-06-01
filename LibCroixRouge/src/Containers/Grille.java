@@ -118,6 +118,8 @@ public class Grille implements Serializable{
             if(key.getX() == row && key.getY() == column){
                 CelluleGrille cellule = key.getValue();
                 cellule.setNomPrenom(nom);
+                String lettre = nom.substring(nom.length()-2, nom.length()-1);
+                cellule.setDetail(lettre);
                 grilles.remove(key);
                 Key newKey = new Key(row, column, cellule);
                 grilles.add(newKey);
@@ -154,5 +156,14 @@ public class Grille implements Serializable{
         }else{
             this.dateFin = null;
         }
+    }
+
+    public CelluleGrille getValueAt(int x, int y){
+        for(Key key : grilles){
+            if(key.getX() == x && key.getY() == y){
+                return key.getValue();
+            }
+        }
+        return null;
     }
 }

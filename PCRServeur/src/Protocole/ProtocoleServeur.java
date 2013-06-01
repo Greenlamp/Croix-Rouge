@@ -14,10 +14,12 @@ import Containers.Vehicule;
 import Containers.Volontaire;
 import DB.DbRequests;
 import States.States;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.LibCritereAndroid.Criteres.ByCodePostal;
 import my.LibCritereAndroid.Criteres.ByDateNaissance;
 import my.LibCritereAndroid.Criteres.ByFormation;
 import my.LibCritereAndroid.Criteres.ByNom;
@@ -576,8 +578,10 @@ public class ProtocoleServeur implements Protocolable{
             return packetRetour;
         }
 
-        LinkedList<CritereCustom> listeCritereCustoms = new LinkedList<>();
-        LinkedList<Critere> listeCriteres = (LinkedList<Critere>) contenu;
+        LinkedList<CritereCustom> listeCritereCustoms = new LinkedList<CritereCustom>();
+        Object[] data = (Object[]) contenu;
+        LinkedList<Critere> listeCriteres = (LinkedList<Critere>)data[0];
+        LinkedList<Object[]> dates = (LinkedList<Object[]>)data[1];
 
         for(Critere critere : listeCriteres){
             if(critere.getType().equals("nom")){
@@ -596,11 +600,21 @@ public class ProtocoleServeur implements Protocolable{
                 ByDateNaissance byDateNaissance = new ByDateNaissance(critere.getDonnee(), dbRequests);
                 byDateNaissance.doSearch();
                 listeCritereCustoms.add(byDateNaissance);
+            }else if(critere.getType().equals("codePostal")){
+                ByCodePostal byCodePostal = new ByCodePostal(critere.getDonnee(), dbRequests);
+                byCodePostal.doSearch();
+                listeCritereCustoms.add(byCodePostal);
             }
         }
 
         TraitementRecherche traitementRecherche = new TraitementRecherche();
         traitementRecherche.Filtrer(listeCritereCustoms);
+        try {
+            traitementRecherche.setResultats(dbRequests.checkDisponibiliteVolontaire(traitementRecherche.getResultats(), dates));
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            return new PacketCom(States.RECHERCHE_NON, "Une erreur s'est produite durant la recherche");
+        }
 
         return new PacketCom(States.RECHERCHE_OUI, (Object)traitementRecherche.getResultats());
     }
@@ -754,6 +768,14 @@ public class ProtocoleServeur implements Protocolable{
             dbRequests.getMysql().rollback();
             return new PacketCom(States.GET_GRILLE_NON, "Grille inconnue");
         }
+        try {
+            dbRequests.lockGrille(semaine, année, ambulance, lieu);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_GRILLE_NON, "Grille inconnue");
+        }
+
 
         Grille grille = null;
         try {
@@ -796,6 +818,19 @@ public class ProtocoleServeur implements Protocolable{
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
             dbRequests.getMysql().rollback();
             return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur de création de nouvelle grille");
+        }
+        int id = -1;
+        try {
+            id = dbRequests.getIdGrilleHoraire(grille.getSemaine(), grille.getAnnee(), grille.getVehicule().getNom(), grille.getLieu());
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur de création de nouvelle grille");
+        }
+
+        if(id!= -1){
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "La grille horaire pour la semaine " + grille.getSemaine() + " déja existante");
         }
 
         try {
@@ -860,9 +895,22 @@ public class ProtocoleServeur implements Protocolable{
             dbRequests.getMysql().rollback();
             return new PacketCom(States.EDIT_GRILLE_HORAIRE_NON, "Erreur d'édition de grille");
         }
+        int id = -1;
+        try {
+            id = dbRequests.getIdGrilleHoraire(newGrille.getSemaine(), newGrille.getAnnee(), newGrille.getVehicule().getNom(), newGrille.getLieu());
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "Erreur de création de nouvelle grille");
+        }
+        if(!(oldGrille.getSemaine() == newGrille.getSemaine() && oldGrille.getAnnee() == newGrille.getAnnee() && oldGrille.getVehicule().getNom().equals(newGrille.getVehicule().getNom()) && oldGrille.getLieu().equals(newGrille.getLieu()))){
+            if(id!= -1){
+                dbRequests.getMysql().rollback();
+                return new PacketCom(States.NEW_GRILLE_HORAIRE_NON, "La grille horaire pour la semaine " + newGrille.getSemaine() + " déja existante");
+            }
+        }
 
         try {
-            //idGrilleHoraire = dbRequests.editGrilleHoraire(oldGrille.getSemaine(), oldGrille.getAnnee(), oldGrille.getNomAmbulance(), oldGrille.getLieu());
             idGrilleHoraire = dbRequests.editGrilleHoraire(oldGrille, newGrille);
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
@@ -948,6 +996,14 @@ public class ProtocoleServeur implements Protocolable{
         String nomVehicule = (String)data[2];
         String lieu = (String)data[3];
 
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"grillehoraire", "Vehicules", "Lieux"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_GRILLE_HORAIRE_NON, "Erreur d'édition de grille");
+        }
+
         boolean locked = true;
         try {
             locked = dbRequests.checkLockGrille(semaine, année, nomVehicule, lieu);
@@ -972,6 +1028,14 @@ public class ProtocoleServeur implements Protocolable{
         int année = grille.getAnnee();
         Vehicule vehicule = grille.getVehicule();
         String lieu = grille.getLieu();
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"grillehoraire", "Vehicules", "Lieux"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.EDIT_GRILLE_HORAIRE_NON, "Erreur d'édition de grille");
+        }
         try {
             dbRequests.unlockGrille(semaine, année, vehicule, lieu);
         } catch (Exception ex) {

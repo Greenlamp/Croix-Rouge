@@ -44,6 +44,7 @@ public class Traitement implements Runnable{
                 Logger.getLogger(Traitement.class.getName()).log(Level.SEVERE, null, ex);
                 return;
             } catch (Exception ex) {
+                Logger.getLogger(Traitement.class.getName()).log(Level.SEVERE, null, ex);
                 return;
             }
         }

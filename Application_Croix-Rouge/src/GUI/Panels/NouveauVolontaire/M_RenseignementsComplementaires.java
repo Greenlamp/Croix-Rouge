@@ -7,7 +7,6 @@ package GUI.Panels.NouveauVolontaire;
 import Containers.Complementaire;
 import Containers.Volontaire;
 import GUI.Panels.Main;
-import Network.NetworkClient;
 import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;

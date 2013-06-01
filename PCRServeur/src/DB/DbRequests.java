@@ -38,6 +38,7 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import my.LibCritereAndroid.Criteres.DBA;
+import my.LibCritereAndroid.Criteres.TraitementRecherche;
 import my.LibCritereAndroid.Recherche.TupleRecherche;
 
 
@@ -61,7 +62,7 @@ public class DbRequests implements DBA{
         if(identite == null){
             return;
         }
-        String request = "INSERT INTO Volontaires(matricule, nom, nomEpouse, prenom, dateNaissance, sexe, email, remarques, photo, completed, idPersonneUrgence, idDecouverte, idPrestation, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, idActivite) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String request = "INSERT INTO Volontaires(matricule, nom, nomEpouse, prenom, dateNaissance, sexe, email, remarques, photo, completed, permanent, idPersonneUrgence, idDecouverte, idPrestation, idRenseignement, idAdresseLegale, idAdresseResidence, idTelephone, idActivite) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Parametres params = new Parametres();
         params.addString(identite.getMatricule());
         params.addString(identite.getNom());
@@ -77,6 +78,7 @@ public class DbRequests implements DBA{
         params.addString(remarque);
         params.addBlob(identite.getPhoto());
         params.addInt((identite.isCompleted() ? 1 : 0));
+        params.addInt((identite.isPermanent() ? 1 : 0));
         params.addInt(idPersonneUrgence);
         params.addInt(idDecouverte);
         params.addInt(idPrestation);
@@ -1024,7 +1026,7 @@ public class DbRequests implements DBA{
         if(idCellule != -1){
             return idCellule;
         }
-        String request = "INSERT INTO caseHoraire(idGrilleHoraire, date, heureDebutPrestation, heureFinPrestation, role, numRow, numColumn, jour) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String request = "INSERT INTO caseHoraire(idGrilleHoraire, date, heureDebutPrestation, heureFinPrestation, role, numRow, numColumn, jour, detail) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Parametres params = new Parametres();
         params.addInt(idGrilleHoraire);
         params.addDate(EasyDate.getDateOnly(cellule.getDate()));
@@ -1034,6 +1036,7 @@ public class DbRequests implements DBA{
         params.addInt(cellule.getRow());
         params.addInt(cellule.getColumn());
         params.addString(cellule.getJour());
+        params.addString(cellule.getDetail());
 
         mysql.pUpdate(request, params);
 
@@ -1076,10 +1079,11 @@ public class DbRequests implements DBA{
             return -1;
         }
 
-        String request = "UPDATE caseHoraire SET heureDebutPrestation = ?, heureFinPrestation = ? WHERE idCaseHoraire = ?";
+        String request = "UPDATE caseHoraire SET heureDebutPrestation = ?, heureFinPrestation = ?, detail = ? WHERE idCaseHoraire = ?";
         Parametres params = new Parametres();
         params.addDateHour(newCellule.getHeureDebut());
         params.addDateHour(newCellule.getHeureFin());
+        params.addString(newCellule.getDetail());
         params.addInt(idCellule);
 
         mysql.pUpdate(request, params);
@@ -1171,7 +1175,7 @@ public class DbRequests implements DBA{
 
     public LinkedList<Key> getCellules(int idGrilleHoraire) throws Exception{
         LinkedList<Key> cellules = new LinkedList<>();
-        String request = "SELECT date, heureDebutPrestation, heureFinPrestation, role, numrow, numcolumn, jour FROM CaseHoraire WHERE idGrilleHoraire = ?";
+        String request = "SELECT date, heureDebutPrestation, heureFinPrestation, role, numrow, numcolumn, jour, detail FROM CaseHoraire WHERE idGrilleHoraire = ?";
         Parametres params = new Parametres();
         params.addInt(idGrilleHoraire);
         ResultSet rs = mysql.pSelect(request, params);
@@ -1183,6 +1187,7 @@ public class DbRequests implements DBA{
             int row = rs.getInt("numRow");
             int column = rs.getInt("numColumn");
             String jour = rs.getString("jour");
+            String detail = rs.getString("detail");
 
             CelluleGrille cellule = new CelluleGrille();
             cellule.setJour(jour);
@@ -1192,6 +1197,7 @@ public class DbRequests implements DBA{
             cellule.setDate(date);
             cellule.setHeureDebut(heureDebutPrestation);
             cellule.setHeureFin(heureFinPrestation);
+            cellule.setDetail(detail);
             Key key = new Key(row, column, cellule);
             cellules.add(key);
         }
@@ -1202,7 +1208,7 @@ public class DbRequests implements DBA{
         if(grille == null || idGrilleHoraire == -1){
             return;
         }
-        String request = "SELECT CaseHoraire.idCaseHoraire, date, heureDebutPrestation, heureFinPrestation, role, numRow, numColumn, jour, nom, prenom FROM (CaseHoraire INNER JOIN assignationCaseHoraire ON(CaseHoraire.idCaseHoraire = assignationCaseHoraire.idCaseHoraire)) INNER JOIN volontaires ON(volontaires.matricule = assignationCaseHoraire.matricule) WHERE CaseHoraire.idGrilleHoraire = ?";
+        String request = "SELECT CaseHoraire.idCaseHoraire, date, heureDebutPrestation, heureFinPrestation, role, numRow, numColumn, jour, nom, prenom, detail FROM (CaseHoraire INNER JOIN assignationCaseHoraire ON(CaseHoraire.idCaseHoraire = assignationCaseHoraire.idCaseHoraire)) INNER JOIN volontaires ON(volontaires.matricule = assignationCaseHoraire.matricule) WHERE CaseHoraire.idGrilleHoraire = ?";
         Parametres params = new Parametres();
         params.addInt(idGrilleHoraire);
         ResultSet rs = mysql.pSelect(request, params);
@@ -1211,7 +1217,8 @@ public class DbRequests implements DBA{
             int column = rs.getInt("numColumn");
             String nom = rs.getString("nom");
             String prenom = rs.getString("prenom");
-            String nomComplet = nom + " " + prenom;
+            String detail = rs.getString("detail");
+            String nomComplet = nom + " " + prenom + " (" + detail + ")";
             for(Key keys : grille.getGrilles()){
                 if(keys.getX() == row && keys.getY() == column){
                     keys.getValue().setNomPrenom(nomComplet);
@@ -1261,14 +1268,15 @@ public class DbRequests implements DBA{
         }
     }
 
-    public void lockGrille(int semaine, int année, Vehicule vehicule, String lieu) throws Exception{
-        int idVehicule = getIdVehicule(vehicule.getNom());
-        String request = "UPDATE GrilleHoraire SET locked = 1 WHERE numéroSemaine = ? AND année = ? AND idVehicule = ? AND lieu = ?";
+    public void lockGrille(int semaine, int année, String nomVehicule, String lieu) throws Exception{
+        int idVehicule = getIdVehicule(nomVehicule);
+        int idLieu = getIdLieu(lieu);
+        String request = "UPDATE GrilleHoraire SET locked = 1 WHERE numéroSemaine = ? AND année = ? AND idVehicule = ? AND idLieu = ?";
         Parametres params = new Parametres();
         params.addInt(semaine);
         params.addInt(année);
         params.addInt(idVehicule);
-        params.addString(lieu);
+        params.addInt(idLieu);
 
         mysql.pUpdate(request, params);
     }
@@ -1352,7 +1360,7 @@ public class DbRequests implements DBA{
             return null;
         }
         Identite identite = null;
-        String request = "SELECT nom, nomEpouse, prenom, dateNaissance, sexe, photo, completed FROM Volontaires WHERE matricule = ?";
+        String request = "SELECT nom, nomEpouse, prenom, dateNaissance, sexe, photo, completed, permanent FROM Volontaires WHERE matricule = ?";
         Parametres params = new Parametres();
         params.addString(matricule);
 
@@ -1365,6 +1373,7 @@ public class DbRequests implements DBA{
             String sexe = rs.getString("sexe");
             java.sql.Blob photo= rs.getBlob("photo");
             int completed = rs.getInt("completed");
+            int permanent = rs.getInt("permanent");
 
             identite = new Identite();
             identite.setNom(nom);
@@ -1376,6 +1385,7 @@ public class DbRequests implements DBA{
             }
             identite.setBlobPhoto(photo);
             identite.setCompleted((completed == 1 ? true : false));
+            identite.setPermanent(permanent);
             identite.setMatricule(matricule);
         }
         return identite;
@@ -1776,7 +1786,7 @@ public class DbRequests implements DBA{
         if(identite == null || matricule == null){
             return;
         }
-        String request = "UPDATE volontaires SET nom = ?, prenom = ?, nomEpouse = ?, dateNaissance = ?, sexe = ?, photo = ?, completed = ? WHERE matricule = ?";
+        String request = "UPDATE volontaires SET nom = ?, prenom = ?, nomEpouse = ?, dateNaissance = ?, sexe = ?, photo = ?, completed = ?, permanent = ? WHERE matricule = ?";
         Parametres params = new Parametres();
         params.addString(identite.getNom());
         params.addString(identite.getPrenom());
@@ -1785,6 +1795,7 @@ public class DbRequests implements DBA{
         params.addString(identite.getSexe());
         params.addBlob(identite.getPhoto());
         params.addInt((identite.isCompleted() ? 1 : 0));
+        params.addInt((identite.isPermanent() ? 1 : 0));
         params.addString(matricule);
         mysql.pUpdate(request, params);
     }
@@ -2845,5 +2856,49 @@ public class DbRequests implements DBA{
         params.addInt(annee);
 
         mysql.pUpdate(request, params);
+    }
+
+    public LinkedList<TupleRecherche> checkDisponibiliteVolontaire(LinkedList<TupleRecherche> resultats, LinkedList<Object[]> dates) throws Exception{
+        LinkedList<TupleRecherche> copie = new LinkedList<TupleRecherche>();
+        copie.addAll(resultats);
+        for(TupleRecherche elm : resultats){
+            String nom = elm.getNom();
+            String prenom = elm.getPrenom();
+            String matricule = getMatricule(nom, prenom);
+            if(matricule == null){
+                throw new Exception("volontaire introuvable");
+            }
+            for(Object[] date : dates){
+                Date dateJour = (Date)date[0];
+                Date heureDebut = (Date)date[1];
+                Date heureFin = (Date)date[2];
+                String request = "SELECT idCaseHoraire FROM AssignationCaseHoraire WHERE matricule = ? AND idCaseHoraire IN(SELECT idCaseHoraire FROM CaseHoraire WHERE date = ? AND((heureDebutPrestation < ? AND heureFinPrestation < ? AND heureFinPrestation > ?)OR(heureDebutPrestation > ? AND heureFinPrestation > ? AND heureDebutPrestation < ?)OR(heureDebutPrestation = ? AND heureFinPrestation = ?)))";
+                Parametres params = new Parametres();
+                params.addString(matricule);
+                params.addDate(dateJour);
+                params.addDateHour(heureDebut);
+                params.addDateHour(heureFin);
+                params.addDateHour(heureDebut);
+                params.addDateHour(heureDebut);
+                params.addDateHour(heureFin);
+                params.addDateHour(heureFin);
+                params.addDateHour(heureDebut);
+                params.addDateHour(heureFin);
+
+
+                ResultSet rs = mysql.pSelect(request, params);
+                while(rs.next()){
+                    int i = 0;
+                    for(TupleRecherche elmCopie : copie){
+                        if(elmCopie.getNom().equals(nom) && elmCopie.getPrenom().equals(prenom)){
+                            copie.remove(i);
+                            break;
+                        }
+                        i++;
+                    }
+                }
+            }
+        }
+        return copie;
     }
 }

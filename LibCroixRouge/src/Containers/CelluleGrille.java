@@ -22,6 +22,7 @@ public class CelluleGrille implements Serializable{
     private Date heureFin;
     private int row;
     private int column;
+    private String detail;
 
     public CelluleGrille(){
         setJour(null);
@@ -30,6 +31,7 @@ public class CelluleGrille implements Serializable{
         setDate(null);
         setHeureDebut(null);
         setHeureFin(null);
+        setDetail(null);
     }
 
     CelluleGrille(CelluleGrille value) {
@@ -134,5 +136,13 @@ public class CelluleGrille implements Serializable{
         } catch (ParseException ex) {
             Logger.getLogger(CelluleGrille.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

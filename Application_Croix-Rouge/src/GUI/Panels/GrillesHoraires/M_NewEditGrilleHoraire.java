@@ -649,12 +649,12 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
     }
 
     private void refreshTableau() {
+        Gsemaine.setText(String.valueOf(grille.getSemaine()));
+        Gannee.setText(String.valueOf(grille.getAnnee()));
         comboVehicules();
         comboLieux();
         reglerVehicule(grille.getVehicule());
         reglerLieu(grille.getLieu());
-        Gsemaine.setText(String.valueOf(grille.getSemaine()));
-        Gannee.setText(String.valueOf(grille.getAnnee()));
 
         InitCellules();
 
@@ -708,6 +708,10 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 String heure = (String)Ggrille.getValueAt(2, i);
                 String role = (String)Ggrille.getValueAt(k, 0);
                 String nomVolontaire = (String)Ggrille.getValueAt(k, i);
+                String lettre = null;
+                if(nomVolontaire != null && !nomVolontaire.isEmpty()){
+                    lettre = nomVolontaire.substring(nomVolontaire.length()-2, nomVolontaire.length()-1);
+                }
                 CelluleGrille cellule = new CelluleGrille();
                 cellule.setJour(jour);
                 String[] splitHeure = heure.split(" - ");
@@ -718,6 +722,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 cellule.setDateString(date);
                 cellule.setRole(role);
                 cellule.setNomPrenom(nomVolontaire);
+                cellule.setDetail(lettre);
                 cellule.setRow(k);
                 cellule.setColumn(i);
                 grille.addCellule(k, i, cellule);
@@ -731,6 +736,10 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 String heure = (String)Ggrille.getValueAt(6, i);
                 String role = (String)Ggrille.getValueAt(k, 0);
                 String nomVolontaire = (String)Ggrille.getValueAt(k, i);
+                String lettre = null;
+                if(nomVolontaire != null && !nomVolontaire.isEmpty()){
+                    lettre = nomVolontaire.substring(nomVolontaire.length()-2, nomVolontaire.length()-1);
+                }
                 CelluleGrille cellule = new CelluleGrille();
                 cellule.setJour(jour);
                 String[] splitHeure = heure.split(" - ");
@@ -741,6 +750,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 cellule.setDateString(date);
                 cellule.setRole(role);
                 cellule.setNomPrenom(nomVolontaire);
+                cellule.setDetail(lettre);
                 cellule.setRow(k);
                 cellule.setColumn(i);
                 grille.addCellule(k, i, cellule);
@@ -754,6 +764,10 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 String heure = (String)Ggrille.getValueAt(10, i);
                 String role = (String)Ggrille.getValueAt(k, 0);
                 String nomVolontaire = (String)Ggrille.getValueAt(k, i);
+                String lettre = null;
+                if(nomVolontaire != null && !nomVolontaire.isEmpty()){
+                    lettre = nomVolontaire.substring(nomVolontaire.length()-2, nomVolontaire.length()-1);
+                }
                 CelluleGrille cellule = new CelluleGrille();
                 cellule.setJour(jour);
                 String[] splitHeure = heure.split(" - ");
@@ -764,6 +778,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 cellule.setDateString(date);
                 cellule.setRole(role);
                 cellule.setNomPrenom(nomVolontaire);
+                cellule.setDetail(lettre);
                 cellule.setRow(k);
                 cellule.setColumn(i);
                 grille.addCellule(k, i, cellule);
@@ -777,6 +792,10 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 String heure = (String)Ggrille.getValueAt(14, i);
                 String role = (String)Ggrille.getValueAt(k, 0);
                 String nomVolontaire = (String)Ggrille.getValueAt(k, i);
+                String lettre = null;
+                if(nomVolontaire != null && !nomVolontaire.isEmpty()){
+                    lettre = nomVolontaire.substring(nomVolontaire.length()-2, nomVolontaire.length()-1);
+                }
                 CelluleGrille cellule = new CelluleGrille();
                 cellule.setJour(jour);
                 String[] splitHeure = heure.split(" - ");
@@ -787,6 +806,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
                 cellule.setDateString(date);
                 cellule.setRole(role);
                 cellule.setNomPrenom(nomVolontaire);
+                cellule.setDetail(lettre);
                 cellule.setRow(k);
                 cellule.setColumn(i);
                 grille.addCellule(k, i, cellule);
@@ -830,7 +850,7 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
         } catch (Exception ex) {
             Logger.getLogger(M_NewEditGrilleHoraire.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if(Gvehicule.getItemCount() == 0){
+        if(Gvehicule.getItemCount() == 0 && !type.equals("edit")){
             cacher(false);
         }
     }
@@ -995,13 +1015,22 @@ public class M_NewEditGrilleHoraire extends javax.swing.JPanel {
     }
 
     private boolean champAssignable(int row, int column) {
-        if(column == 0 || column <= 2){
+        if(column == 0 || row <= 2){
             return false;
         }
         if(row == 6 || row == 10 || row == 14){
             return false;
         }
-        if(Ggrille.getValueAt(row, column) != null){
+        Object valueAt = Ggrille.getValueAt(row, column);
+        String value = null;
+        if(valueAt != null){
+            if(valueAt.toString().isEmpty()){
+                value = null;
+            }else{
+                value = valueAt.toString();
+            }
+        }
+        if(value != null){
             return false;
         }
 

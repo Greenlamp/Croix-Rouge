@@ -4,14 +4,22 @@
  */
 package GUI.Panels.Recherche;
 
+import Containers.CelluleGrille;
 import Containers.Grille;
+import Containers.Key;
 import GUI.Panels.Main;
 import Helpers.SwingUtils;
 import SSL.NetworkClientSSL;
 import my.cr.PacketCom.PacketCom;
 import States.States;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import my.LibCritereAndroid.Recherche.Critere;
 import my.LibCritereAndroid.Recherche.TupleRecherche;
 
@@ -28,12 +36,14 @@ public class M_SearchCrit extends javax.swing.JPanel {
     NetworkClientSSL socket = null;
     LinkedList<TupleRecherche> listeVolontaire = null;
     LinkedList<Critere> listeCriteres = null;
+    String type = "grille";
     int cpt = 0;
     public M_SearchCrit(Main parent, NetworkClientSSL socket) {
         initComponents();
         this.socket = socket;
         this.parent = parent;
-        listeCriteres = new LinkedList<>();
+        comboAnnee();
+        listeCriteres = new LinkedList<Critere>();
         getListeFormation();
     }
 
@@ -48,6 +58,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
+        buttonGroup3 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         Baccueil = new javax.swing.JButton();
@@ -59,11 +70,23 @@ public class M_SearchCrit extends javax.swing.JPanel {
         Bretirer = new javax.swing.JButton();
         Bvider = new javax.swing.JButton();
         Brechercher = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         Gresultat = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        Go = new javax.swing.JRadioButton();
+        Gi = new javax.swing.JRadioButton();
+        Ge = new javax.swing.JRadioButton();
+        Gt = new javax.swing.JRadioButton();
+        Gm = new javax.swing.JRadioButton();
+        Glundi = new javax.swing.JCheckBox();
+        Gmardi = new javax.swing.JCheckBox();
+        Gmercredi = new javax.swing.JCheckBox();
+        Gjeudi = new javax.swing.JCheckBox();
+        Gvendredi = new javax.swing.JCheckBox();
+        Gsamedi = new javax.swing.JCheckBox();
+        Gdimanche = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         GdotNom = new javax.swing.JRadioButton();
@@ -71,7 +94,6 @@ public class M_SearchCrit extends javax.swing.JPanel {
         GdotPrenom = new javax.swing.JRadioButton();
         Gprenom = new javax.swing.JTextField();
         GdotDateNaissance = new javax.swing.JRadioButton();
-        GdateNaissance = new javax.swing.JTextField();
         GdotFormation = new javax.swing.JRadioButton();
         Bajouter = new javax.swing.JButton();
         Gformation = new javax.swing.JComboBox();
@@ -81,8 +103,13 @@ public class M_SearchCrit extends javax.swing.JPanel {
         jCheckBox4 = new javax.swing.JCheckBox();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jTextField1 = new javax.swing.JTextField();
+        GdotCp = new javax.swing.JRadioButton();
+        GcodePostal = new javax.swing.JTextField();
+        Gannee = new javax.swing.JComboBox();
+        jLabel8 = new javax.swing.JLabel();
+        Gmois = new javax.swing.JComboBox();
+        jLabel7 = new javax.swing.JLabel();
+        Gjour = new javax.swing.JComboBox();
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -158,6 +185,14 @@ public class M_SearchCrit extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton1.setText("Changer Paramètres");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -168,10 +203,11 @@ public class M_SearchCrit extends javax.swing.JPanel {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
                     .addComponent(Bretirer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Bvider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Brechercher, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(Brechercher, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -180,7 +216,9 @@ public class M_SearchCrit extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Bretirer)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -202,15 +240,62 @@ public class M_SearchCrit extends javax.swing.JPanel {
             new String [] {
                 "Nom", "Prénom"
             }
-        ));
-        jScrollPane3.setViewportView(Gresultat);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
 
-        jButton1.setText("Sélectionner");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
+        Gresultat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                GresultatMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(Gresultat);
+
+        Go.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup3.add(Go);
+        Go.setText("Observation(o)");
+
+        Gi.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup3.add(Gi);
+        Gi.setText("Intégration(i)");
+
+        Ge.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup3.add(Ge);
+        Ge.setText("Epamu(e)");
+
+        Gt.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup3.add(Gt);
+        Gt.setText("Tms(t)");
+
+        Gm.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup3.add(Gm);
+        Gm.setText("Militaire(m)");
+
+        Glundi.setBackground(new java.awt.Color(153, 153, 153));
+        Glundi.setText("Lundi");
+
+        Gmardi.setBackground(new java.awt.Color(153, 153, 153));
+        Gmardi.setText("Mardi");
+
+        Gmercredi.setBackground(new java.awt.Color(153, 153, 153));
+        Gmercredi.setText("Mercredi");
+
+        Gjeudi.setBackground(new java.awt.Color(153, 153, 153));
+        Gjeudi.setText("Jeudi");
+
+        Gvendredi.setBackground(new java.awt.Color(153, 153, 153));
+        Gvendredi.setText("Vendredi");
+
+        Gsamedi.setBackground(new java.awt.Color(153, 153, 153));
+        Gsamedi.setText("Samedi");
+
+        Gdimanche.setBackground(new java.awt.Color(153, 153, 153));
+        Gdimanche.setText("Dimanche");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -221,20 +306,58 @@ public class M_SearchCrit extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(Glundi)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gmardi)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gmercredi)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gjeudi)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gvendredi)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gsamedi)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gdimanche))
+                            .addComponent(jLabel4)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(Go)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gi)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Ge)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gt)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gm)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Go)
+                    .addComponent(Gi)
+                    .addComponent(Ge)
+                    .addComponent(Gt)
+                    .addComponent(Gm))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Glundi)
+                    .addComponent(Gmardi)
+                    .addComponent(Gmercredi)
+                    .addComponent(Gjeudi)
+                    .addComponent(Gvendredi)
+                    .addComponent(Gsamedi)
+                    .addComponent(Gdimanche))
+                .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -247,9 +370,21 @@ public class M_SearchCrit extends javax.swing.JPanel {
         buttonGroup1.add(GdotNom);
         GdotNom.setText("Selon le nom");
 
+        Gnom.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                GnomMouseClicked(evt);
+            }
+        });
+
         GdotPrenom.setBackground(new java.awt.Color(153, 153, 153));
         buttonGroup1.add(GdotPrenom);
         GdotPrenom.setText("Selon le prénom");
+
+        Gprenom.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                GprenomMouseClicked(evt);
+            }
+        });
 
         GdotDateNaissance.setBackground(new java.awt.Color(153, 153, 153));
         buttonGroup1.add(GdotDateNaissance);
@@ -263,6 +398,12 @@ public class M_SearchCrit extends javax.swing.JPanel {
         Bajouter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BajouterActionPerformed(evt);
+            }
+        });
+
+        Gformation.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                GformationMouseClicked(evt);
             }
         });
 
@@ -286,9 +427,28 @@ public class M_SearchCrit extends javax.swing.JPanel {
         buttonGroup2.add(jRadioButton2);
         jRadioButton2.setText("Permanent");
 
-        jRadioButton3.setBackground(new java.awt.Color(153, 153, 153));
-        buttonGroup1.add(jRadioButton3);
-        jRadioButton3.setText("Selon le code postal");
+        GdotCp.setBackground(new java.awt.Color(153, 153, 153));
+        buttonGroup1.add(GdotCp);
+        GdotCp.setText("Selon le code postal");
+
+        GcodePostal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                GcodePostalMouseClicked(evt);
+            }
+        });
+
+        jLabel8.setText("/");
+
+        Gmois.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+
+        jLabel7.setText("/");
+
+        Gjour.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        Gjour.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                GjourMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -299,12 +459,12 @@ public class M_SearchCrit extends javax.swing.JPanel {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Gnom)
                     .addComponent(Gprenom)
-                    .addComponent(GdateNaissance)
                     .addComponent(Bajouter, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
                     .addComponent(Gformation, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(GcodePostal)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jRadioButton3)
+                            .addComponent(GdotCp)
                             .addComponent(GdotFormation)
                             .addComponent(GdotDateNaissance)
                             .addComponent(GdotNom)
@@ -321,9 +481,18 @@ public class M_SearchCrit extends javax.swing.JPanel {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jRadioButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton2)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jTextField1))
+                                .addComponent(jRadioButton2))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(Gjour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Gmois, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Gannee, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -342,7 +511,12 @@ public class M_SearchCrit extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(GdotDateNaissance)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(GdateNaissance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Gjour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(Gmois, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(Gannee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(GdotFormation)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -360,10 +534,10 @@ public class M_SearchCrit extends javax.swing.JPanel {
                     .addComponent(jRadioButton1)
                     .addComponent(jRadioButton2))
                 .addGap(18, 18, 18)
-                .addComponent(jRadioButton3)
+                .addComponent(GdotCp)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(GcodePostal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE)
                 .addComponent(Bajouter)
                 .addContainerGap())
         );
@@ -407,6 +581,8 @@ public class M_SearchCrit extends javax.swing.JPanel {
             AjouterCritereDateNaissance();
         }else if(GdotFormation.isSelected()){
             AjouterCritereFormation();
+        }else if(GdotCp.isSelected()){
+            AjouterCritereCodePostal();
         }
     }//GEN-LAST:event_BajouterActionPerformed
 
@@ -440,7 +616,15 @@ public class M_SearchCrit extends javax.swing.JPanel {
     }//GEN-LAST:event_BviderActionPerformed
 
     private void BrechercherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BrechercherActionPerformed
-        PacketCom packet = new PacketCom(States.RECHERCHE, (Object)listeCriteres);
+        if(listeCriteres.size() == 0){
+            return;
+        }
+        PacketCom packet = null;
+        if(type.equals("grille")){
+            LinkedList<Object[]> dates = getDates();
+            Object[] data = {listeCriteres, dates};
+            packet = new PacketCom(States.RECHERCHE, (Object)data);
+        }
         socket.send(packet);
         try {
             PacketCom packetReponse = socket.receive();
@@ -456,29 +640,6 @@ public class M_SearchCrit extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_BrechercherActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int[] selectedRows = Gresultat.getSelectedRows();
-        if(selectedRows.length == 1){
-            String nom = null;
-            int row = parent.getCelluleRow();
-            int column = parent.getCelluleColumn();
-            Grille grille = parent.getGrille();
-            for(int indice : selectedRows){
-                nom = Gresultat.getValueAt(indice, 0).toString() + " " + Gresultat.getValueAt(indice, 1).toString();
-            }
-            grille.setNom(row, column, nom);
-            parent.setGrille(grille);
-        }
-        /*LinkedList<TupleRecherche> listeResultatSelectionne = new LinkedList<>();
-        for(int indice : selectedRows){
-            String nom = Gresultat.getValueAt(indice, 0).toString();
-            String prenom = Gresultat.getValueAt(indice, 1).toString();
-            listeResultatSelectionne.add(new TupleRecherche(nom, prenom));
-        }
-        parent.setListeVolontaire(listeResultatSelectionne);*/
-        parent.changeState(Main.EDITNEWGRILLLE);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void BaccueilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BaccueilActionPerformed
         parent.changeState(Main.LOGGED);
     }//GEN-LAST:event_BaccueilActionPerformed
@@ -489,24 +650,79 @@ public class M_SearchCrit extends javax.swing.JPanel {
         parent.changeState(Main.EDITNEWGRILLLE);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void GresultatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GresultatMouseClicked
+        if(evt.getClickCount() == 2){
+            String lettre = getLettre();
+            int row = Gresultat.getSelectedRow();
+            String nom = Gresultat.getValueAt(row, 0).toString() + " " + Gresultat.getValueAt(row, 1).toString() + " (" + lettre + ")";
+            int rowGrille = parent.getCelluleRow();
+            int columnGrille = parent.getCelluleColumn();
+            Grille grille = parent.getGrille();
+            attribuerVolontaire(grille, rowGrille, columnGrille, nom);
+            parent.setGrille(grille);
+            parent.changeState(Main.EDITNEWGRILLLE);
+        }
+    }//GEN-LAST:event_GresultatMouseClicked
+
+    private void GnomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GnomMouseClicked
+        GdotNom.setSelected(true);
+    }//GEN-LAST:event_GnomMouseClicked
+
+    private void GprenomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GprenomMouseClicked
+        GdotPrenom.setSelected(true);
+    }//GEN-LAST:event_GprenomMouseClicked
+
+    private void GcodePostalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GcodePostalMouseClicked
+        GdotCp.setSelected(true);
+    }//GEN-LAST:event_GcodePostalMouseClicked
+
+    private void GjourMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GjourMouseClicked
+        GdotDateNaissance.setSelected(true);
+    }//GEN-LAST:event_GjourMouseClicked
+
+    private void GformationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GformationMouseClicked
+        GdotFormation.setSelected(true);
+    }//GEN-LAST:event_GformationMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        enableJours(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Baccueil;
     private javax.swing.JButton Bajouter;
     private javax.swing.JButton Brechercher;
     private javax.swing.JButton Bretirer;
     private javax.swing.JButton Bvider;
-    private javax.swing.JTextField GdateNaissance;
+    private javax.swing.JComboBox Gannee;
+    private javax.swing.JTextField GcodePostal;
+    private javax.swing.JCheckBox Gdimanche;
+    private javax.swing.JRadioButton GdotCp;
     private javax.swing.JRadioButton GdotDateNaissance;
     private javax.swing.JRadioButton GdotFormation;
     private javax.swing.JRadioButton GdotNom;
     private javax.swing.JRadioButton GdotPrenom;
+    private javax.swing.JRadioButton Ge;
     private javax.swing.JComboBox Gformation;
+    private javax.swing.JRadioButton Gi;
+    private javax.swing.JCheckBox Gjeudi;
+    private javax.swing.JComboBox Gjour;
     private javax.swing.JList GlisteCriteres;
+    private javax.swing.JCheckBox Glundi;
+    private javax.swing.JRadioButton Gm;
+    private javax.swing.JCheckBox Gmardi;
+    private javax.swing.JCheckBox Gmercredi;
+    private javax.swing.JComboBox Gmois;
     private javax.swing.JTextField Gnom;
+    private javax.swing.JRadioButton Go;
     private javax.swing.JTextField Gprenom;
     private javax.swing.JTable Gresultat;
+    private javax.swing.JCheckBox Gsamedi;
+    private javax.swing.JRadioButton Gt;
+    private javax.swing.JCheckBox Gvendredi;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
@@ -517,16 +733,16 @@ public class M_SearchCrit extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
     private void AjouterCritereNom() {
@@ -546,14 +762,25 @@ public class M_SearchCrit extends javax.swing.JPanel {
     }
 
     private void AjouterCritereDateNaissance() {
-        String dateNaissance = GdateNaissance.getText();
-        cpt++;
-        String mot = "-"+cpt+"- Date de naissance -> " + dateNaissance;
-        SwingUtils.addToList(GlisteCriteres, mot);
-        listeCriteres.add(new Critere(cpt, "dateNaissance", dateNaissance));
+        String jour = Gjour.getSelectedItem().toString();
+        String mois = Gmois.getSelectedItem().toString();
+        String annee = Gannee.getSelectedItem().toString();
+        String dateNaissance = jour + "/" + mois + "/" + annee;
+        if(EasyDate.EasyDate.isValidDate(dateNaissance, null)){
+            cpt++;
+            String mot = "-"+cpt+"- Date de naissance -> " + dateNaissance;
+            SwingUtils.addToList(GlisteCriteres, mot);
+            listeCriteres.add(new Critere(cpt, "dateNaissance", dateNaissance));
+        }else{
+            parent.afficherMessage("date invalide");
+        }
     }
 
     private void AjouterCritereFormation() {
+        if(Gformation.getItemCount() == 0){
+            parent.afficherMessage("Aucunes formations disponibles");
+            return;
+        }
         String formation = Gformation.getSelectedItem().toString();
         cpt++;
         String mot = "-" + cpt + "- Formation -> " + formation;
@@ -561,7 +788,24 @@ public class M_SearchCrit extends javax.swing.JPanel {
         listeCriteres.add(new Critere(cpt, "formation", formation));
     }
 
+    private void AjouterCritereCodePostal() {
+        String codePostal = GcodePostal.getText();
+        if(codePostal != null && !codePostal.isEmpty()){
+            try{
+                Integer.parseInt(codePostal);
+            }catch(Exception ex){
+                parent.afficherMessage("code postal invalide");
+                return;
+            }
+        }
+        cpt++;
+        String mot = "-" + cpt + "- Code Postal -> " + codePostal;
+        SwingUtils.addToList(GlisteCriteres, mot);
+        listeCriteres.add(new Critere(cpt, "codePostal", codePostal));
+    }
+
     private void TraitementResultat(LinkedList<TupleRecherche> listeResultat) {
+        listeResultat = retraitVolontaireDejaAttribute(listeResultat);
         SwingUtils.emptyTable(Gresultat);
         for(TupleRecherche tuple : listeResultat){
             Vector vector = new Vector();
@@ -569,6 +813,7 @@ public class M_SearchCrit extends javax.swing.JPanel {
             vector.add(tuple.getPrenom());
             SwingUtils.addToTable(Gresultat, vector);
         }
+        enableJours(false);
     }
 
     private void getListeFormation() {
@@ -588,5 +833,336 @@ public class M_SearchCrit extends javax.swing.JPanel {
         } catch (Exception ex) {
             //Logger.getLogger(Wizard_Nouveau.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private String getLettre() {
+        if(Go.isSelected()){
+            return "o";
+        }else if(Gi.isSelected()){
+            return "i";
+        }else if(Ge.isSelected()){
+            return "e";
+        }else if(Gt.isSelected()){
+            return "t";
+        }else if(Gm.isSelected()){
+            return "m";
+        }else{
+            return "*";
+        }
+    }
+
+    private void attribuerVolontaire(Grille grille, int rowGrille, int columnGrille, String nom) {
+        LinkedList<Integer> columnsJour = new LinkedList<Integer>();
+        columnsJour.add(columnGrille);
+        if(Glundi.isSelected()){
+            if(!columnsJour.contains(1)){
+                columnsJour.add(1);
+            }
+        }
+        if(Gmardi.isSelected()){
+            if(!columnsJour.contains(2)){
+                columnsJour.add(2);
+            }
+        }
+        if(Gmercredi.isSelected()){
+            if(!columnsJour.contains(3)){
+                columnsJour.add(3);
+            }
+        }
+        if(Gjeudi.isSelected()){
+            if(!columnsJour.contains(4)){
+                columnsJour.add(4);
+            }
+        }
+        if(Gvendredi.isSelected()){
+            if(!columnsJour.contains(5)){
+                columnsJour.add(5);
+            }
+        }
+        if(Gsamedi.isSelected()){
+            if(!columnsJour.contains(6)){
+                columnsJour.add(6);
+            }
+        }
+        if(Gdimanche.isSelected()){
+            if(!columnsJour.contains(7)){
+                columnsJour.add(7);
+            }
+        }
+        for(int columnJour : columnsJour){
+            CelluleGrille cellule = grille.getValueAt(rowGrille, columnJour);
+            if(cellule.getNomPrenom() == null || cellule.getNomPrenom().isEmpty()){
+                grille.setNom(rowGrille, columnJour, nom);
+            }
+        }
+    }
+
+    private void comboAnnee() {
+        String annéeToday = new SimpleDateFormat("yyyy").format(new Date());
+        int année = Integer.parseInt(annéeToday);
+        for(int i=année; i>=1920; i--){
+            Gannee.addItem(i);
+        }
+    }
+
+    private LinkedList<Object[]> getDates() {
+        LinkedList<Object[]> dates = new LinkedList<Object[]>();
+        LinkedList<Integer> columnsJour = new LinkedList<Integer>();
+        int columnGrille = parent.getCelluleColumn();
+
+        columnsJour.add(columnGrille);
+        if(Glundi.isSelected()){
+            if(!columnsJour.contains(1)){
+                columnsJour.add(1);
+            }
+        }
+        if(Gmardi.isSelected()){
+            if(!columnsJour.contains(2)){
+                columnsJour.add(2);
+            }
+        }
+        if(Gmercredi.isSelected()){
+            if(!columnsJour.contains(3)){
+                columnsJour.add(3);
+            }
+        }
+        if(Gjeudi.isSelected()){
+            if(!columnsJour.contains(4)){
+                columnsJour.add(4);
+            }
+        }
+        if(Gvendredi.isSelected()){
+            if(!columnsJour.contains(5)){
+                columnsJour.add(5);
+            }
+        }
+        if(Gsamedi.isSelected()){
+            if(!columnsJour.contains(6)){
+                columnsJour.add(6);
+            }
+        }
+        if(Gdimanche.isSelected()){
+            if(!columnsJour.contains(7)){
+                columnsJour.add(7);
+            }
+        }
+
+        CelluleGrille cellule = parent.getGrille().getValueAt(parent.getCelluleRow(), parent.getCelluleColumn());
+        GregorianCalendar gc = new GregorianCalendar();
+        int annee = parent.getGrille().getAnnee();
+        int semaine = parent.getGrille().getSemaine();
+        gc.set(GregorianCalendar.YEAR, annee);
+        gc.set(GregorianCalendar.WEEK_OF_YEAR, semaine);
+        for(int numJour : columnsJour){
+            gc.set(GregorianCalendar.DAY_OF_WEEK, numJour+1);
+            Date foundDate = gc.getTime();
+            Date heureDebut = cellule.getHeureDebut();
+            Date heureFin = cellule.getHeureFin();
+            dates.add(new Object[] {foundDate, heureDebut, heureFin});
+        }
+        return dates;
+    }
+
+    private LinkedList<TupleRecherche> retraitVolontaireDejaAttribute(LinkedList<TupleRecherche> listeResultat) {
+        LinkedList<TupleRecherche> copie = new LinkedList<TupleRecherche>();
+        CelluleGrille elmSelected = parent.getGrille().getValueAt(parent.getCelluleRow(), parent.getCelluleColumn());
+        copie.addAll(listeResultat);
+
+        for(Key key : parent.getGrille().getGrilles()){
+            CelluleGrille cellule = key.getValue();
+            Date date = cellule.getDate();
+            Date heureDebut = cellule.getHeureDebut();
+            Date heureFin = cellule.getHeureFin();
+            String nomPrenom = cellule.getNomPrenom();
+            if(nomPrenom != null && !nomPrenom.isEmpty()){
+                String[] split = nomPrenom.split(" ");
+                String nom = split[0];
+                String prenom = split[1];
+                String jour = cellule.getJour();
+
+                boolean found = false;
+                if(jour.equals(elmSelected.getJour())){
+                    if(heureDebut.equals(elmSelected.getHeureDebut()) && heureFin.equals(elmSelected.getHeureFin())){
+                        if(!found){
+                            int i=0;
+                            for(TupleRecherche elm : copie){
+                                if(elm.getNom().equals(nom) && elm.getPrenom().equals(prenom)){
+                                    found = true;
+                                    copie.remove(i);
+                                    break;
+                                }
+                                i++;
+                            }
+                        }
+                    }
+                }
+
+
+                found = false;
+                if(Glundi.isSelected()){
+                    if(jour.equals(Glundi.getText().toUpperCase())){
+                        if(heureDebut.equals(elmSelected.getHeureDebut()) && heureFin.equals(elmSelected.getHeureFin())){
+                            if(!found){
+                                int i=0;
+                                for(TupleRecherche elm : copie){
+                                    if(elm.getNom().equals(nom) && elm.getPrenom().equals(prenom)){
+                                        found = true;
+                                        copie.remove(i);
+                                        break;
+                                    }
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+                found = false;
+                if(Gmardi.isSelected()){
+                    if(jour.equals(Gmardi.getText().toUpperCase())){
+                        if(heureDebut.equals(elmSelected.getHeureDebut()) && heureFin.equals(elmSelected.getHeureFin())){
+                            if(!found){
+                                int i=0;
+                                for(TupleRecherche elm : copie){
+                                    if(elm.getNom().equals(nom) && elm.getPrenom().equals(prenom)){
+                                        found = true;
+                                        copie.remove(i);
+                                        break;
+                                    }
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+                found = false;
+                if(Gmercredi.isSelected()){
+                    if(jour.equals(Gmercredi.getText().toUpperCase())){
+                        if(heureDebut.equals(elmSelected.getHeureDebut()) && heureFin.equals(elmSelected.getHeureFin())){
+                            if(!found){
+                                int i=0;
+                                for(TupleRecherche elm : copie){
+                                    if(elm.getNom().equals(nom) && elm.getPrenom().equals(prenom)){
+                                        found = true;
+                                        copie.remove(i);
+                                        break;
+                                    }
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+                found = false;
+                if(Gjeudi.isSelected()){
+                    if(jour.equals(Gjeudi.getText().toUpperCase())){
+                        if(heureDebut.equals(elmSelected.getHeureDebut()) && heureFin.equals(elmSelected.getHeureFin())){
+                            if(!found){
+                                int i=0;
+                                for(TupleRecherche elm : copie){
+                                    if(elm.getNom().equals(nom) && elm.getPrenom().equals(prenom)){
+                                        found = true;
+                                        copie.remove(i);
+                                        break;
+                                    }
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+                found = false;
+                if(Gvendredi.isSelected()){
+                    if(jour.equals(Gvendredi.getText().toUpperCase())){
+                        if(heureDebut.equals(elmSelected.getHeureDebut()) && heureFin.equals(elmSelected.getHeureFin())){
+                            if(!found){
+                                int i=0;
+                                for(TupleRecherche elm : copie){
+                                    if(elm.getNom().equals(nom) && elm.getPrenom().equals(prenom)){
+                                        found = true;
+                                        copie.remove(i);
+                                        break;
+                                    }
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+                found = false;
+                if(Gsamedi.isSelected()){
+                    if(jour.equals(Gsamedi.getText().toUpperCase())){
+                        if(heureDebut.equals(elmSelected.getHeureDebut()) && heureFin.equals(elmSelected.getHeureFin())){
+                            if(!found){
+                                int i=0;
+                                for(TupleRecherche elm : copie){
+                                    if(elm.getNom().equals(nom) && elm.getPrenom().equals(prenom)){
+                                        found = true;
+                                        copie.remove(i);
+                                        break;
+                                    }
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+                found = false;
+                if(Gdimanche.isSelected()){
+                    if(jour.equals(Gdimanche.getText().toUpperCase())){
+                        if(heureDebut.equals(elmSelected.getHeureDebut()) && heureFin.equals(elmSelected.getHeureFin())){
+                            if(!found){
+                                int i=0;
+                                for(TupleRecherche elm : copie){
+                                    if(elm.getNom().equals(nom) && elm.getPrenom().equals(prenom)){
+                                        found = true;
+                                        copie.remove(i);
+                                        break;
+                                    }
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return copie;
+    }
+
+    private void enableJours(boolean value) {
+        if(value == true){
+            SwingUtils.emptyTable(Gresultat);
+        }
+        Glundi.setEnabled(value);
+        Gmardi.setEnabled(value);
+        Gmercredi.setEnabled(value);
+        Gjeudi.setEnabled(value);
+        Gvendredi.setEnabled(value);
+        Gsamedi.setEnabled(value);
+        Gdimanche.setEnabled(value);
+
+        Brechercher.setEnabled(value);
+        Bvider.setEnabled(value);
+        Bretirer.setEnabled(value);
+        Bajouter.setEnabled(value);
     }
 }

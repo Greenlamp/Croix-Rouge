@@ -148,5 +148,6 @@ public class Parametres {
             }
             i++;
         }
+        //System.out.println(ps.toString());
     }
 }
