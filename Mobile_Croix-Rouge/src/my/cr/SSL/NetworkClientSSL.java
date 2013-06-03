@@ -3,27 +3,21 @@
  * and open the template in the editor.
  */
 
-package SSL;
+package my.cr.SSL;
 
-import FileAccess.FileAccess;
-import Protocole.ProtocoleClient;
-import java.io.File;
-import java.io.FileInputStream;
+import android.app.Activity;
+import android.util.Log;
+import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Security;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateExpiredException;
-import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,21 +27,28 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 import my.cr.PacketCom.PacketCom;
+import my.cr.activite.Menu;
+import my.cr.activite.R;
+import my.cr.protocole.ProtocoleClient;
 import my.lib.ContainerSSL.SSLContainer;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 
-public class NetworkClientSSL {
+public class NetworkClientSSL implements Serializable {
     private SSLSocket socket;
     ProtocoleClient protocole;
     private String host;
     private int port;
     SSLContainer sslContainer;
+    Activity parent;
+    int ks;
 
     /**************************************************************************/
     /*Constructeurs*/
     /**************************************************************************/
-    public NetworkClientSSL(String host, int port, boolean toConnect){
+    public NetworkClientSSL(String host, int port, boolean toConnect, Activity parent, int ks){
+        this.parent = parent;
+        this.ks = ks;
         this.sslContainer = getDataSSL();
         protocole = new ProtocoleClient();
         try {
@@ -60,7 +61,14 @@ public class NetworkClientSSL {
             }
         } catch (Exception ex) {
             Logger.getLogger(NetworkClientSSL.class.getName()).log(Level.SEVERE, null, ex);
+            Toast.makeText(parent, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    public NetworkClientSSL(Activity parent, SSLSocket sslSocket) {
+        protocole = new ProtocoleClient();
+        this.parent = parent;
+        this.socket = sslSocket;
     }
 
     public void connect(){
@@ -73,7 +81,7 @@ public class NetworkClientSSL {
     }
 
     public boolean isConnected(){
-        if(socket != null){
+        if(getSocket() != null){
             return true;
         }else{
             return false;
@@ -83,7 +91,7 @@ public class NetworkClientSSL {
     public void disconnect(){
         if(this.isConnected()){
             try {
-                socket.close();
+                getSocket().close();
                 socket = null;
                 System.out.println("Déconnection réussie");
             } catch (IOException ex) {
@@ -98,7 +106,7 @@ public class NetworkClientSSL {
     public void send(PacketCom packet){
         if(this.isConnected()){
             try {
-                OutputStream os = this.socket.getOutputStream();
+                OutputStream os = this.getSocket().getOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(os);
                 oos.writeObject((Object)packet);
             } catch (IOException ex) {
@@ -111,7 +119,7 @@ public class NetworkClientSSL {
 
     public PacketCom receive() throws Exception{
         try{
-            InputStream is = this.socket.getInputStream();
+            InputStream is = this.getSocket().getInputStream();
             ObjectInputStream ois = new ObjectInputStream(is);
             Object objet = (Object)ois.readObject();
             PacketCom MessageFromServer = protocole.messageFromServer(objet);
@@ -126,12 +134,12 @@ public class NetworkClientSSL {
         BouncyCastleProvider bc = new BouncyCastleProvider();
         Security.addProvider(bc);
         SSLContext SslC = null;
-        SslC = SSLContext.getInstance("SSLv3");
+        SslC = SSLContext.getInstance("TLS");
         KeyManagerFactory kmf = null;
-        kmf = KeyManagerFactory.getInstance("SunX509");
+        kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         kmf.init(sslContainer.getKeystoreServer(), sslContainer.getPass().toCharArray());
         TrustManagerFactory tmf = null;
-        tmf = TrustManagerFactory.getInstance("SunX509");
+        tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         tmf.init(sslContainer.getKeystoreServer());
         SslC.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
         SSLSocketFactory SslSFac = SslC.getSocketFactory();
@@ -139,9 +147,16 @@ public class NetworkClientSSL {
     }
 
     private SSLContainer getDataSSL() {
-        String path_keystore_client = FileAccess.getConfig("configs", "KS_CLIENT");
-        String pass_keystore_client = FileAccess.getConfig("configs", "PASS");
-        File path = FileAccess.getFile(path_keystore_client);
+        String sep = System.getProperty("file.separator");
+        String path = System.getProperty("user.dir") + sep + "my.cr.ks" + sep + "KS_CR_Client.jks";
+
+        String pass_keystore_client = "CroixR";
+        InputStream is = parent.getResources().openRawResource(ks);
+        try {
+            Log.e("myLog:", " is.available(): " + is.available());
+        } catch (IOException ex) {
+            Logger.getLogger(NetworkClientSSL.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
 
         KeyStore ks = null;
@@ -150,9 +165,10 @@ public class NetworkClientSSL {
         SSLContainer sslContainer = null;
 
         try {
-            ks = KeyStore.getInstance("JKS");
+            ks = KeyStore.getInstance(KeyStore.getDefaultType());
 
-            ks.load(new FileInputStream(path), pass_keystore_client.toCharArray());
+            ks.load(is, pass_keystore_client.toCharArray());
+
             certificat = (X509Certificate)ks.getCertificate("client");
             certificat.checkValidity();
 
@@ -163,24 +179,14 @@ public class NetworkClientSSL {
             sslContainer.setCertificatServer(certificat);
             sslContainer.setPrivateKey(privateKey);
             sslContainer.setPass(pass_keystore_client);
-
-
-        } catch (KeyStoreException ex) {
-            Logger.getLogger(NetworkClientSSL.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(NetworkClientSSL.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnrecoverableKeyException ex) {
-            Logger.getLogger(NetworkClientSSL.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CertificateExpiredException ex) {
-            Logger.getLogger(NetworkClientSSL.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CertificateNotYetValidException ex) {
-            Logger.getLogger(NetworkClientSSL.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(NetworkClientSSL.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CertificateException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(NetworkClientSSL.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return sslContainer;
+    }
+
+    public SSLSocket getSocket() {
+        return socket;
     }
 }

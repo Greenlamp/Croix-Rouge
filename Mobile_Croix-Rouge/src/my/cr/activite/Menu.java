@@ -7,11 +7,14 @@ package my.cr.activite;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.cr.SSL.NetworkClientSSL;
+import my.cr.lib.MyApplication;
 
 /**
  *
@@ -25,13 +28,16 @@ public class Menu extends ListActivity {
     String[] items = {"Consulter", "Recherche"};
     String login;
     String password;
+    NetworkClientSSL socket;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         Bundle b = getIntent().getExtras();
-        login = b.getString("login");
-        password = b.getString("password");
+        MyApplication global = (MyApplication)getApplication();
+        socket = global.getSocket();
+        Log.e("mylog: ", "port: " + socket.getSocket().getPort());
+        Log.e("mylog: ", "connecté: " + socket.getSocket().isConnected());
         setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items));
     }
 

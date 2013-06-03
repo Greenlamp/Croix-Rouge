@@ -83,6 +83,10 @@ public interface States {
     public static String GET_EXP_BREVET = "GET_EXP_BREVET";
     public static String GET_HORAIRE_MISS = "GET_HORAIRE_MISS";
 
+    public static String GET_DETAILS_ANDROID = "GET_DETAILS_ANDROID";
+
+
+
 
 
 
@@ -236,4 +240,7 @@ public interface States {
 
     public static String GET_HORAIRE_MISS_OUI = "GET_HORAIRE_MISS_OUI";
     public static String GET_HORAIRE_MISS_NON = "GET_HORAIRE_MISS_NON";
+
+    public static String GET_DETAILS_ANDROID_OUI = "GET_DETAILS_ANDROID_OUI";
+    public static String GET_DETAILS_ANDROID_NON = "GET_DETAILS_ANDROID_NON";
 }

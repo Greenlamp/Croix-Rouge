@@ -3,7 +3,7 @@
       package="my.cr.activite"
       android:versionCode="1"
       android:versionName="1.0">
-    <application android:label="@string/app_name" >
+    <application android:label="@string/app_name" android:name="my.cr.lib.MyApplication">
 
         <activity android:name="Start"
                   android:label="@string/app_name">
@@ -57,6 +57,14 @@
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.AFFICHAGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="Detail"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.DETAIL" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

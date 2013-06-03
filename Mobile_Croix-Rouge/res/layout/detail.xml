@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+	android:id="@+id/widget320"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+<TextView
+	android:id="@+id/Gmatricule"
+	android:layout_width="320dp"
+	android:layout_height="wrap_content"
+	android:text="Matricule:"
+	android:textSize="16dp"
+	android:textColor="@color/white"
+	android:gravity="center"
+	android:layout_x="0dp"
+	android:layout_y="21dp" />
+<TextView
+	android:id="@+id/Gnom"
+	android:layout_width="320dp"
+	android:layout_height="wrap_content"
+	android:text="Nom:"
+	android:textSize="16dp"
+	android:textColor="@color/white"
+	android:gravity="center"
+	android:layout_x="0dp"
+	android:layout_y="42dp" />
+<TextView
+	android:id="@+id/Gprenom"
+	android:layout_width="320dp"
+	android:layout_height="wrap_content"
+	android:text="Prenom:"
+	android:textSize="16dp"
+	android:textColor="@color/white"
+	android:gravity="center"
+	android:layout_x="0dp"
+	android:layout_y="63dp" />
+<TextView
+	android:id="@+id/Gsexe"
+	android:layout_width="320dp"
+	android:layout_height="wrap_content"
+	android:text="Sexe"
+	android:textSize="16dp"
+	android:textColor="@color/white"
+	android:gravity="center"
+	android:layout_x="0dp"
+	android:layout_y="84dp" />
+<TextView
+	android:id="@+id/GdateNaissance"
+	android:layout_width="320dp"
+	android:layout_height="wrap_content"
+	android:text="Date de naissance:"
+	android:textSize="16dp"
+	android:textColor="@color/white"
+	android:gravity="center"
+	android:layout_x="0dp"
+	android:layout_y="105dp" />
+<TextView
+	android:id="@+id/Gadresse"
+	android:layout_width="320dp"
+	android:layout_height="wrap_content"
+	android:text="Adresse:"
+	android:textSize="16dp"
+	android:textColor="@color/white"
+	android:gravity="center"
+	android:layout_x="0dp"
+	android:layout_y="126dp" />
+<TextView
+	android:id="@+id/Gadresse2"
+	android:layout_width="320dp"
+	android:layout_height="wrap_content"
+	android:text="Adresse2:"
+	android:textSize="16sp"
+	android:textColor="@color/white"
+	android:gravity="center"
+	android:layout_x="0dp"
+	android:layout_y="147dp" />
+<TextView
+	android:id="@+id/Gemail"
+	android:layout_width="320dp"
+	android:layout_height="wrap_content"
+	android:text="Email:"
+	android:textSize="16dp"
+	android:textColor="@color/white"
+	android:gravity="center"
+	android:layout_x="0dp"
+	android:layout_y="168dp" />
+<TextView
+	android:id="@+id/Ggsm"
+	android:layout_width="320dp"
+	android:layout_height="wrap_content"
+	android:text="Gsm:"
+	android:textSize="16dp"
+	android:textColor="@color/white"
+	android:gravity="center"
+	android:layout_x="0dp"
+	android:layout_y="189dp" />
+</AbsoluteLayout>

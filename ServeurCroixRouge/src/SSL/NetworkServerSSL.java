@@ -5,7 +5,6 @@
 
 package SSL;
 
-import ContainerSSL.SSLContainer;
 import FileAccess.FileAccess;
 import Protocole.ProtocoleServeur;
 import java.io.File;
@@ -35,6 +34,7 @@ import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 import my.cr.PacketCom.PacketCom;
 import my.cr.PacketCom.Protocolable;
+import my.lib.ContainerSSL.SSLContainer;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 

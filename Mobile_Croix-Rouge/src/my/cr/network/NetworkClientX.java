@@ -19,7 +19,7 @@ import my.cr.PacketCom.PacketCom;
 import my.cr.protocole.ProtocoleClient;
 
 
-public class NetworkClient {
+public class NetworkClientX {
     private Socket socket;
     ProtocoleClient protocole;
     private String host;
@@ -28,7 +28,7 @@ public class NetworkClient {
     /**************************************************************************/
     /*Constructeurs*/
     /**************************************************************************/
-    public NetworkClient(String host, int port, boolean toConnect){
+    public NetworkClientX(String host, int port, boolean toConnect){
         protocole = new ProtocoleClient();
         try {
             if(toConnect){
@@ -39,11 +39,11 @@ public class NetworkClient {
                 this.port = port;
             }
         } catch (Exception ex) {
-            Logger.getLogger(NetworkClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NetworkClientX.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public NetworkClient(Socket socket){
+    public NetworkClientX(Socket socket){
         protocole = new ProtocoleClient();
         this.socket = socket;
     }
@@ -57,9 +57,9 @@ public class NetworkClient {
             InetAddress ip = InetAddress.getByName(this.host);
             socket = new Socket(ip, this.port);
         } catch (UnknownHostException ex) {
-            Logger.getLogger(NetworkClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NetworkClientX.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(NetworkClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NetworkClientX.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -78,7 +78,7 @@ public class NetworkClient {
                 socket = null;
                 System.out.println("Déconnection réussie");
             } catch (IOException ex) {
-                Logger.getLogger(NetworkClient.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(NetworkClientX.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -93,7 +93,7 @@ public class NetworkClient {
                 ObjectOutputStream oos = new ObjectOutputStream(os);
                 oos.writeObject((Object)packet);
             } catch (IOException ex) {
-                Logger.getLogger(NetworkClient.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(NetworkClientX.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else{
             System.out.println("Socket non connectée");

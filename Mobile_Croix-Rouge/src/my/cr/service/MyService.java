@@ -8,18 +8,19 @@ package my.cr.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import my.cr.network.NetworkClient;
+import my.cr.SSL.NetworkClientSSL;
+import my.cr.activite.R;
 
 
 public class MyService extends Service{
-    NetworkClient socket;
+    NetworkClientSSL socket;
     String host = "192.168.0.2";
     int port = 8500;
 
     @Override
     public void onCreate(){
         super.onCreate();
-        socket = new NetworkClient(host, port, true);
+        socket = new NetworkClientSSL(host, port, true, null, R.raw.ks3);
     }
 
     @Override

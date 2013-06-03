@@ -46,4 +46,23 @@
 	android:text="Connexion"
 	android:layout_x="12dp"
 	android:layout_y="191dp" />
+<TextView
+	android:id="@+id/Gerror"
+	android:layout_width="303dp"
+	android:layout_height="wrap_content"
+	android:visibility="invisible"
+	android:text="Erreur: Connexion &#233;chou&#233;e"
+	android:textSize="16sp"
+	android:textStyle="bold"
+	android:textColor="@color/red"
+	android:gravity="center"
+	android:layout_x="9dp"
+	android:layout_y="8dp" />
+<ProgressBar
+	android:id="@+id/Gloading"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:visibility="invisible"
+	android:layout_x="134dp"
+	android:layout_y="241dp" />
 </AbsoluteLayout>

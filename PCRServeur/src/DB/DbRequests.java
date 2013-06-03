@@ -1355,6 +1355,62 @@ public class DbRequests implements DBA{
         return volontaire;
     }
 
+    public String[] getVolontaireAndroid(String matricule) throws Exception{
+        Identite identite = getIdentite(matricule);
+        if(identite == null){
+            return null;
+        }
+        Adresse adresse = getAdresseLegale(matricule);
+        Telephone telephone = getTelephone(matricule);
+
+        String email = adresse.getEmail();
+
+        String gsm = null;
+        String aadresse = null;
+        String aadresse2 = null;
+
+        if(telephone == null){
+            gsm = "Pas de gsm";
+        }else{
+            gsm = telephone.getGsm();
+        }
+
+        if(email == null || email.isEmpty()){
+            email = "Pas d'email";
+        }
+
+        if(gsm == null || gsm.isEmpty()){
+            gsm = "Pas de gsm";
+        }
+
+        if(adresse == null){
+            aadresse = "Pas d'adresse";
+            aadresse2 = "";
+        }else{
+            if(adresse.getRue() != null && !adresse.getRue().isEmpty() && adresse.getNuméro() != null && !adresse.getNuméro().isEmpty() &&
+                    adresse.getCodePostal() != null && !adresse.getCodePostal().isEmpty() && adresse.getVille() != null && !adresse.getVille().isEmpty()){
+                aadresse = adresse.getRue() + " n°" + adresse.getNuméro();
+                aadresse2 = adresse.getCodePostal() + " " + adresse.getVille();
+            }else{
+                aadresse = "Pas d'adresse";
+            aadresse2 = "";
+            }
+        }
+
+        String[] retour = {
+            "Matricule: " +identite.getMatricule(),
+            "Nom: " +identite.getNom(),
+            "Prenom: " + identite.getPrenom(),
+            "Sexe: " + identite.getSexe() ,
+            "Date de naissance: " + EasyDate.getDateOnly(identite.getDateNaissance()),
+            aadresse,
+            aadresse2,
+            email,
+            gsm
+        };
+        return retour;
+    }
+
     public Identite getIdentite(String matricule) throws Exception{
         if(matricule == null){
             return null;
@@ -2859,6 +2915,9 @@ public class DbRequests implements DBA{
     }
 
     public LinkedList<TupleRecherche> checkDisponibiliteVolontaire(LinkedList<TupleRecherche> resultats, LinkedList<Object[]> dates) throws Exception{
+        if(dates == null){
+            return resultats;
+        }
         LinkedList<TupleRecherche> copie = new LinkedList<TupleRecherche>();
         copie.addAll(resultats);
         for(TupleRecherche elm : resultats){

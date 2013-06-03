@@ -14,7 +14,6 @@ import Containers.Vehicule;
 import Containers.Volontaire;
 import DB.DbRequests;
 import States.States;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
@@ -157,6 +156,8 @@ public class ProtocoleServeur implements Protocolable{
             return actionGetExpBrevet(type, contenu);
         }else if(type.equals(States.GET_HORAIRE_MISS)){
             return actionGetHoraireMiss(type, contenu);
+        }else if(type.equals(States.GET_DETAILS_ANDROID)){
+            return actionGetDetailsAndroid(type, contenu);
         }else{
             return new PacketCom(States.ERROR, "ERROR");
         }
@@ -335,6 +336,43 @@ public class ProtocoleServeur implements Protocolable{
         }
         dbRequests.getMysql().commit();
         return new PacketCom(States.GET_VOLONTAIRE_OUI, (Object)volontaire);
+    }
+
+    private PacketCom actionGetDetailsAndroid(String type, Object contenu) {
+        String[] data = (String[]) contenu;
+        String nom = data[0];
+        String prenom = data[1];
+
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"volontaires", "PersonneUrgence", "Decouverte", "langue", "Renseignements", "LanguesConnue", "Formation", "Pays", "Ville", "Telephone", "Adresse", "FormationsSuivie", "Activite", "FormationSuivieActivite", "FormationActivite"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_DETAILS_ANDROID_NON, "Impossible de récupérer le volontaire");
+        }
+
+        String matricule;
+        try {
+            matricule = dbRequests.getMatricule(nom, prenom);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_DETAILS_ANDROID_NON, "Impossible de récupérer le volontaire");
+        }
+        if(matricule == null){
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_DETAILS_ANDROID_NON, "Impossible de récupérer le volontaire");
+        }
+        String[] volontaire = null;
+        try {
+            volontaire = dbRequests.getVolontaireAndroid(matricule);
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.GET_DETAILS_ANDROID_NON, "Impossible de récupérer le volontaire");
+        }
+        dbRequests.getMysql().commit();
+        return new PacketCom(States.GET_DETAILS_ANDROID_OUI, (Object)volontaire);
     }
 
     private PacketCom actionDeleteVolontaire(String type, Object contenu) {
@@ -586,6 +624,14 @@ public class ProtocoleServeur implements Protocolable{
             return packetRetour;
         }
 
+        try {
+            dbRequests.getMysql().lockTable(new String[]{"volontaires", "PersonneUrgence", "Decouverte", "langue", "Renseignements", "LanguesConnue", "Formation", "Pays", "Ville", "Telephone", "Adresse", "FormationsSuivie", "Activite", "FormationSuivieActivite", "FormationActivite"});
+        } catch (Exception ex) {
+            Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
+            return new PacketCom(States.RECHERCHE_NON, "Une erreur s'est produite durant la recherche");
+        }
+
         LinkedList<CritereCustom> listeCritereCustoms = new LinkedList<CritereCustom>();
         Object[] data = (Object[]) contenu;
         LinkedList<Critere> listeCriteres = (LinkedList<Critere>)data[0];
@@ -630,9 +676,11 @@ public class ProtocoleServeur implements Protocolable{
             traitementRecherche.setResultats(dbRequests.checkDisponibiliteVolontaire(traitementRecherche.getResultats(), dates));
         } catch (Exception ex) {
             Logger.getLogger(ProtocoleServeur.class.getName()).log(Level.SEVERE, null, ex);
+            dbRequests.getMysql().rollback();
             return new PacketCom(States.RECHERCHE_NON, "Une erreur s'est produite durant la recherche");
         }
 
+        dbRequests.getMysql().commit();
         return new PacketCom(States.RECHERCHE_OUI, (Object)traitementRecherche.getResultats());
     }
 
